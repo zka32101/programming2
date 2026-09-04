@@ -1,0 +1,79 @@
+name: 小学コレ！プログラミング CI/CD
+
+# Phase 1: analyze + test（PR時の必須ゲート）
+# Phase 2: APK/AAB ビルド（タグ付きpush時に実行）
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'shogaku-kore-programming/**'
+      - '.github/workflows/shogaku-kore-programming-ci.yml'
+    tags:
+      - 'shogaku-kore-v*'
+  pull_request:
+    paths:
+      - 'shogaku-kore-programming/**'
+      - '.github/workflows/shogaku-kore-programming-ci.yml'
+
+jobs:
+  # Phase 1: Analyze & Test (Ubuntu, 低コスト)
+  analyze-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: shogaku-kore-programming
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Static analysis
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+  # Phase 2: Build APK & AAB (タグ付きpushまたは手動実行時)
+  build-apk-aab:
+    if: startsWith(github.ref, 'refs/tags/shogaku-kore-v') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: shogaku-kore-programming
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release --android-skip-build-dependency-validation
+
+      - name: Build AAB
+        run: flutter build appbundle --release --android-skip-build-dependency-validation
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: shogaku-kore-programming-apk
+          path: shogaku-kore-programming/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: shogaku-kore-programming-aab
+          path: shogaku-kore-programming/build/app/outputs/bundle/release/app-release.aab
+          retention-days: 30
