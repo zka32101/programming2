@@ -36,6 +36,7 @@ export 'widgets/coin_balance_widget.dart';         // CoinBalanceWidget
 export 'widgets/avatar_widget.dart';               // AvatarWidget, LockedAvatarWidget
 export 'widgets/character_collection_page.dart';   // CharacterCollectionPage
 export 'widgets/coin_shop_page.dart';              // CoinShopPage, ShopItemTile
+export 'widgets/analytics_dashboard_widget.dart';  // AnalyticsDashboard, DailyActivityData, AccuracyTrendData
 
 // Services
 export 'services/firebase_service.dart';
