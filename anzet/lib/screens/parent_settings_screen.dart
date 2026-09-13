@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_core/services/parental_gate_service.dart';
 
+import '../providers/cloud_sync_provider.dart';
 import '../providers/screen_time_provider.dart';
 import '../widgets/screen_time_limiter_widget.dart';
+import '../widgets/sync_status_banner.dart';
 
 /// 親向け設定画面
 class ParentSettingsScreen extends ConsumerStatefulWidget {
@@ -45,9 +47,16 @@ class _ParentSettingsScreenState extends ConsumerState<ParentSettingsScreen> {
         title: const Text('保護者向け設定'),
         elevation: 0,
       ),
-      body: !_isAuthenticated
-          ? _buildLockedView()
-          : _buildSettingsView(),
+      body: Column(
+        children: [
+          const SyncStatusBanner(showDetailsOnTap: true),
+          Expanded(
+            child: !_isAuthenticated
+                ? _buildLockedView()
+                : _buildSettingsView(),
+          ),
+        ],
+      ),
     );
   }
 
