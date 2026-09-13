@@ -14,6 +14,7 @@ dependencies:
   firebase_auth: ^5.5.4
   uuid: ^4.0.0
   google_fonts: ^6.2.1
+  json_annotation: ^4.9.0
   cross_promo_kit:
     path: ../cross_promo_kit
 
@@ -24,6 +25,7 @@ dev_dependencies:
   build_runner: ^2.4.0
   freezed_annotation: ^2.4.1
   freezed: ^2.4.0
+  json_serializable: ^6.8.0
   analyzer: ^6.0.0
 
 flutter:
