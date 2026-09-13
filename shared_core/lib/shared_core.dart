@@ -45,6 +45,5 @@ export 'services/parental_gate_service.dart';  // ParentalGateService
 export 'theme/app_theme_base.dart';
 export 'theme/app_theme.dart';
 
-// クロスプロモーション（他アプリ紹介）— 実装は cross_promo_kit（ポートフォリオ全体の共通パッケージ）
-// に一本化されている。shared_core はそれを再エクスポートするだけ。
-export 'package:cross_promo_kit/cross_promo_kit.dart';
+// クロスプロモーション（他アプリ紹介）— 実装待ち
+// export 'package:cross_promo_kit/cross_promo_kit.dart';
