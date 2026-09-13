@@ -1,6 +1,30 @@
 // 小学コレシリーズ共通バッジシステム
 // 全教科で共有可能な統一バッジモデル
 
+/// バッジのレアリティレベル（全アプリ共通）
+enum BadgeRarity {
+  common('common', '🟦', '通常'),
+  rare('rare', '🟪', 'レア'),
+  epic('epic', '🟧', 'エピック'),
+  legendary('legendary', '🟨', 'レジェンダリー'),
+  secret('secret', '⬛', 'シークレット');
+
+  final String id;
+  final String emoji;
+  final String label;
+
+  const BadgeRarity(this.id, this.emoji, this.label);
+
+  /// IDからレアリティを取得
+  static BadgeRarity? fromId(String id) {
+    try {
+      return BadgeRarity.values.firstWhere((r) => r.id == id);
+    } catch (_) {
+      return null;
+    }
+  }
+}
+
 enum BadgeCategory { streak, score, content1, content2, special, kanji, reading, writing, grammar, vocab, character }
 
 class BadgeModel {
