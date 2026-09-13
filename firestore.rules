@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users collection - 本人のみアクセス可
+    match /users/{userId} {
+      allow read, write: if request.auth.uid == userId;
+
+      // Children subcollection
+      match /children/{childId} {
+        allow read, write: if request.auth.uid == userId;
+
+        // ScreenTime Config - 親のみ読取/書き込み
+        match /screen_time_config/{configDoc} {
+          allow read, write: if request.auth.uid == userId;
+
+          // Validation rules
+          allow write: if
+            request.resource.data.dailyLimitMinutes > 0 &&
+            request.resource.data.dailyLimitMinutes <= 480 &&
+            request.resource.data.usedTodayMinutes >= 0 &&
+            request.resource.data.usedTodayMinutes <= 1440 &&
+            request.resource.data.lastUpdated is timestamp;
+        }
+
+        // ScreenTime History
+        match /screen_time_history/{historyDoc} {
+          allow read, write: if request.auth.uid == userId;
+
+          // History entries validation
+          allow write: if
+            request.resource.data.date is string &&
+            request.resource.data.entries is list;
+        }
+      }
+    }
+
+    // Public data (if needed for future features)
+    match /public/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid != null;
+    }
+
+    // Deny all other access by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
