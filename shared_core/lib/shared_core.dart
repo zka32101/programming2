@@ -25,7 +25,6 @@ export 'providers/profile_provider.dart';
 export 'providers/learning_timer_provider.dart';
 export 'providers/character_state_provider.dart'; // BaseCharacterNotifier, characterStateProvider
 export 'providers/inventory_provider.dart';        // InventoryNotifier, inventoryProvider
-export 'providers/profile_data_migration.dart';    // ProfileDataMigration
 
 // Widgets
 export 'widgets/generic_quiz_widget.dart';
@@ -40,7 +39,6 @@ export 'widgets/analytics_dashboard_widget.dart';  // AnalyticsDashboard, DailyA
 
 // Services
 export 'services/firebase_service.dart';
-export 'services/cloud_functions_service.dart';
 export 'services/parental_gate_service.dart';  // ParentalGateService
 
 // Theme
