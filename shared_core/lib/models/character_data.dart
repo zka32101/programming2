@@ -1,3 +1,17 @@
+// ─── Subject enum (which app/subject) ──────────────────────────────────────
+
+/// Which subject/app this character belongs to (kokugo, sansu, shokollen, etc)
+enum Subject {
+  kokugo,
+  sansu,
+  shokollen,
+  kagaku,
+  shakai,
+  geijutsu,
+  programming,
+  eigo,
+}
+
 // ─── Level-up constants ────────────────────────────────────────────────────
 
 // Lv.2:50 / Lv.3:100 / Lv.4:200 / Lv.5:500 コイン
@@ -23,6 +37,7 @@ class BaseCharacter {
   final String backstory; // revealed at Lv.4
   final List<String> stampPhrases; // 8 phrases for LINE stamp
   final String? imageAsset; // optional character illustration
+  final Subject appSubject; // which app (e.g. Subject.kokugo, Subject.sansu)
 
   const BaseCharacter({
     required this.id,
@@ -34,6 +49,7 @@ class BaseCharacter {
     required this.backstory,
     required this.stampPhrases,
     this.imageAsset,
+    required this.appSubject,
   });
 }
 
