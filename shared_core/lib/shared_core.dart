@@ -41,6 +41,7 @@ export 'widgets/analytics_dashboard_widget.dart';  // AnalyticsDashboard, DailyA
 // Services
 export 'services/firebase_service.dart';
 export 'services/cloud_functions_service.dart';
+export 'services/parental_gate_service.dart';  // ParentalGateService
 
 // Theme
 export 'theme/app_theme_base.dart';
