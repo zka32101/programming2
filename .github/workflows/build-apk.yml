@@ -14,7 +14,6 @@ jobs:
       matrix:
         app:
           - sansu-kore
-          - social_quiz_app
           - kokugo-kore
           - shokollen_science
           - eigo-kore
