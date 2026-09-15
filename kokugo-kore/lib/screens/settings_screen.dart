@@ -172,8 +172,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
         controller: _tabController,
         children: [
           ListView(
-        children: [
-          if (!premium.isPremium) _PremiumBanner(premium: premium),
+            children: [
+              if (!premium.isPremium) _PremiumBanner(premium: premium),
           _SectionHeader(title: 'おと・サウンド'),
           SwitchListTile(
             secondary: const Text('🔊', style: TextStyle(fontSize: 20)),

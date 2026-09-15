@@ -3,12 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final analyticsProvider = StateNotifierProvider<AnalyticsNotifier, ProgressAnalytics?>((ref) {
-  return AnalyticsNotifier();
-
 import '../models/analytics_model.dart';
 import '../services/firebase_realtime_db.dart';
 
+final analyticsProvider = StateNotifierProvider<AnalyticsNotifier, ProgressAnalytics?>((ref) {
+  return AnalyticsNotifier();
 });
 
 final learningPaceProvider = StateNotifierProvider<LearningPaceNotifier, LearningPaceData?>((ref) {

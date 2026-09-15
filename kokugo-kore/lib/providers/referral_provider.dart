@@ -1,11 +1,9 @@
 import 'dart:convert';
-
-class ReferralCode {
-  final String code;
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+class ReferralCode {
+  final String code;
   final String generatorId;
   final int coinsReward;
   final List<String> usedByUserIds;

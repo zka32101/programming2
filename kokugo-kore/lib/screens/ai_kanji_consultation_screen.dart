@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_core/providers/premium_provider.dart';
-import 'package:shared_core/widgets/premium_gate_widget.dart';
 
 import '../theme/app_theme.dart';
 
