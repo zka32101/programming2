@@ -262,10 +262,10 @@ class _AnalyticsTabContent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AnalyticsDashboard(
-                userName: profile.userName ?? 'User',
-                totalQuestions: progress.completedQuizzes.length,
+                userName: profile.currentProfile?.name ?? 'User',
+                totalQuestions: progress.totalCorrect,
                 averageAccuracy: 0.0,
-                totalTimeSpent: 0,
+                totalTimeSpent: Duration.zero,
                 accuracyTrend: [],
                 dailyActivity: [],
               ),
