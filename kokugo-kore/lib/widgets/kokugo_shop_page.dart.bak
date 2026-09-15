@@ -370,8 +370,10 @@ class _ExchangeTab extends ConsumerWidget {
               final owned = purchased.ownedItemIds.contains(item.id);
               final canAfford = coins >= item.coinCost;
               final equippable = owned && _isEquippable(item);
-              // TODO: Integrate equippedItemsProvider from shared_core
-              final equipped = false; // equippable ? ref.watch(...) : false;
+              final equipped = equippable
+                  ? ref.watch(equippedItemsProvider
+                      .select((s) => s.equippedByCategory[item.category] == item.id))
+                  : false;
               return ListTile(
                 leading: item.assetPath != null
                     ? SizedBox(
@@ -566,10 +568,7 @@ class _AvatarTab extends ConsumerWidget {
                       border: Border.all(color: Colors.green.shade400, width: 2),
                     ),
                     child: Center(
-                      child: CircleAvatar(
-                        radius: 22,
-                        child: Text(avatar.emoji, style: const TextStyle(fontSize: 24)),
-                      ),
+                      child: AvatarImage(avatar: avatar, size: 44),
                     ),
                   );
                 },
@@ -618,13 +617,7 @@ class _AvatarTab extends ConsumerWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Opacity(
-                        opacity: 0.4,
-                        child: CircleAvatar(
-                          radius: 22,
-                          child: Text(avatar.emoji, style: const TextStyle(fontSize: 24)),
-                        ),
-                      ),
+                      AvatarImage(avatar: avatar, size: 44, opacity: 0.4),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -662,10 +655,7 @@ class _AvatarTab extends ConsumerWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(
-              radius: 32,
-              child: Text(avatar.emoji, style: const TextStyle(fontSize: 32)),
-            ),
+            AvatarImage(avatar: avatar, size: 64),
             const SizedBox(height: 12),
             Text('${avatar.name}をゲットします\n$cost コイン必要です',
                 textAlign: TextAlign.center),
@@ -727,13 +717,12 @@ class _EquipButton extends ConsumerWidget {
       width: 90,
       child: ElevatedButton(
         onPressed: () {
-          // TODO: Integrate equippedItemsProvider from shared_core
-          // final notifier = ref.read(equippedItemsProvider.notifier);
-          // if (equipped) {
-          //   notifier.unequip(item.category);
-          // } else {
-          //   notifier.equip(item.category, item.id);
-          // }
+          final notifier = ref.read(equippedItemsProvider.notifier);
+          if (equipped) {
+            notifier.unequip(item.category);
+          } else {
+            notifier.equip(item.category, item.id);
+          }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: equipped ? Colors.grey.shade300 : kPrimaryColor,
