@@ -118,6 +118,9 @@ class CharacterState {
       );
 }
 
+// ─── ShopItemKind enum ─────────────────────────────────────────────────────
+enum ShopItemKind { avatar, emoji, background, sticker, effect }
+
 // ─── AppShopItem ───────────────────────────────────────────────────────────
 
 class AppShopItem {
@@ -127,6 +130,8 @@ class AppShopItem {
   final String description;
   final String category;
   final int coinCost;
+  final ShopItemKind kind;
+  final String? assetPath;
 
   const AppShopItem({
     required this.id,
@@ -135,5 +140,7 @@ class AppShopItem {
     required this.description,
     required this.category,
     required this.coinCost,
+    this.kind = ShopItemKind.emoji,
+    this.assetPath,
   });
 }

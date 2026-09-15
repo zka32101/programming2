@@ -1,26 +1,4 @@
-/// バッジのレアリティレベル
-enum BadgeRarity {
-  common('common', '🟦', '通常'),
-  rare('rare', '🟪', 'レア'),
-  epic('epic', '🟧', 'エピック'),
-  legendary('legendary', '🟨', 'レジェンダリー'),
-  secret('secret', '⬛', 'シークレット');
-
-  final String id;
-  final String emoji;
-  final String label;
-
-  const BadgeRarity(this.id, this.emoji, this.label);
-
-  /// IDからレアリティを取得
-  static BadgeRarity? fromId(String id) {
-    try {
-      return BadgeRarity.values.firstWhere((r) => r.id == id);
-    } catch (_) {
-      return null;
-    }
-  }
-}
+import 'package:shared_core/models/badge_model.dart' show BadgeRarity;
 
 /// バッジの獲得進捗情報
 class BadgeProgress {
