@@ -1,0 +1,49 @@
+name: Simple APK Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'App to build'
+        required: true
+        default: 'eigo-kore'
+        type: choice
+        options:
+          - eigo-kore
+          - sansu-kore
+          - kokugo-kore
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 🎯 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.4'
+          channel: 'stable'
+
+      - name: 📦 Get dependencies
+        run: |
+          cd ${{ inputs.app }}
+          flutter pub get
+
+      - name: 🔨 Build APK
+        run: |
+          cd ${{ inputs.app }}
+          flutter build apk --release --android-skip-build-dependency-validation
+
+      - name: 📤 Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.app }}-apk
+          path: ${{ inputs.app }}/build/app/outputs/apk/release/app-release.apk
+          if-no-files-found: warn
+
+      - name: ✅ Build complete
+        run: echo "✅ APK build complete for ${{ inputs.app }}"
