@@ -1,11 +1,7 @@
 name: Build APK - 小学コレシリーズ
 
 on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
-  workflow_dispatch:  # 手動トリガー
+  workflow_dispatch:  # 手動トリガーのみ（自動ビルド無効化）
 
 jobs:
   build:
