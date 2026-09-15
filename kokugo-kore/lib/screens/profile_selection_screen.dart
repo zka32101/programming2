@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_core/models/avatar_model.dart';
 import 'package:shared_core/widgets/avatar_widget.dart';
-import 'package:shared_core/shared_core.dart' show requireParentalGate;
+import 'package:shared_core/shared_core.dart' show ParentalGateService;
 import '../providers/profile_provider.dart';
 
 import '../providers/profile_avatar_provider.dart';
@@ -67,10 +67,12 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: Colors.grey.shade300),
                     ),
-                    child: AvatarImage(
-                      avatar: avatar,
-                      size: 48,
+                    child: Opacity(
                       opacity: isUnlocked ? 1.0 : 0.4,
+                      child: CircleAvatar(
+                        radius: 24,
+                        child: Text(avatar.emoji, style: const TextStyle(fontSize: 24)),
+                      ),
                     ),
                   ),
                   if (!isUnlocked)
@@ -161,10 +163,12 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                                   width: selected ? 2 : 1,
                                 ),
                               ),
-                              child: AvatarImage(
-                                avatar: avatar,
-                                size: 44,
+                              child: Opacity(
                                 opacity: isUnlocked ? 1.0 : 0.4,
+                                child: CircleAvatar(
+                                  radius: 22,
+                                  child: Text(avatar.emoji, style: const TextStyle(fontSize: 20)),
+                                ),
                               ),
                             ),
                             if (!isUnlocked)
@@ -265,7 +269,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                   child: ListTile(
                     leading: CircleAvatar(
                       backgroundColor: kPrimaryColor.withAlpha(30),
-                      child: AvatarImage(avatar: avatarModel, size: 40),
+                      child: Text(avatarModel.emoji, style: const TextStyle(fontSize: 20)),
                     ),
                     title: Text(profile.name),
                     subtitle: Text('${profile.grade}年生'),
@@ -277,11 +281,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                       onSelected: (val) async {
                         if (val == 'delete') {
                           if (profiles.length > 1) {
-                            final passedGate = await requireParentalGate(
-                              context,
-                              title: 'ほごしゃかくにん',
-                              description: 'プロフィールの削除には、ほごしゃの確認が必要です。',
-                            );
+                            final passedGate = await ParentalGateService.requireParentalGate(context);
                             if (!passedGate || !context.mounted) return;
                             await ref.read(profileProvider.notifier).deleteProfile(profile.id);
                           }
