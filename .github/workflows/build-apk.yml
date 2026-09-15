@@ -13,11 +13,8 @@ jobs:
     strategy:
       matrix:
         app:
-          - sansu-kore
-          - kokugo-kore
-          - shokollen_science
           - eigo-kore
-      max-parallel: 2  # 並列数2に制限（メモリ効率）
+      max-parallel: 1  # 単一ビルド（large checkout問題回避）
 
     steps:
       - name: 📥 Checkout
