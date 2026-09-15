@@ -133,6 +133,7 @@ class EnglishTownFirebaseService {
     required int xpEarned,
     required int coinsEarned,
     required int responseScore,
+    String difficulty = 'medium',
   }) async {
     if (!isAvailable || userId == null) return;
 

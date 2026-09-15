@@ -315,6 +315,24 @@ class TownProgress {
   /// 総獲得コイン
   final int totalCoinsEarned;
 
+  /// 総獲得XP
+  final int totalXpEarned;
+
+  /// 訪問済みロケーションID
+  final List<String> visitedLocationIds;
+
+  /// アンロック済み達成
+  final List<String> unlockedAchievements;
+
+  /// NPC会話カウント
+  final Map<String, int> npcConversationCounts;
+
+  /// 現在の時刻（朝/昼/夜）
+  final String currentTimeOfDay;
+
+  /// 現在の天気
+  final String currentWeather;
+
   /// 現在のエリアID
   final String? currentAreaId;
 
@@ -341,6 +359,12 @@ class TownProgress {
     required this.averageScore,
     required this.totalLearningPoints,
     required this.totalCoinsEarned,
+    required this.totalXpEarned,
+    required this.visitedLocationIds,
+    required this.unlockedAchievements,
+    required this.npcConversationCounts,
+    required this.currentTimeOfDay,
+    required this.currentWeather,
     this.currentAreaId,
     this.currentNPCId,
     this.firstVisitedAt,
