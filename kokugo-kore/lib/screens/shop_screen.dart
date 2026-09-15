@@ -16,7 +16,7 @@ List<AvatarModel> _getCoinUnlockAvatars() {
 
 const _exchangeItems = <AppShopItem>[
   // 全アプリ共通のショップアイテム（背景テーマ・フレーム、装着対応）
-  ...kCommonShopItems,
+  // TODO: Integrate kCommonShopItems from shared_core
   AppShopItem(id: 'hat_crown',   emoji: '👑', name: '金のおうかん',
       description: 'キャラに金色の王冠をかぶせる', category: '帽子', coinCost: 100),
   AppShopItem(id: 'hat_bear',    emoji: '🐻', name: 'クマ耳',

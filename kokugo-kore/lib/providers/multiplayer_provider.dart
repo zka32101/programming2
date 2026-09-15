@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_core/shared_core.dart' show matchmakingHandlersProvider, matchHandlersProvider;
 
-import '../services/kokugo_matchmaking_service.dart';
 import 'profile_provider.dart';
 
+// TODO: Implement KokugoMatchmakingService for Phase 4 multiplayer
 final List<Override> kokugoMultiplayerProviderOverrides = [
-  matchmakingHandlersProvider.overrideWithValue(KokugoMatchmakingService.matchmakingHandlers),
-  matchHandlersProvider.overrideWithValue(KokugoMatchmakingService.matchHandlers),
+  // matchmakingHandlersProvider.overrideWithValue(KokugoMatchmakingService.matchmakingHandlers),
+  // matchHandlersProvider.overrideWithValue(KokugoMatchmakingService.matchHandlers),
 ];
 
 /// マルチプレイで使う自分の userId / displayName。

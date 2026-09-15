@@ -6,7 +6,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_core/shared_core.dart' show LessonMenuPage;
-import '../data/lesson_data.dart';
 
 import '../providers/lesson_provider.dart';
 
@@ -21,13 +20,15 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(lessonProvider.notifier).load(kLessons);
-    });
+    // TODO: Load lessons from Phase 4 implementation
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   ref.read(lessonProvider.notifier).load(kLessons);
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const LessonMenuPage(lessons: kLessons);
+    // TODO: Load lessons from shared_core LessonMenuPage
+    return const LessonMenuPage(lessons: const []);
   }
 }

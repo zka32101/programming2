@@ -6,7 +6,6 @@ import 'dart:async';
 
 import '../data/kokugo_characters.dart';
 import '../models/quest_model.dart';
-import '../providers/character_provider.dart';
 import '../providers/premium_provider.dart';
 import '../providers/progress_provider.dart';
 import '../theme/app_theme.dart';

@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_core/shared_core.dart' hide kAccentGreen, kTextDark, kTextMuted;
 
 import '../data/kokugo_characters.dart';
-import '../providers/character_provider.dart';
 import '../providers/purchased_items_provider.dart';
 import '../providers/avatar_unlock_provider.dart';
 import '../theme/app_theme.dart';

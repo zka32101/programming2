@@ -8,7 +8,7 @@ import 'package:shared_core/shared_core.dart'
 
 import '../../data/quiz_data.dart';
 import '../../providers/multiplayer_provider.dart';
-import '../../services/kokugo_matchmaking_service.dart';
+// import '../../services/kokugo_matchmaking_service.dart'; // TODO: Phase 4
 import '../../theme/app_theme.dart';
 
 class MultiplayerQuizScreen extends ConsumerStatefulWidget {
@@ -93,7 +93,8 @@ class _MultiplayerQuizScreenState extends ConsumerState<MultiplayerQuizScreen> {
     if (!match.isFinished) return;
     if (match.playerIds.isEmpty || match.playerIds.first != myUserId) return;
     _ratingUpdateTriggered = true;
-    KokugoMatchmakingService.updateRatingsAfterMatch(match);
+    // TODO: Implement rating update for Phase 4
+    // KokugoMatchmakingService.updateRatingsAfterMatch(match);
   }
 
   @override

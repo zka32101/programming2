@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_core/models/avatar_model.dart';
 import 'package:shared_core/widgets/avatar_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'ai_coaching_dashboard_screen.dart';
 import '../data/quiz_data.dart';
 
 import '../data/kokugo_characters.dart';

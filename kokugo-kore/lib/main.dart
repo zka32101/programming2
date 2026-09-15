@@ -7,14 +7,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart' show ProviderContainer, UncontrolledProviderScope;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_core/shared_core.dart'
     show
         characterStateProvider,
         coinProvider,
         avatarProvider,
-        equippedItemsProvider,
-        screenTimeProvider,
         ScreenTimeLimitReachedWidget,
         badgeProvider,
         unifiedBadges,
@@ -41,8 +39,6 @@ import 'models/quest_model.dart';
 import 'screens/character_screen.dart';
 import 'providers/badge_metrics_provider.dart';
 import 'providers/study_habit_provider.dart';
-import 'providers/character_provider.dart';
-import 'providers/equipped_items_provider.dart';
 import 'providers/multiplayer_provider.dart';
 import 'providers/avatar_unlock_provider.dart';
 import 'providers/purchased_items_provider.dart';
@@ -51,8 +47,7 @@ import 'providers/quest_performance_provider.dart';
 import 'theme/app_theme.dart';
 import 'providers/ranking_privacy_provider.dart';
 import 'providers/badge_progress_provider.dart';
-import 'providers/screen_time_provider.dart';
-import 'providers/lesson_provider.dart' show LessonNotifier, lessonProvider;
+import 'providers/lesson_provider.dart';
 import 'screens/bushu_quiz_screen.dart';
 import 'screens/haiku_quiz_screen.dart';
 import 'screens/detailed_analytics_screen.dart';
@@ -94,15 +89,7 @@ import 'screens/writing_screen.dart';
 import 'screens/goal_setting_screen.dart';
 import 'screens/yojijukugo_quiz_screen.dart';
 import 'screens/synonym_antonym_quiz_screen.dart';
-import 'screens/ai_kanji_consultation_screen.dart';
-import 'screens/ai_coaching_dashboard_screen.dart';
 import 'services/ad_service.dart';
-import 'services/revenue_cat_service.dart';
-import 'services/firestore_ranking_service.dart';
-import 'services/firestore_friend_service.dart';
-import 'services/firestore_mission_service.dart';
-import 'services/firestore_push_notification_service.dart';
-import 'services/firestore_retention_service.dart';
 import 'widgets/premium_gate.dart';
 
 Future<void> main() async {
@@ -199,16 +186,15 @@ Future<void> main() async {
 
   final container = ProviderContainer(
     overrides: [
-      // 国語コレのキャラクターノティファイアを注入
-      characterStateProvider.overrideWith(CharacterNotifier.new),
-      // 国語コレのショップアイテム装着状態ノティファイアを注入
-      equippedItemsProvider.overrideWith(EquippedItemsNotifier.new),
+      // TODO: Phase 4 - Implement missing base notifiers
+      // characterStateProvider.overrideWith(CharacterNotifier.new),
+      // equippedItemsProvider.overrideWith(EquippedItemsNotifier.new),
       // 統一バッジシステム（Phase 4.1）: 国語コレ用バッジを主題タグで初期化
       badgeProvider.overrideWith(() => BadgeNotifier()),
-      // 国語コレの利用時間制限（スクリーンタイム管理）ノティファイアを注入
-      screenTimeProvider.overrideWith(() => ScreenTimeNotifier()),
-      // 国語コレの解説記事管理（LessonProvider）ノティファイアを注入
-      lessonProvider.overrideWith(LessonNotifier.new),
+      // TODO: Phase 4 - Implement ScreenTimeNotifier
+      // screenTimeProvider.overrideWith(() => ScreenTimeNotifier()),
+      // TODO: Phase 4 - Implement LessonNotifier
+      // lessonProvider.overrideWith(LessonNotifier.new),
       // Phase 4.7: 統一サブスクリプション管理（PremiumProvider）
       premiumProvider.overrideWith(PremiumNotifier.new),
       // マルチプレイ対戦（レートマッチング）のFirestoreハンドラを注入

@@ -1,4 +1,4 @@
-import 'package:shared_core/shared_core.dart';
+﻿import 'package:shared_core/shared_core.dart';
 
 // 16体の国語キャラクター（新設計 2026-06-06）
 // 読む・書く・聞く・話す + 感情・記号表現キャラクター
@@ -14,7 +14,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['本読めた！', '面白い！', 'ホンホンと読もう', 'また読みたい',
       '物語すき', 'ありがとう！', 'また明日も', '一緒に冒険しよう'],
     imageAsset: 'assets/characters/01_honhon.png',
-    levelImages: {2: 'assets/character_levels/01_honhon_lv2_1.jpg', 3: 'assets/character_levels/01_honhon_lv3_1.jpg', 5: 'assets/characters_lvmax/honhon_lvmax.jpg'},
   ),
   BaseCharacter(
     id: 'penpen', name: 'ペンペン', emoji: '✏️', tier: 1, unlockAt: 3,
@@ -26,7 +25,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['書けた！', '上手だね', 'ペンペンと書こう', '気持ちいい',
       '文字がすき', 'ありがとう！', 'また書こう', '想いを込めて'],
     imageAsset: 'assets/characters/02_penpen.png',
-    levelImages: {2: 'assets/character_levels/02_penpen_lv2_1.jpg', 3: 'assets/character_levels/02_penpen_lv3_1.jpg', 5: 'assets/characters_lvmax/penpen_lvmax.jpg'},
   ),
   BaseCharacter(
     id: 'kiku', name: 'キクくん', emoji: '👂', tier: 1, unlockAt: 5,
@@ -38,7 +36,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['よく聞けた！', '理解できた', 'キクくんと学ぼう', '気づいたよ',
       '聞くって大切', 'ありがとう！', 'また聞こう', '相手を理解しよう'],
     imageAsset: 'assets/characters/05_kiku.png',
-    levelImages: {2: 'assets/character_levels/05_kikukun_lv2_1.jpg', 3: 'assets/character_levels/05_kikukun_lv3_1.jpg', 5: 'assets/characters_lvmax/kiku_lvmax.jpg'},
   ),
   BaseCharacter(
     id: 'yomu', name: 'ヨムくん', emoji: '📚', tier: 1, unlockAt: 8,
@@ -50,7 +47,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['読み解けた！', 'わかった！', 'ヨムくんと読もう', 'すっきり',
       '読解楽しい', 'ありがとう！', 'また読もう', '筋道を見つけよう'],
     imageAsset: 'assets/characters/06_yomu.png',
-    levelImages: {2: 'assets/character_levels/06_yomukun_lv2_1.jpg', 3: 'assets/character_levels/06_yomukun_lv3_1.jpg', 5: 'assets/characters_lvmax/yomu_lvmax.jpg'},
   ),
   // ── Tier 2（応用・小2-3年相当）4体 ─────────────────────────────────
   BaseCharacter(
@@ -63,7 +59,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['言葉わかった！', '意味がわかった', 'ジションと学ぼう', 'なるほど！',
       '言葉すき', 'ありがとう！', 'また教えてね', '言葉は宝もの'],
     imageAsset: 'assets/characters/03_jisyon.png',
-    levelImages: {2: 'assets/character_levels/03_jishin_lv2_1.jpg', 3: 'assets/character_levels/03_jishin_lv3_1.jpg', 5: 'assets/characters_lvmax/jisyon_lvmax.jpg'},
   ),
   BaseCharacter(
     id: 'kaku', name: 'カクちゃん', emoji: '✍️', tier: 2, unlockAt: 16,
@@ -75,7 +70,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['作品できた！', 'いい話だね', 'カクちゃんと書こう', '素敵だ！',
       '創作楽しい', 'ありがとう！', 'また書こう', '想像力を広げよう'],
     imageAsset: 'assets/characters/07_kaku.png',
-    levelImages: {2: 'assets/character_levels/07_kakuchan_lv2_1.jpg', 3: 'assets/character_levels/07_kakuchan_lv3_1.jpg', 5: 'assets/characters_lvmax/kaku_lvmax.jpg'},
   ),
   BaseCharacter(
     id: 'hanasu', name: 'ハナすん', emoji: '💬', tier: 2, unlockAt: 20,
@@ -87,7 +81,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['上手に話せた！', '相手が笑った', 'ハナすんと話そう', '通じたね',
       '話すって楽しい', 'ありがとう！', 'また話そう', '心を込めて話そう'],
     imageAsset: 'assets/characters/08_hanasu.png',
-    levelImages: {2: 'assets/character_levels/08_hanasun_lv2_1.jpg', 3: 'assets/character_levels/08_hanasun_lv3_1.jpg', 5: 'assets/characters_lvmax/hanasu_lvmax.jpg'},
   ),
   BaseCharacter(
     id: 'kangaeru', name: 'カンガエル', emoji: '🤔', tier: 2, unlockAt: 24,
@@ -99,7 +92,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['理由がわかった！', 'なるほど！', 'カンガエルと考えよう', 'ああ！',
       '思考楽しい', 'ありがとう！', 'また考えよう', '問いかけてみよう'],
     imageAsset: 'assets/characters/09_kangaeru.png',
-    levelImages: {2: 'assets/character_levels/09_kangaeru_lv2_1.jpg', 3: 'assets/character_levels/09_kangaeru_lv3_1.jpg', 5: 'assets/characters_lvmax/kangaeru_lvmax.jpg'},
   ),
   // ── Tier 3（高度・小3-4年相当）4体 ─────────────────────────────────
   BaseCharacter(
@@ -112,7 +104,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['句点打てた！', '文がまとまった', 'マルちゃんと書こう', 'すっきり',
       '句点って大事', 'ありがとう！', 'また書こう', '文を完成させよう'],
     imageAsset: 'assets/characters/13_maru.png',
-    levelImages: {2: 'assets/character_levels/13_maruchan_lv2_1.jpg', 3: 'assets/character_levels/13_maruchan_lv3_1.jpg', 5: 'assets/characters_lvmax/maru_lvmax.jpg'},
   ),
   BaseCharacter(
     id: 'koma', name: 'コマちゃん', emoji: '、', tier: 3, unlockAt: 32,
@@ -124,7 +115,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['読点打てた！', '読みやすい！', 'コマちゃんと書こう', 'いい流れ',
       '読点って大事', 'ありがとう！', 'また書こう', 'リズムを作ろう'],
     imageAsset: 'assets/characters/14_koma.png',
-    levelImages: {2: 'assets/character_levels/14_mojiin_lv2_1.jpg', 3: 'assets/character_levels/14_mojiin_lv3_1.jpg', 5: 'assets/characters_lvmax/koma_lvmax.jpg'},
   ),
   BaseCharacter(
     id: 'kagi', name: 'カギくん', emoji: '「」', tier: 3, unlockAt: 36,
@@ -136,7 +126,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['括弧つけた！', '会話が活き活き', 'カギくんと書こう', 'はっきり！',
       '括弧って楽しい', 'ありがとう！', 'また書こう', '会話を活かそう'],
     imageAsset: 'assets/characters/15_kagi.png',
-    levelImages: {2: 'assets/character_levels/15_kagikun_lv2_1.jpg', 3: 'assets/character_levels/15_kagikun_lv3_1.jpg', 5: 'assets/characters_lvmax/kagi_lvmax.jpg'},
   ),
   BaseCharacter(
     id: 'kuesu', name: 'クエスちゃん', emoji: '？', tier: 3, unlockAt: 40,
@@ -148,7 +137,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['疑問符つけた！', 'いい質問！', 'クエスちゃんと書こう', 'わくわく',
       '疑問符すき', 'ありがとう！', 'また書こう', '問いを大切にしよう'],
     imageAsset: 'assets/characters/16_kuesu.png',
-    levelImages: {2: 'assets/character_levels/16_kuesu_chan_lv2_1.jpg', 3: 'assets/character_levels/16_kuesu_chan_lv3_1.jpg', 5: 'assets/characters_lvmax/kuesu_lvmax.jpg'},
   ),
   // ── Tier 4（完成・小4-6年相当）4体 ─────────────────────────────────
   BaseCharacter(
@@ -161,7 +149,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['楽しい！', 'またやりたい', 'ワラウんと学ぼう', 'いい気分',
       '勉強すき', 'ありがとう！', 'また笑おう', 'この喜びを忘れずに'],
     imageAsset: 'assets/characters/10_warau.png',
-    levelImages: {2: 'assets/character_levels/10_waraun_lv2_1.jpg', 3: 'assets/character_levels/10_waraun_lv3_1.jpg', 5: 'assets/characters_lvmax/warau_lvmax.jpg'},
   ),
   BaseCharacter(
     id: 'naku', name: 'ナクちゃん', emoji: '😢', tier: 4, unlockAt: 47,
@@ -173,7 +160,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['感動した！', '涙が出た', 'ナクちゃんと読もう', 'いい話だ',
       '物語深い', 'ありがとう！', 'また感動しよう', '心で感じる'],
     imageAsset: 'assets/characters/11_naku.png',
-    levelImages: {5: 'assets/characters_lvmax/naku_lvmax.jpg'},
   ),
   BaseCharacter(
     id: 'odoroku', name: 'オドロクん', emoji: '😲', tier: 4, unlockAt: 50,
@@ -185,7 +171,6 @@ const List<BaseCharacter> kKokugoCharacters = [
     stampPhrases: ['びっくりした！', '予想外だ', 'オドロクんと読もう', 'えっ！',
       '発見楽しい', 'ありがとう！', 'また新しい発見', '視点を広げよう'],
     imageAsset: 'assets/characters/12_odoroku.png',
-    levelImages: {2: 'assets/character_levels/12_odorokukunn_lv2_1.jpg', 3: 'assets/character_levels/12_odorokukunn_lv3_1.jpg', 5: 'assets/characters_lvmax/odoroku_lvmax.jpg'},
   ),
 ];
 
@@ -206,3 +191,4 @@ const Map<String, String> kKokugoCharactersLvMax = {
   'naku': 'assets/characters_lvmax/naku_lvmax.jpg',
   'odoroku': 'assets/characters_lvmax/odoroku_lvmax.jpg',
 };
+
