@@ -1,0 +1,96 @@
+﻿name: Build and Deploy APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Clone shared_core
+        run: |
+          mkdir -p packages
+          git clone https://github.com/zka32101/shared_core packages/shared_core
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+
+      - name: Get Flutter version
+        run: |
+          flutter --version
+          FLUTTER_SDK=$(which flutter | xargs dirname | xargs dirname)
+          echo "FLUTTER_SDK=$FLUTTER_SDK" >> $GITHUB_ENV
+          echo "Flutter SDK path: $FLUTTER_SDK"
+
+      - name: Create local.properties
+        run: |
+          echo "flutter.sdk=$FLUTTER_SDK" > android/local.properties
+          cat android/local.properties
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Setup signing keystore
+        run: |
+          if [ -n "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" ]; then
+            echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 -d > android/release.keystore
+            ls -lh android/release.keystore
+            echo "KEYSTORE_CONFIGURED=true" >> $GITHUB_ENV
+          else
+            echo "KEYSTORE_CONFIGURED=false" >> $GITHUB_ENV
+          fi
+
+      - name: Build APK
+        run: |
+          set -o pipefail
+          flutter build apk --release -v 2>&1 | tee build_apk.log
+          exit ${PIPESTATUS[0]}
+
+      - name: Build AAB
+        run: |
+          set -o pipefail
+          flutter build appbundle --release -v 2>&1 | tee build_aab.log
+          exit ${PIPESTATUS[0]}
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            build_apk.log
+            build_aab.log
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            build/app/outputs/apk/release/app-release.apk
+            build/app/outputs/bundle/release/app-release.aab
+
+      - name: Setup Python for Google Drive upload
+        if: always()
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Google Drive dependencies
+        if: always()
+        run: |
+          pip install google-auth google-auth-httplib2 google-api-python-client
+
+      - name: Upload to Google Drive
+        if: always()
+        continue-on-error: true
+        env:
+          GOOGLE_DRIVE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_DRIVE_SERVICE_ACCOUNT_KEY }}
+          GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID || '1kqPMiEnGtF7sRNiYsds9_9YvuPsT1Rfu' }}
+        run: python scripts/upload_to_drive.py

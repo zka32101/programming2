@@ -1,0 +1,23 @@
+# Dart / Flutter package .gitignore
+
+# Tooling / IDE
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Generated lockfile — package repos generally leave this out
+# so consuming apps resolve versions themselves.
+pubspec.lock
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# macOS
+.DS_Store
+
+# Coverage
+coverage/
