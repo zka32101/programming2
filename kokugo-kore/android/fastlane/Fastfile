@@ -1,0 +1,19 @@
+default_platform(:android)
+
+platform :android do
+  desc "Upload AAB to Google Play internal testing track"
+  lane :internal_track do
+    # Upload AAB to internal testing track only
+    # CRITICAL: Never automate production track or public releases
+    supply(
+      track: "internal",
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      validate_only: false
+    )
+
+    puts "✅ AAB uploaded to Google Play internal track"
+  end
+end

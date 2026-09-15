@@ -1,0 +1,81 @@
+name: kokugo_kore
+description: "小学1～6年生向け国語学習アプリ。ひらがな・漢字・読解・作文をゲーム感覚で学習。バッジシステムで楽しくモチベーション向上。学年別カリキュラム対応。"
+publish_to: 'none'
+
+version: 1.5.1+18
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_core:
+    git:
+      url: https://github.com/zka32101/shared_core.git
+      ref: main
+  cross_promo_kit:
+    git:
+      url: https://github.com/zka32101/cross_promo_kit.git
+      ref: main
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.6.1
+  shared_preferences: ^2.3.0
+  intl: ^0.19.0
+  confetti: ^0.8.0
+  firebase_core: ^3.13.1
+  firebase_auth: ^5.5.4
+  firebase_database: ^11.3.10
+  firebase_remote_config: ^5.1.0 # Phase 4.12-4.14: Dynamic Pricing・Retention・Multiplayer 設定
+  cloud_firestore: ^5.5.0 # shared_core のマルチプレイ対戦(レートマッチング)用 FirestoreMatchmakingService
+  cloud_functions: ^5.1.3
+  in_app_purchase: ^3.2.0
+  google_fonts: ^6.2.1
+  flutter_tts: ^4.0.2
+  uuid: ^4.0.0
+  google_mobile_ads: ^5.2.0
+  gal: ^2.2.0
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+  fl_chart: ^0.67.0
+  path_drawing: ^1.0.1 # SVG path 'd' string parsing for stroke-order playback
+  flutter_svg: ^2.0.10+1 # shared_core のショップアイテム(テーマ/フレーム)SVG表示用
+  purchases_flutter: ^8.2.0 # Phase 4.2: RevenueCat SDK for subscription management
+  firebase_messaging: ^15.0.0 # Phase 4.18: Firebase Cloud Messaging (push notifications)
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.1
+  freezed: ^2.4.6
+  build_runner: ^2.4.9
+  json_serializable: ^6.7.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logos/app_icon_512.jpg"
+  min_sdk_android: 21
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/logos/app_icon_512.jpg"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/legal/
+    - assets/characters/
+    - assets/character_levels/
+    - assets/characters_lvmax/
+    - assets/logos/
+    - assets/images/
+    - assets/backgrounds/
+
+# url_launcher(クロスプロモーション用)が引き込む最新の url_launcher_android は
+# androidx.core 1.17.0 / androidx.browser 1.9.0 を要求し AGP 8.9.1+ が必要になるが、
+# このプロジェクトは AGP 8.7.3。androidx を強制ダウングレードすると url_launcher_android
+# 自身が実際にビルド・テストされていないバージョンの上で動くことになり実行時リスクがあるため、
+# androidx.browser 1.5.0 のみを要求する古い url_launcher_android に固定して整合性を保つ。
+dependency_overrides:
+  url_launcher_android: 6.3.6

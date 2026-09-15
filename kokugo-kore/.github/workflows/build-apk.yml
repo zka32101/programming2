@@ -1,0 +1,127 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - 'claude/continuation-session-*'
+      - 'main'
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: true
+        default: 'release'
+        type: choice
+        options:
+          - release
+          - debug
+
+jobs:
+  build-apk:
+    name: Build APK (${{ inputs.build_type }})
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+          channel: 'stable'
+
+      - name: Clean and get dependencies
+        run: |
+          flutter clean
+          flutter pub get
+
+      - name: Generate code (build_runner)
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Create keystore directory
+        run: |
+          if (!(Test-Path "android\keystore")) {
+            New-Item -ItemType Directory -Path "android\keystore" -Force
+          }
+        shell: powershell
+
+      - name: Decode and write keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if ("${{ env.KEYSTORE_BASE64 }}" -ne "") {
+            $bytes = [Convert]::FromBase64String("${{ env.KEYSTORE_BASE64 }}")
+            [System.IO.File]::WriteAllBytes("android\keystore\release_new.jks", $bytes)
+            Write-Host "✓ Keystore decoded"
+          } else {
+            Write-Host "⚠️ ANDROID_KEYSTORE_BASE64 not set - debug build only"
+          }
+        shell: powershell
+
+      - name: Map K: drive (Japanese path workaround)
+        run: |
+          $projectPath = "${{ github.workspace }}"
+          subst K: $projectPath
+          Write-Host "✓ K: drive mapped to $projectPath"
+        shell: powershell
+
+      - name: Build APK (Release)
+        if: |
+          (github.event_name == 'workflow_dispatch' && inputs.build_type == 'release') ||
+          (github.event_name == 'push')
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          JAVA_HOME: ${{ env.JAVA_HOME }}
+        run: |
+          cd K:/
+          flutter build apk --release --no-pub
+          Write-Host "✓ Release APK build completed"
+        shell: powershell
+
+      - name: Build APK (Debug)
+        if: github.event_name == 'workflow_dispatch' && inputs.build_type == 'debug'
+        run: |
+          cd K:/
+          flutter build apk --debug
+          Write-Host "✓ Debug APK build completed"
+        shell: powershell
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-${{ inputs.build_type }}
+          path: |
+            build/app/outputs/flutter-apk/app-*.apk
+          retention-days: 30
+
+      - name: Display build info
+        run: |
+          $apkPath = Get-ChildItem -Path "build\app\outputs\flutter-apk\*.apk" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($apkPath) {
+            $size = $apkPath.Length / 1MB
+            Write-Host "✓ APK built successfully"
+            Write-Host "  Path: $($apkPath.FullName)"
+            Write-Host "  Size: $([Math]::Round($size, 2)) MB"
+          } else {
+            Write-Host "⚠️ APK not found"
+          }
+        shell: powershell
+
+      - name: Unmount K: drive
+        if: always()
+        run: |
+          subst K: /d
+          Write-Host "✓ K: drive unmounted"
+        shell: powershell

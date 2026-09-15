@@ -1,0 +1,5 @@
+# Fastlane sensitive files
+google_play_key.json
+*.mobileprovision
+*.cer
+*.p8

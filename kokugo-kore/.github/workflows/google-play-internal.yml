@@ -1,0 +1,139 @@
+name: Google Play Internal Track Upload
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: true
+        default: 'release'
+        type: choice
+        options:
+          - release
+
+jobs:
+  build-and-upload:
+    name: Build AAB and Upload to Google Play Internal
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Create keystore directory
+        run: |
+          if (!(Test-Path "android\keystore")) {
+            New-Item -ItemType Directory -Path "android\keystore" -Force
+          }
+        shell: powershell
+
+      - name: Decode and write keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if ("${{ env.KEYSTORE_BASE64 }}" -ne "") {
+            $bytes = [Convert]::FromBase64String("${{ env.KEYSTORE_BASE64 }}")
+            [System.IO.File]::WriteAllBytes("android\keystore\release_new.jks", $bytes)
+            Write-Host "✓ Keystore decoded"
+          } else {
+            Write-Host "⚠️ ANDROID_KEYSTORE_BASE64 not set - skipping release build"
+            exit 1
+          }
+        shell: powershell
+
+      - name: Map K: drive (Japanese path workaround)
+        run: |
+          $projectPath = "${{ github.workspace }}"
+          subst K: $projectPath
+          Write-Host "✓ K: drive mapped to $projectPath"
+        shell: powershell
+
+      - name: Build AAB (Release)
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          JAVA_HOME: ${{ env.JAVA_HOME }}
+        run: |
+          cd K:/
+          flutter build appbundle --release --no-pub
+          Write-Host "✓ Release AAB build completed"
+        shell: powershell
+
+      - name: Verify AAB output
+        run: |
+          $aabPath = Get-ChildItem -Path "build\app\outputs\bundle\release\*.aab" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($aabPath) {
+            $size = $aabPath.Length / 1MB
+            Write-Host "✓ AAB built successfully"
+            Write-Host "  Path: $($aabPath.FullName)"
+            Write-Host "  Size: $([Math]::Round($size, 2)) MB"
+          } else {
+            Write-Host "❌ AAB not found"
+            exit 1
+          }
+        shell: powershell
+
+      - name: Setup Ruby for fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+          working-directory: 'android'
+
+      - name: Install fastlane
+        run: |
+          gem install fastlane -NV
+        shell: pwsh
+
+      - name: Upload to Google Play Internal Track
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          if ("${{ env.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}" -eq "") {
+            Write-Host "⚠️ GOOGLE_PLAY_SERVICE_ACCOUNT_JSON not set - skipping upload"
+            exit 0
+          }
+
+          # Save the JSON key to a temporary file
+          $jsonPath = "android/fastlane/google_play_key.json"
+          Set-Content -Path $jsonPath -Value "${{ env.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}"
+
+          cd android
+          fastlane android internal_track
+
+          # Clean up sensitive file
+          Remove-Item -Path "fastlane/google_play_key.json" -Force
+        shell: pwsh
+
+      - name: Unmount K: drive
+        if: always()
+        run: |
+          subst K: /d
+          Write-Host "✓ K: drive unmounted"
+        shell: powershell
+
+      - name: Upload AAB artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aab-release
+          path: |
+            build/app/outputs/bundle/release/app-release.aab
+          retention-days: 30
