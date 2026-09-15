@@ -174,269 +174,269 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
           ListView(
             children: [
               if (!premium.isPremium) _PremiumBanner(premium: premium),
-          _SectionHeader(title: 'おと・サウンド'),
-          SwitchListTile(
-            secondary: const Text('🔊', style: TextStyle(fontSize: 20)),
-            title: const Text('よみあげ'),
-            subtitle: const Text('文字をタップするとよみあげます', style: TextStyle(fontSize: 11)),
-            value: soundEnabled,
-            activeColor: kPrimaryColor,
-            onChanged: (_) => ref.read(soundProvider.notifier).toggle(),
-          ),
-          const Divider(),
-          _SectionHeader(title: 'かく・練習'),
-          ListTile(
-            leading: const Text('✏️', style: TextStyle(fontSize: 20)),
-            title: const Text('かく 合格点'),
-            subtitle: const Text('一覧のかくでクリアとみなす点数', style: TextStyle(fontSize: 11)),
-            trailing: DropdownButton<int>(
-              value: drawingSettings.passingScore,
-              underline: const SizedBox.shrink(),
-              items: const [
-                DropdownMenuItem(value: 60, child: Text('60点')),
-                DropdownMenuItem(value: 70, child: Text('70点')),
-                DropdownMenuItem(value: 80, child: Text('80点')),
-                DropdownMenuItem(value: 90, child: Text('90点')),
-              ],
-              onChanged: (v) {
-                if (v != null) {
-                  ref.read(drawingSettingsProvider.notifier).setPassingScore(v);
-                }
-              },
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.cleaning_services_outlined, color: kTextMuted),
-            title: const Text('かく れんしゅうをリセット'),
-            subtitle: const Text('かく練習の成績をリセットします', style: TextStyle(fontSize: 11)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => _confirmDrawingReset(context, ref),
-          ),
-          const Divider(),
-          _SectionHeader(title: 'がくしゅうしゃ'),
-          ListTile(
-            leading: const Icon(Icons.person_outline),
-            title: const Text('プロフィール'),
-            subtitle: Text(
-              currentProfile?.name ?? 'なし',
-              style: const TextStyle(fontSize: 12),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => Navigator.pushReplacementNamed(context, '/profile-selection'),
-          ),
-          const Divider(),
-          _SectionHeader(title: 'きろく'),
-          ListTile(
-            leading: const Text('🔥', style: TextStyle(fontSize: 20)),
-            title: const Text('れんぞく'),
-            trailing: Text('${progress.streakDays}日',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          ),
-          ListTile(
-            leading: const Text('⭐', style: TextStyle(fontSize: 20)),
-            title: const Text('せいかいすう'),
-            trailing: Text('${progress.totalCorrect}問',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          ),
-          ListTile(
-            leading: const Text('📖', style: TextStyle(fontSize: 20)),
-            title: const Text('かんじ せいかい'),
-            trailing: Text('${progress.totalKanjiCorrect}問',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          ),
-          ListTile(
-            leading: const Text('📚', style: TextStyle(fontSize: 20)),
-            title: const Text('よむ せいかい'),
-            trailing: Text('${progress.totalReadingCorrect}問',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          ),
-          ListTile(
-            leading: const Text('あ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kAccentGreen)),
-            title: const Text('ひらがな かく'),
-            subtitle: const Text('かく練習のクリア数', style: TextStyle(fontSize: 11)),
-            trailing: Text('$hiraganaCleared / $hiraganaTotal',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          ),
-          ListTile(
-            leading: const Text('ア', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kAccentBlue)),
-            title: const Text('カタカナ かく'),
-            subtitle: const Text('かく練習のクリア数', style: TextStyle(fontSize: 11)),
-            trailing: Text('$katakanaCleared / $katakanaTotal',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          ),
-          ListTile(
-            leading: const Text('💬', style: TextStyle(fontSize: 20)),
-            title: const Text('ことば マスター'),
-            subtitle: const Text('マスターした語数', style: TextStyle(fontSize: 11)),
-            trailing: Text('$masteredVocab語',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          ),
-          const Divider(),
-          _SectionHeader(title: '利用時間制限'),
-          ListTile(
-            leading: const Text('⏰', style: TextStyle(fontSize: 20)),
-            title: const Text('利用時間を設定する'),
-            subtitle: const Text('1日の利用時間に上限を設定できます（ほごしゃ向け）',
-                style: TextStyle(fontSize: 11)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => _openScreenTimeSettings(context),
-          ),
-          const Divider(),
-          _SectionHeader(title: '🔔 通知設定'),
-          ListTile(
-            leading: const Text('🔔', style: TextStyle(fontSize: 20)),
-            title: const Text('通知設定を変更'),
-            subtitle: const Text('通知の受け取り設定を管理',
-                style: TextStyle(fontSize: 11)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () {
-              final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-              if (userId.isNotEmpty) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => NotificationSettingsPage(userId: userId),
-                  ),
-                );
-              }
-            },
-          ),
-          const Divider(),
-          _SectionHeader(title: '📈 分析'),
-          ListTile(
-            leading: const Text('📊', style: TextStyle(fontSize: 20)),
-            title: const Text('ユーザーリテンション分析'),
-            subtitle: const Text('あなたの活動パターンと継続性を分析',
-                style: TextStyle(fontSize: 11)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => const RetentionDashboard(),
+              _SectionHeader(title: 'おと・サウンド'),
+              SwitchListTile(
+                secondary: const Text('🔊', style: TextStyle(fontSize: 20)),
+                title: const Text('よみあげ'),
+                subtitle: const Text('文字をタップするとよみあげます', style: TextStyle(fontSize: 11)),
+                value: soundEnabled,
+                activeColor: kPrimaryColor,
+                onChanged: (_) => ref.read(soundProvider.notifier).toggle(),
               ),
-            ),
-          ),
-          const Divider(),
-          _SectionHeader(title: 'ソーシャル'),
-          ListTile(
-            leading: const Icon(Icons.person_add, color: kPrimaryColor),
-            title: const Text('フレンドを探す'),
-            subtitle: const Text('ユーザーを検索してフレンド申請する', style: TextStyle(fontSize: 11)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => showDialog(
-              context: context,
-              builder: (context) => const AddFriendDialog(),
-            ),
-          ),
-          const Divider(),
-          _SectionHeader(title: 'テーマ'),
-          const _ThemeSection(),
-          const Divider(),
-          _SectionHeader(title: 'ともコレ'),
-          const _TomoKoreSection(),
-          const Divider(),
-          _SectionHeader(title: 'ランキング設定'),
-          const _RankingPrivacySection(),
-          const Divider(),
-          _SectionHeader(title: 'バトル設定'),
-          const _BattleSettingsSection(),
-          const Divider(),
-          _SectionHeader(title: 'アプリについて'),
-          ListTile(
-            leading: const Text('🏅', style: TextStyle(fontSize: 20)),
-            title: const Text('バッジコレクション'),
-            subtitle: const Text('獲得したバッジを確認する', style: TextStyle(fontSize: 11)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => Navigator.of(context).pushNamed('/badges'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.bar_chart, color: kPrimaryColor),
-            title: const Text('ほごしゃレポート'),
-            subtitle: const Text('がくしゅうきろくを確認する',
-                style: TextStyle(fontSize: 11)),
-            trailing: const Icon(Icons.arrow_forward_ios,
-                size: 14, color: kTextMuted),
-            onTap: () => _openParentReport(context),
-          ),
-          ListTile(
-            leading: const Icon(Icons.help_outline),
-            title: const Text('このアプリの使い方'),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => _showUsageGuide(context),
-          ),
-          ListTile(
-            leading: const Icon(Icons.celebration_outlined),
-            title: const Text('アプリの紹介をもう一度見る'),
-            subtitle: const Text('初回起動時に表示された説明',
-                style: TextStyle(fontSize: 11)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => showAppIntroDialog(context),
-          ),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: const Text('バージョン'),
-            trailing: const Text(_appVersion, style: TextStyle(color: kTextMuted)),
-            onTap: () => _showChangelog(context),
-            subtitle: const Text('タップでアップデート履歴を確認', style: TextStyle(fontSize: 10)),
-          ),
-          ListTile(
-            leading: const Icon(Icons.library_books_outlined),
-            title: const Text('小学コレ！国語'),
-            subtitle: const Text('Your Wish'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.privacy_tip_outlined),
-            title: const Text('プライバシーポリシー'),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => Navigator.of(context).pushNamed('/privacy'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.description_outlined),
-            title: const Text('利用規約'),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => Navigator.of(context).pushNamed('/terms'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.copyright_outlined),
-            title: const Text('オープンソースライセンス'),
-            subtitle: const Text('書き順データの提供元', style: TextStyle(fontSize: 11)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => _showOpenSourceCredits(context),
-          ),
-          ListTile(
-            leading: const Icon(Icons.bug_report_outlined),
-            title: const Text('バグ報告・改善要望'),
-            subtitle: const Text('アプリの問題や機能提案をお知らせください', style: TextStyle(fontSize: 11)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => const FeedbackFormPage(
-                  appName: 'kokugo-kore',
-                  appVersion: _appVersion,
+              const Divider(),
+              _SectionHeader(title: 'かく・練習'),
+              ListTile(
+                leading: const Text('✏️', style: TextStyle(fontSize: 20)),
+                title: const Text('かく 合格点'),
+                subtitle: const Text('一覧のかくでクリアとみなす点数', style: TextStyle(fontSize: 11)),
+                trailing: DropdownButton<int>(
+                  value: drawingSettings.passingScore,
+                  underline: const SizedBox.shrink(),
+                  items: const [
+                    DropdownMenuItem(value: 60, child: Text('60点')),
+                    DropdownMenuItem(value: 70, child: Text('70点')),
+                    DropdownMenuItem(value: 80, child: Text('80点')),
+                    DropdownMenuItem(value: 90, child: Text('90点')),
+                  ],
+                  onChanged: (v) {
+                    if (v != null) {
+                      ref.read(drawingSettingsProvider.notifier).setPassingScore(v);
+                    }
+                  },
                 ),
               ),
-            ),
-          ),
-          const CrossPromoSection(
-            currentAppId: 'com.yourwish.shougakukore.kokugo',
-            currentCategory: '小学コレ',
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: OutlinedButton.icon(
-              icon: const Icon(Icons.refresh, color: kAccentRed),
-              label: const Text('がくしゅうきろくをリセット',
-                  style: TextStyle(color: kAccentRed)),
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: kAccentRed),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ListTile(
+                leading: const Icon(Icons.cleaning_services_outlined, color: kTextMuted),
+                title: const Text('かく れんしゅうをリセット'),
+                subtitle: const Text('かく練習の成績をリセットします', style: TextStyle(fontSize: 11)),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => _confirmDrawingReset(context, ref),
               ),
-              onPressed: () => _confirmReset(context, ref),
-            ),
-          ),
-          const SizedBox(height: 80),
-        ],
-          // Tab 2: 学習分析
+              const Divider(),
+              _SectionHeader(title: 'がくしゅうしゃ'),
+              ListTile(
+                leading: const Icon(Icons.person_outline),
+                title: const Text('プロフィール'),
+                subtitle: Text(
+                  currentProfile?.name ?? 'なし',
+                  style: const TextStyle(fontSize: 12),
+                ),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => Navigator.pushReplacementNamed(context, '/profile-selection'),
+              ),
+              const Divider(),
+              _SectionHeader(title: 'きろく'),
+              ListTile(
+                leading: const Text('🔥', style: TextStyle(fontSize: 20)),
+                title: const Text('れんぞく'),
+                trailing: Text('${progress.streakDays}日',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              ),
+              ListTile(
+                leading: const Text('⭐', style: TextStyle(fontSize: 20)),
+                title: const Text('せいかいすう'),
+                trailing: Text('${progress.totalCorrect}問',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              ),
+              ListTile(
+                leading: const Text('📖', style: TextStyle(fontSize: 20)),
+                title: const Text('かんじ せいかい'),
+                trailing: Text('${progress.totalKanjiCorrect}問',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              ),
+              ListTile(
+                leading: const Text('📚', style: TextStyle(fontSize: 20)),
+                title: const Text('よむ せいかい'),
+                trailing: Text('${progress.totalReadingCorrect}問',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              ),
+              ListTile(
+                leading: const Text('あ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kAccentGreen)),
+                title: const Text('ひらがな かく'),
+                subtitle: const Text('かく練習のクリア数', style: TextStyle(fontSize: 11)),
+                trailing: Text('$hiraganaCleared / $hiraganaTotal',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              ),
+              ListTile(
+                leading: const Text('ア', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kAccentBlue)),
+                title: const Text('カタカナ かく'),
+                subtitle: const Text('かく練習のクリア数', style: TextStyle(fontSize: 11)),
+                trailing: Text('$katakanaCleared / $katakanaTotal',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              ),
+              ListTile(
+                leading: const Text('💬', style: TextStyle(fontSize: 20)),
+                title: const Text('ことば マスター'),
+                subtitle: const Text('マスターした語数', style: TextStyle(fontSize: 11)),
+                trailing: Text('$masteredVocab語',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              ),
+              const Divider(),
+              _SectionHeader(title: '利用時間制限'),
+              ListTile(
+                leading: const Text('⏰', style: TextStyle(fontSize: 20)),
+                title: const Text('利用時間を設定する'),
+                subtitle: const Text('1日の利用時間に上限を設定できます（ほごしゃ向け）',
+                    style: TextStyle(fontSize: 11)),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => _openScreenTimeSettings(context),
+              ),
+              const Divider(),
+              _SectionHeader(title: '🔔 通知設定'),
+              ListTile(
+                leading: const Text('🔔', style: TextStyle(fontSize: 20)),
+                title: const Text('通知設定を変更'),
+                subtitle: const Text('通知の受け取り設定を管理',
+                    style: TextStyle(fontSize: 11)),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () {
+                  final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+                  if (userId.isNotEmpty) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => NotificationSettingsPage(userId: userId),
+                      ),
+                    );
+                  }
+                },
+              ),
+              const Divider(),
+              _SectionHeader(title: '📈 分析'),
+              ListTile(
+                leading: const Text('📊', style: TextStyle(fontSize: 20)),
+                title: const Text('ユーザーリテンション分析'),
+                subtitle: const Text('あなたの活動パターンと継続性を分析',
+                    style: TextStyle(fontSize: 11)),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const RetentionDashboard(),
+                  ),
+                ),
+              ),
+              const Divider(),
+              _SectionHeader(title: 'ソーシャル'),
+              ListTile(
+                leading: const Icon(Icons.person_add, color: kPrimaryColor),
+                title: const Text('フレンドを探す'),
+                subtitle: const Text('ユーザーを検索してフレンド申請する', style: TextStyle(fontSize: 11)),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => showDialog(
+                  context: context,
+                  builder: (context) => const AddFriendDialog(),
+                ),
+              ),
+              const Divider(),
+              _SectionHeader(title: 'テーマ'),
+              const _ThemeSection(),
+              const Divider(),
+              _SectionHeader(title: 'ともコレ'),
+              const _TomoKoreSection(),
+              const Divider(),
+              _SectionHeader(title: 'ランキング設定'),
+              const _RankingPrivacySection(),
+              const Divider(),
+              _SectionHeader(title: 'バトル設定'),
+              const _BattleSettingsSection(),
+              const Divider(),
+              _SectionHeader(title: 'アプリについて'),
+              ListTile(
+                leading: const Text('🏅', style: TextStyle(fontSize: 20)),
+                title: const Text('バッジコレクション'),
+                subtitle: const Text('獲得したバッジを確認する', style: TextStyle(fontSize: 11)),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => Navigator.of(context).pushNamed('/badges'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.bar_chart, color: kPrimaryColor),
+                title: const Text('ほごしゃレポート'),
+                subtitle: const Text('がくしゅうきろくを確認する',
+                    style: TextStyle(fontSize: 11)),
+                trailing: const Icon(Icons.arrow_forward_ios,
+                    size: 14, color: kTextMuted),
+                onTap: () => _openParentReport(context),
+              ),
+              ListTile(
+                leading: const Icon(Icons.help_outline),
+                title: const Text('このアプリの使い方'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => _showUsageGuide(context),
+              ),
+              ListTile(
+                leading: const Icon(Icons.celebration_outlined),
+                title: const Text('アプリの紹介をもう一度見る'),
+                subtitle: const Text('初回起動時に表示された説明',
+                    style: TextStyle(fontSize: 11)),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => showAppIntroDialog(context),
+              ),
+              ListTile(
+                leading: const Icon(Icons.info_outline),
+                title: const Text('バージョン'),
+                trailing: const Text(_appVersion, style: TextStyle(color: kTextMuted)),
+                onTap: () => _showChangelog(context),
+                subtitle: const Text('タップでアップデート履歴を確認', style: TextStyle(fontSize: 10)),
+              ),
+              ListTile(
+                leading: const Icon(Icons.library_books_outlined),
+                title: const Text('小学コレ！国語'),
+                subtitle: const Text('Your Wish'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.privacy_tip_outlined),
+                title: const Text('プライバシーポリシー'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => Navigator.of(context).pushNamed('/privacy'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.description_outlined),
+                title: const Text('利用規約'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => Navigator.of(context).pushNamed('/terms'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.copyright_outlined),
+                title: const Text('オープンソースライセンス'),
+                subtitle: const Text('書き順データの提供元', style: TextStyle(fontSize: 11)),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => _showOpenSourceCredits(context),
+              ),
+              ListTile(
+                leading: const Icon(Icons.bug_report_outlined),
+                title: const Text('バグ報告・改善要望'),
+                subtitle: const Text('アプリの問題や機能提案をお知らせください', style: TextStyle(fontSize: 11)),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const FeedbackFormPage(
+                      appName: 'kokugo-kore',
+                      appVersion: _appVersion,
+                    ),
+                  ),
+                ),
+              ),
+              const CrossPromoSection(
+                currentAppId: 'com.yourwish.shougakukore.kokugo',
+                currentCategory: '小学コレ',
+              ),
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: OutlinedButton.icon(
+                  icon: const Icon(Icons.refresh, color: kAccentRed),
+                  label: const Text('がくしゅうきろくをリセット',
+                      style: TextStyle(color: kAccentRed)),
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: kAccentRed),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  onPressed: () => _confirmReset(context, ref),
+                ),
+              ),
+              const SizedBox(height: 80),
+            ],
+            // Tab 2: 学習分析
           SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: AnalyticsDashboardWidget(
