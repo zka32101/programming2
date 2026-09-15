@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_core/shared_core.dart' show CrossPromoSection, AnalyticsDashboard;
+import 'package:shared_core/shared_core.dart' show AnalyticsDashboard;
 import '../providers/profile_provider.dart';
 import '../providers/progress_provider.dart';
 import '../providers/premium_provider.dart';
 import '../providers/daily_login_provider.dart';
-import '../providers/adaptive_provider.dart';
 import '../providers/logout_provider.dart';
 import '../providers/sansu_profile_provider.dart';
 import '../theme/app_theme.dart';
@@ -128,17 +127,18 @@ class _SettingsTabContent extends ConsumerWidget {
             onTap: () => Navigator.of(context).pushNamed('/privacy'),
           ),
           const SizedBox(height: 16),
-          CrossPromoSection(
-            appKey: 'sansu-kore',
-            onAppSelected: (appName) {},
-          ),
+          // CrossPromoSection temporarily disabled - not yet in shared_core
+          // CrossPromoSection(
+          //   appKey: 'sansu-kore',
+          //   onAppSelected: (appName) {},
+          // ),
           const SizedBox(height: 24),
           Center(
             child: ElevatedButton.icon(
               onPressed: () async {
                 try {
                   // Trigger logout by refreshing the provider
-                  await ref.refresh(logoutProvider);
+                  ref.invalidate(logoutProvider);
                   if (context.mounted) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       '/login',
@@ -265,6 +265,9 @@ class _AnalyticsTabContent extends StatelessWidget {
                 userName: profile.userName ?? 'User',
                 totalQuestions: progress.completedQuizzes.length,
                 averageAccuracy: 0.0,
+                totalTimeSpent: 0,
+                accuracyTrend: [],
+                dailyActivity: [],
               ),
               const SizedBox(height: 16),
             ],
