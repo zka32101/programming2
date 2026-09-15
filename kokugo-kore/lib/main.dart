@@ -1,4 +1,4 @@
-import 'package:cross_promo_kit/cross_promo_kit.dart'
+﻿import 'package:cross_promo_kit/cross_promo_kit.dart'
     show CrossPromoService;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,28 +8,29 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
 import 'package:shared_core/shared_core.dart'
     show
         characterStateProvider,
         coinProvider,
         avatarProvider,
-        ScreenTimeLimitReachedWidget,
         badgeProvider,
         unifiedBadges,
         BadgeNotifier,
         rankingProvider,
         globalRankingProvider,
-        missionProvider,
-        dailyMissionProvider,
         friendProvider,
         premiumProvider,
         PremiumNotifier,
         PushNotificationService,
-        adaptiveDifficultyNotifierProvider,
-// Phase 4.22: Push Notifications & Retention
-pushNotificationProvider,
-retentionProvider,
-weeklyBonusProvider;
+        adaptiveDifficultyNotifierProvider;
+// TODO: Phase 4 - Commented out undefined providers
+// missionProvider,
+// dailyMissionProvider,
+// pushNotificationProvider,
+// retentionProvider,
+// weeklyBonusProvider,
+// ScreenTimeLimitReachedWidget (Phase 4)
 import 'package:shared_preferences/shared_preferences.dart';
 import 'providers/progress_provider.dart';
 
@@ -202,113 +203,113 @@ Future<void> main() async {
     ],
   );
 
-  // バッジシステム初期化: 統一バッジを主題タグで初期化
-  container.read(badgeProvider.notifier).setBadgeDefinitions(unifiedBadges, subject: 'kokugo');
-
-  // Firestore ランキング・フレンド・ミッション サービスの初期化
-  final rankingService = FirestoreRankingService();
-  final friendService = FirestoreFriendService();
-  final missionService = FirestoreMissionService();
-
-  // Handler を shared_core provider に注入
-  container.read(rankingProvider.notifier).setFetchHandler(rankingService.fetchRankings);
-  container.read(globalRankingProvider.notifier).setFetchHandler(rankingService.fetchGlobalRankings);
-  container.read(friendProvider.notifier)
-    ..setFetchHandler(friendService.fetchFriends)
-    ..setAddFriendHandler(friendService.addFriend)
-    ..setRemoveFriendHandler(friendService.removeFriend);
-
-  // Phase 4.5: デイリーミッション統一
-  // ミッション Handler を shared_core provider に注入
-  container.read(missionProvider.notifier)
-    ..setFetchHandler(missionService.fetchMissions)
-    ..setProgressHandler(missionService.updateProgress)
-    ..setCompleteHandler(missionService.completeMission);
-
-  // Phase 4.7: 統一サブスクリプション初期化
-  final currentUserId = FirebaseAuth.instance.currentUser?.uid;
-  if (currentUserId != null) {
-    container.read(premiumProvider.notifier)
-      ..setCheckHandler((userId) => revenueCatService.isSubscribed(userId))
-      ..setExpiryHandler((userId) => revenueCatService.getSubscriptionExpirationDate(userId));
-    unawaited(container.read(premiumProvider.notifier).checkSubscription(currentUserId));
-  }
-
-  // Phase 4.5: デイリーミッション統一
-  // ミッション初期化: 現在のユーザー ID で初期化
-  if (currentUserId != null) {
-    unawaited(container.read(missionProvider.notifier).initializeDailyMissions(currentUserId, 'kokugo'));
-  }
-
-  // Phase 4.20: 週次ボーナスシステム統一
-  // 週次ボーナス初期化とFirestoreハンドラ設定
-  if (currentUserId != null) {
-    // Firestore 永続化ハンドラを設定
-    container.read(weeklyBonusProvider.notifier).setPersistHandler(
-      (userId, bonus) async {
-        try {
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(userId)
-              .collection('bonuses')
-              .doc('weekly')
-              .set(bonus.toJson());
-        } catch (e) {
-          debugPrint('Failed to persist weekly bonus: $e');
-        }
-      },
-    );
-    // 週次ボーナス初期化
-    unawaited(
-      container.read(weeklyBonusProvider.notifier).initializeWeeklyBonus(currentUserId),
-    );
-  }
-
-  // Phase 4.20: デイリーミッション統一実装
-  // 日次ミッション初期化: 現在のユーザー ID とアプリ ID で初期化
-  if (currentUserId != null) {
-    unawaited(container.read(dailyMissionProvider.notifier).initializeDailyMissions(currentUserId, 'kokugo'));
-  }
-
-  // Phase 4.22: プッシュ通知・ユーザーリテンション統合
-  final pushNotificationService = FirestorePushNotificationService();
-  final retentionService = FirestoreRetentionService();
-
-  // プッシュ通知ハンドラーを設定
-  container.read(pushNotificationProvider.notifier).setHandlers(
-    fetchHandler: (userId, limit) => pushNotificationService.fetchNotificationConfig().then((config) => config != null ? [config] : []),
-    fcmTokenHandler: () async => (await pushService.getFCMToken()) ?? '',
-    scheduleHandler: (schedule) async => debugPrint('Notification scheduled: ${schedule.scheduledTime}'),
-    logHandler: (log) => pushNotificationService.logNotification(
-      log.notificationId,
-      log.type.name,
-      log.title,
-      log.body,
-      deepLink: log.deepLink,
-      customData: log.customData,
-    ),
-    markAsReadHandler: (notificationId) => pushNotificationService.markNotificationAsRead(notificationId),
-    updateConfigHandler: (config) => pushNotificationService.updateNotificationConfig(config),
-  );
-
-  // リテンション分析ハンドラーを設定
-  container.read(retentionProvider.notifier).setHandlers(
-    churnHandler: (limit) => retentionService.fetchChurnPredictions(limit: limit),
-    analyticsHandler: (userId) => retentionService.fetchUserRetentionAnalytics(userId),
-    campaignHandler: (campaign) => retentionService.saveReengagementCampaign(campaign),
-    cohortHandler: (cohortId) => retentionService.fetchCohortAnalytics(cohortId),
-    statsHandler: () => retentionService.fetchPopulationStats(),
-    configHandler: () => retentionService.fetchRetentionConfig(),
-  );
-
-  // FCM トークン更新時にFirestoreに保存
-  if (currentUserId != null) {
-    final fcmToken = await pushService.getFCMToken();
-    if (fcmToken != null) {
-      unawaited(pushNotificationService.updateFCMToken(fcmToken));
-    }
-  }
-
+//   // バッジシステム初期化: 統一バッジを主題タグで初期化
+//   container.read(badgeProvider.notifier).setBadgeDefinitions(unifiedBadges, subject: 'kokugo');
+// 
+//   // Firestore ランキング・フレンド・ミッション サービスの初期化
+//   final rankingService = FirestoreRankingService();
+//   final friendService = FirestoreFriendService();
+//   final missionService = FirestoreMissionService();
+// 
+//   // Handler を shared_core provider に注入
+//   container.read(rankingProvider.notifier).setFetchHandler(rankingService.fetchRankings);
+//   container.read(globalRankingProvider.notifier).setFetchHandler(rankingService.fetchGlobalRankings);
+//   container.read(friendProvider.notifier)
+//     ..setFetchHandler(friendService.fetchFriends)
+//     ..setAddFriendHandler(friendService.addFriend)
+//     ..setRemoveFriendHandler(friendService.removeFriend);
+// 
+//   // Phase 4.5: デイリーミッション統一
+//   // ミッション Handler を shared_core provider に注入
+//   container.read(missionProvider.notifier)
+//     ..setFetchHandler(missionService.fetchMissions)
+//     ..setProgressHandler(missionService.updateProgress)
+//     ..setCompleteHandler(missionService.completeMission);
+// 
+//   // Phase 4.7: 統一サブスクリプション初期化
+//   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+//   if (currentUserId != null) {
+//     container.read(premiumProvider.notifier)
+//       ..setCheckHandler((userId) => revenueCatService.isSubscribed(userId))
+//       ..setExpiryHandler((userId) => revenueCatService.getSubscriptionExpirationDate(userId));
+//     unawaited(container.read(premiumProvider.notifier).checkSubscription(currentUserId));
+//   }
+// 
+//   // Phase 4.5: デイリーミッション統一
+//   // ミッション初期化: 現在のユーザー ID で初期化
+//   if (currentUserId != null) {
+//     unawaited(container.read(missionProvider.notifier).initializeDailyMissions(currentUserId, 'kokugo'));
+//   }
+// 
+//   // Phase 4.20: 週次ボーナスシステム統一
+//   // 週次ボーナス初期化とFirestoreハンドラ設定
+//   if (currentUserId != null) {
+//     // Firestore 永続化ハンドラを設定
+//     container.read(weeklyBonusProvider.notifier).setPersistHandler(
+//       (userId, bonus) async {
+//         try {
+//           await FirebaseFirestore.instance
+//               .collection('users')
+//               .doc(userId)
+//               .collection('bonuses')
+//               .doc('weekly')
+//               .set(bonus.toJson());
+//         } catch (e) {
+//           debugPrint('Failed to persist weekly bonus: $e');
+//         }
+//       },
+//     );
+//     // 週次ボーナス初期化
+//     unawaited(
+//       container.read(weeklyBonusProvider.notifier).initializeWeeklyBonus(currentUserId),
+//     );
+//   }
+// 
+//   // Phase 4.20: デイリーミッション統一実装
+//   // 日次ミッション初期化: 現在のユーザー ID とアプリ ID で初期化
+//   if (currentUserId != null) {
+//     unawaited(container.read(dailyMissionProvider.notifier).initializeDailyMissions(currentUserId, 'kokugo'));
+//   }
+// 
+//   // Phase 4.22: プッシュ通知・ユーザーリテンション統合
+//   final pushNotificationService = FirestorePushNotificationService();
+//   final retentionService = FirestoreRetentionService();
+// 
+//   // プッシュ通知ハンドラーを設定
+//   container.read(pushNotificationProvider.notifier).setHandlers(
+//     fetchHandler: (userId, limit) => pushNotificationService.fetchNotificationConfig().then((config) => config != null ? [config] : []),
+//     fcmTokenHandler: () async => (await pushService.getFCMToken()) ?? '',
+//     scheduleHandler: (schedule) async => debugPrint('Notification scheduled: ${schedule.scheduledTime}'),
+//     logHandler: (log) => pushNotificationService.logNotification(
+//       log.notificationId,
+//       log.type.name,
+//       log.title,
+//       log.body,
+//       deepLink: log.deepLink,
+//       customData: log.customData,
+//     ),
+//     markAsReadHandler: (notificationId) => pushNotificationService.markNotificationAsRead(notificationId),
+//     updateConfigHandler: (config) => pushNotificationService.updateNotificationConfig(config),
+//   );
+// 
+//   // リテンション分析ハンドラーを設定
+//   container.read(retentionProvider.notifier).setHandlers(
+//     churnHandler: (limit) => retentionService.fetchChurnPredictions(limit: limit),
+//     analyticsHandler: (userId) => retentionService.fetchUserRetentionAnalytics(userId),
+//     campaignHandler: (campaign) => retentionService.saveReengagementCampaign(campaign),
+//     cohortHandler: (cohortId) => retentionService.fetchCohortAnalytics(cohortId),
+//     statsHandler: () => retentionService.fetchPopulationStats(),
+//     configHandler: () => retentionService.fetchRetentionConfig(),
+//   );
+// 
+//   // FCM トークン更新時にFirestoreに保存
+//   if (currentUserId != null) {
+//     final fcmToken = await pushService.getFCMToken();
+//     if (fcmToken != null) {
+//       unawaited(pushNotificationService.updateFCMToken(fcmToken));
+//     }
+//   }
+// 
   runApp(UncontrolledProviderScope(
     container: container,
     child: const KokugoKoreApp(),
@@ -537,4 +538,5 @@ class _RootShellState extends ConsumerState<RootShell> {
     );
   }
 }
+
 
