@@ -777,7 +777,10 @@ class _FramedAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatarImage = AvatarImage(avatar: avatar, size: size);
+    final avatarImage = CircleAvatar(
+      radius: size / 2,
+      child: Text(avatar.emoji, style: TextStyle(fontSize: size * 0.6)),
+    );
     final framePath = frame?.assetPath;
     if (framePath == null) return avatarImage;
 
@@ -809,7 +812,7 @@ class _AiCoachingCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.watch(profileProvider).currentProfile;
-    final userId = currentUser?.userId;
+    final userId = currentUser?.id;
 
     if (userId == null) {
       return const SizedBox.shrink();

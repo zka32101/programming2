@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_core/shared_core.dart'
-    show currentMatchProvider, watchMatchProvider, MatchState, QuizQuestion, Stage;
+    show QuizQuestion, Stage;
+// TODO: Phase 4 - Implement multiplayer matching (currentMatchProvider, watchMatchProvider, MatchState)
 
 import '../../data/quiz_data.dart';
 import '../../providers/multiplayer_provider.dart';
@@ -99,9 +100,30 @@ class _MultiplayerQuizScreenState extends ConsumerState<MultiplayerQuizScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final identity = ref.watch(kokugoPlayerIdentityProvider);
-    final matchAsync = ref.watch(watchMatchProvider(widget.matchId));
+    // TODO: Phase 4 - Implement multiplayer matching UI
+    // final identity = ref.watch(kokugoPlayerIdentityProvider);
+    // final matchAsync = ref.watch(watchMatchProvider(widget.matchId));
 
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('対戦クイズ'),
+        backgroundColor: kPrimaryColor,
+        centerTitle: true,
+      ),
+      body: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.construction, size: 64, color: Colors.orange),
+            SizedBox(height: 16),
+            Text('対戦クイズ機能は準備中です'),
+          ],
+        ),
+      ),
+    );
+
+    // TODO: Original implementation commented out
+    /*
     return Scaffold(
       appBar: AppBar(
         title: const Text('対戦クイズ'),
