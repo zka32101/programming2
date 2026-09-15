@@ -312,9 +312,10 @@ class _KokugoLevelUpCard extends ConsumerWidget {
                               .read(characterStateProvider.notifier)
                               .levelUp(character.id);
                           if (error == null) {
-                            await ref
-                                .read(featuredCharacterProvider.notifier)
-                                .setFeatured(character.id);
+                            // TODO: Integrate featuredCharacterProvider from Phase 4
+                            // await ref
+                            //     .read(featuredCharacterProvider.notifier)
+                            //     .setFeatured(character.id);
                           }
                           if (ctx.mounted) {
                             Navigator.pop(ctx);

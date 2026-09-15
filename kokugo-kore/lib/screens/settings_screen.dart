@@ -86,7 +86,7 @@ Future<void> _openScreenTimeSettings(BuildContext context) async {
           title: const Text('利用時間の設定'),
           backgroundColor: kPrimaryColor,
         ),
-        body: const ScreenTimeSettingsWidget(primaryColor: kPrimaryColor),
+        body: const ScreenTimeSettingsWidget(),
       ),
     ),
   );
@@ -302,7 +302,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
                 trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => const RetentionDashboard(),
+                    builder: (_) => RetentionDashboard(),
                   ),
                 ),
               ),
@@ -315,7 +315,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
                 trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
                 onTap: () => showDialog(
                   context: context,
-                  builder: (context) => const AddFriendDialog(),
+                  builder: (context) => AddFriendDialog(),
                 ),
               ),
               const Divider(),
@@ -400,14 +400,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
                 trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => const FeedbackFormPage(
+                    builder: (_) => FeedbackFormPage(
                       appName: 'kokugo-kore',
                       appVersion: _appVersion,
                     ),
                   ),
                 ),
               ),
-              const CrossPromoSection(
+              CrossPromoSection(
                 currentAppId: 'com.yourwish.shougakukore.kokugo',
                 currentCategory: '小学コレ',
               ),
