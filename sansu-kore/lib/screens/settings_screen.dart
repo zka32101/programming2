@@ -58,12 +58,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
   }
 }
 
-class _SettingsTabContent extends StatelessWidget {
-  final WidgetRef ref;
-  const _SettingsTabContent({required this.ref});
+class _SettingsTabContent extends ConsumerWidget {
+  const _SettingsTabContent();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider).currentProfile;
     final premium = ref.watch(premiumProvider);
     final daily = ref.watch(dailyLoginProvider);
@@ -139,11 +138,12 @@ class _SettingsTabContent extends StatelessWidget {
               onPressed: () async {
                 try {
                   await ref.read(logoutProvider.notifier).logout();
-                  if (!mounted) return;
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/login',
-                    (route) => false,
-                  );
+                  if (context.mounted) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/login',
+                      (route) => false,
+                    );
+                  }
                 } catch (e) {
                   debugPrint('Logout error: $e');
                 }
