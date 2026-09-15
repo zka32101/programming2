@@ -1,4 +1,5 @@
 import 'package:shared_core/shared_core.dart';
+import 'package:shared_core/models/character_data.dart' show Subject;
 
 // 算数コレ 10体のキャラクター（設計書「小学コレシリーズ_キャラクター図鑑＋LINEスタンプ化」準拠）
 // unlockAt: clearedStageIds.length の閾値（最大92ステージ）
@@ -17,6 +18,7 @@ const List<BaseCharacter> kSansuCharacters = [
       'たし算できた！', '1から始めよう', 'イチコと練習！', 'できたよ！',
       '算数すき！', 'ありがとう！', 'また明日ね', '一緒に頑張ろう',
     ],
+    appSubject: Subject.sansu,
   ),
 
   BaseCharacter(
@@ -31,6 +33,7 @@ const List<BaseCharacter> kSansuCharacters = [
       'ひき算OK！', 'バランスとれた！', 'ニニコと勉強', '残りはいくつ？',
       '2つ並んでる！', 'ありがとう！', 'また来てね', '一緒に考えよう',
     ],
+    appSubject: Subject.sansu,
   ),
 
   BaseCharacter(
@@ -45,6 +48,7 @@ const List<BaseCharacter> kSansuCharacters = [
       'かけ算できた！', '九九覚えた！', 'トライと一緒に', '何倍だろう？',
       '三角形は強い！', 'ありがとう！', 'また挑戦！', '繰り返しが大切',
     ],
+    appSubject: Subject.sansu,
   ),
 
   BaseCharacter(
@@ -59,6 +63,7 @@ const List<BaseCharacter> kSansuCharacters = [
       'わり算できた！', '等しく分けた！', 'フォークと計算', 'あまりはいくつ？',
       '公平が大事！', 'ありがとう！', 'また来てね', '一緒に分けよう',
     ],
+    appSubject: Subject.sansu,
   ),
 
   // ── Tier 2（計算の達人）3体 ──────────────────────────────────────
@@ -74,6 +79,7 @@ const List<BaseCharacter> kSansuCharacters = [
       '分数わかった！', '小数もOK！', 'ゴーゴと挑戦', '1より小さい数',
       '5本指の力！', 'ありがとう！', 'ハイタッチ！', '一緒に進もう',
     ],
+    appSubject: Subject.sansu,
   ),
 
   BaseCharacter(
@@ -88,6 +94,7 @@ const List<BaseCharacter> kSansuCharacters = [
       'かけ算マスター！', '計算速い！', 'マルティプルと', '大きな数も平気',
       '×で世界が広がる！', 'ありがとう！', 'また挑戦！', '一緒に計算しよう',
     ],
+    appSubject: Subject.sansu,
   ),
 
   BaseCharacter(
@@ -102,6 +109,7 @@ const List<BaseCharacter> kSansuCharacters = [
       'わり算マスター！', '筆算できた！', 'ディバイドと', '余りゼロ！',
       '分けることは美しい', 'ありがとう！', 'また計算しよう', '一緒に学ぼう',
     ],
+    appSubject: Subject.sansu,
   ),
 
   // ── Tier 3（図形と量の世界）2体 ──────────────────────────────────
@@ -117,6 +125,7 @@ const List<BaseCharacter> kSansuCharacters = [
       '図形わかった！', 'きれいな形！', 'ジオメと学ぼう', '面積計算OK！',
       '図形は芸術！', 'ありがとう！', 'また描こう', '一緒に考えよう',
     ],
+    appSubject: Subject.sansu,
   ),
 
   BaseCharacter(
@@ -131,6 +140,7 @@ const List<BaseCharacter> kSansuCharacters = [
       '算数全部OK！', '賢者に近づいた！', 'カルキュと一緒', 'どんな問題も',
       '計算は人類の知恵', 'ありがとう！', 'また挑戦！', '算数の達人！',
     ],
+    appSubject: Subject.sansu,
   ),
 
   // ── Tier 4（伝説の存在）1体 ──────────────────────────────────────
@@ -146,5 +156,6 @@ const List<BaseCharacter> kSansuCharacters = [
       '算数マスター！！', '全制覇した！', '伝説の算数使い', 'どんな計算も',
       '⚡算数の神⚡', 'ありがとう！！', 'また会おう！', 'これが算数の極意',
     ],
+    appSubject: Subject.sansu,
   ),
 ];
