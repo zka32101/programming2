@@ -1,0 +1,62 @@
+name: sansu_kore
+description: "算数コレ！- たし算からかんすうまで"
+publish_to: 'none'
+
+version: 3.1.0+13
+
+# Build trigger for shared_core APK integration - 2026-09-13
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_core:
+    path: ../shared_core
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.6.1
+  shared_preferences: ^2.3.0
+  intl: ^0.19.0
+  confetti: ^0.8.0
+  firebase_core: ^3.13.1
+  firebase_auth: ^5.5.4
+  firebase_messaging: ^15.1.6
+  cloud_firestore: ^5.4.2
+  in_app_purchase: ^3.3.0
+  google_fonts: ^6.2.1
+  uuid: ^4.0.0
+  google_mobile_ads: ^5.2.0
+  share_plus: ^11.0.0
+  flutter_tts: ^4.2.5
+  http: ^1.2.0
+  flutter_dotenv: ^5.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.1
+  build_runner: ^2.4.0
+  freezed: ^2.4.0
+  json_serializable: ^6.7.0
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/app_icon/app_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/app_icon/app_icon.png"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/branding/
+    - assets/app_icon/
+    - assets/avatars/
+    - assets/legal/
+    - assets/characters/tier1/
+    - assets/characters/tier2/
+    - assets/characters/tier3/
+    - assets/characters/tier4/

@@ -1,0 +1,101 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── ユーティリティ ───
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    // ─── users コレクション ───
+    // ユーザープロフィール、進捗、バッジ等の個人データ
+    match /users/{uid} {
+      // 所有者のみ読み書き可能
+      allow read, write: if isOwner(uid);
+
+      // プロフィール
+      match /profile {
+        allow read, write: if isOwner(uid);
+      }
+
+      // 学習進捗
+      match /progress {
+        allow read, write: if isOwner(uid);
+      }
+
+      // バッジ獲得履歴
+      match /badges/{document=**} {
+        allow read, write: if isOwner(uid);
+      }
+
+      // コイン残高
+      match /coins {
+        allow read, write: if isOwner(uid);
+      }
+
+      // キャラクターレベル
+      match /characters/{document=**} {
+        allow read, write: if isOwner(uid);
+      }
+
+      // デイリーログイン
+      match /dailyLogin {
+        allow read, write: if isOwner(uid);
+      }
+
+      // ストリーク
+      match /streak {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // ─── leaderboards コレクション ───
+    // 公開ランキングデータ（読み取り可能）
+    match /leaderboards/{document=**} {
+      // 全員読み取り可能
+      allow read: if isAuth();
+
+      // Cloud Functions のみ書き込み可能
+      allow write: if false;
+    }
+
+    // ─── announcements コレクション ───
+    // お知らせ・アップデート情報（公開）
+    match /announcements/{document=**} {
+      // 全員読み取り可能
+      allow read: if isAuth();
+
+      // Cloud Functions のみ書き込み可能
+      allow write: if false;
+    }
+
+    // ─── config コレクション ───
+    // アプリ設定・ゲームバランス設定
+    match /config/{document=**} {
+      // 全員読み取り可能
+      allow read: if isAuth();
+
+      // Cloud Functions のみ書き込み可能
+      allow write: if false;
+    }
+
+    // ─── gameEvents コレクション ───
+    // ゲームイベント・キャンペーン
+    match /gameEvents/{document=**} {
+      // 全員読み取り可能
+      allow read: if isAuth();
+
+      // Cloud Functions のみ書き込み可能
+      allow write: if false;
+    }
+
+    // ─── その他のコレクションは拒否 ───
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

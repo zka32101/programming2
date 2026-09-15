@@ -1,0 +1,52 @@
+# Flutter
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Android
+android/local.properties
+android/.gradle/
+android/gradlew
+android/gradlew.bat
+
+# iOS
+ios/Pods/
+ios/Podfile.lock
+
+# Web
+web/
+
+# Generated
+.g.dart
+.config.dart
+
+# Environment
+.env
+.env.local
+
+# Firebase (secrets)
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# OS
+Thumbs.db
+
+# Misc
+*.iml
+
+*.apk
+*.aab

@@ -1,0 +1,100 @@
+# Uncomment this line to define a global platform for your project
+platform :ios, '13.0'
+
+# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+project 'Runner', {
+  'Debug' => :debug,
+  'Profile' => :release,
+  'Release' => :release,
+}
+
+def flutter_root
+  generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
+  unless File.exist?(generated_xcode_build_settings_path)
+    raise "#{generated_xcode_build_settings_path} must exist. If you're running pod install manually, make sure flutter pub get is executed first"
+  end
+
+  File.foreach(generated_xcode_build_settings_path) do |line|
+    matches = line.match(/FLUTTER_ROOT\=(.*)/)
+    return matches[1].strip if matches
+  end
+  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
+end
+
+require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
+
+flutter_ios_podfile_setup
+
+target 'Runner' do
+  use_frameworks!
+  # Firebase.h等、モジュールとして書かれていないヘッダーをObjective-C側から
+  # importしているPod（firebase_messagingが依存するFirebase umbrella header等）があり、
+  # use_frameworks! のみだと "Include of non-modular header inside framework module"
+  # というビルドエラーになる。use_modular_headers! を併用してこれを回避する。
+  use_modular_headers!
+
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+
+    # 一部のPodがIPHONEOS_DEPLOYMENT_TARGETを非常に古い値（iOS10.0など）のまま
+    # 指定していたため、全Podのターゲットをアプリ本体と同じ13.0に揃える。
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+
+      # use_modular_headers! だけでは "Include of non-modular header inside
+      # framework module 'firebase_messaging.FLTFirebaseMessagingPlugin':
+      # 'Firebase.h'" が解消しなかったため、この設定で明示的に許可する。
+      # Firebase umbrella header（Firebase.h）を素直にモジュール化できない
+      # 構成のPodがあるための既知の回避策。
+      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+    end
+
+    # firebase_core/cloud_firestore等が依存するBoringSSL-GRPCは、ファイル単位の
+    # コンパイラフラグに "-GCC_WARN_INHIBIT_ALL_WARNINGS" を設定しているが、
+    # 新しいClang（Xcode 16以降）がこれを正しく解釈できず "-G" とみなして
+    # "unsupported option '-G'" というビルドエラーになる既知の問題がある。
+    # 該当フラグを取り除くことで回避する。
+    if target.name == 'BoringSSL-GRPC'
+      target.source_build_phase.files.each do |file|
+        if file.settings && file.settings['COMPILER_FLAGS']
+          flags = file.settings['COMPILER_FLAGS'].split
+          flags.reject! { |flag| flag == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
+          file.settings['COMPILER_FLAGS'] = flags.join(' ')
+        end
+      end
+    end
+  end
+
+  # gRPC-Core / gRPC-C++（cloud_firestore等が依存）のC++コードが、新しいClang
+  # （Xcode 16.3以降）の厳密なテンプレート構文チェックに引っかかり "A template
+  # argument list is expected after a name prefixed by the template keyword"
+  # というパースエラーになる既知の問題がある
+  # （https://github.com/grpc/grpc/issues/39458）。
+  # basic_seq.hは "gRPC-Core" と "gRPC-C++" の両方のPodに同じ内容がコピーされて
+  # 存在するため、`Pods/`配下を再帰的に検索し、見つかった全ファイルにパッチを当てる。
+  patched_count = 0
+  Dir.glob(File.join(__dir__, 'Pods', '**', 'basic_seq.h')).each do |basic_seq_path|
+    content = File.read(basic_seq_path)
+    # 完全一致ではなく部分一致の正規表現に変更（`return`の有無や空白差分に
+    # 依存させないため）。同じパターンがファイル内に複数あっても全て補正する。
+    patched = content.gsub(
+      /Traits::template CallSeqFactory\(/,
+      'Traits::template CallSeqFactory<>('
+    )
+    if patched != content
+      File.write(basic_seq_path, patched)
+      patched_count += 1
+      puts "[Podfile] Patched gRPC basic_seq.h template call syntax: #{basic_seq_path}"
+    end
+  end
+  puts "[Podfile] gRPC basic_seq.h patch: #{patched_count} file(s) patched"
+end
