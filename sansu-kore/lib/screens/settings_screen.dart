@@ -136,12 +136,14 @@ class _SettingsTabContent extends StatelessWidget {
           const SizedBox(height: 24),
           Center(
             child: ElevatedButton.icon(
-              onPressed: () {
-                ref.read(logoutProvider.notifier).state;
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/login',
-                  (route) => false,
-                );
+              onPressed: () async {
+                await ref.read(logoutProvider.notifier).logout();
+                if (mounted) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/login',
+                    (route) => false,
+                  );
+                }
               },
               icon: const Icon(Icons.logout),
               label: const Text('ログアウト'),
@@ -248,12 +250,17 @@ class _AnalyticsTabContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const AnalyticsDashboard(),
-          const SizedBox(height: 16),
-        ],
+      child: Consumer(
+        builder: (context, ref, child) {
+          final profile = ref.watch(profileProvider);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AnalyticsDashboard(userName: profile.userName ?? 'User'),
+              const SizedBox(height: 16),
+            ],
+          );
+        },
       ),
     );
   }
