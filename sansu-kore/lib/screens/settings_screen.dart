@@ -137,12 +137,15 @@ class _SettingsTabContent extends StatelessWidget {
           Center(
             child: ElevatedButton.icon(
               onPressed: () async {
-                await ref.read(logoutProvider.notifier).logout();
-                if (mounted) {
+                try {
+                  await ref.read(logoutProvider.notifier).logout();
+                  if (!mounted) return;
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     '/login',
                     (route) => false,
                   );
+                } catch (e) {
+                  debugPrint('Logout error: $e');
                 }
               },
               icon: const Icon(Icons.logout),
@@ -253,10 +256,14 @@ class _AnalyticsTabContent extends StatelessWidget {
       child: Consumer(
         builder: (context, ref, child) {
           final profile = ref.watch(profileProvider);
+          final progress = ref.watch(progressProvider);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AnalyticsDashboard(userName: profile.userName ?? 'User'),
+              AnalyticsDashboard(
+                userName: profile.userName ?? 'User',
+                totalQuestions: progress.completedQuizzes.length,
+              ),
               const SizedBox(height: 16),
             ],
           );
