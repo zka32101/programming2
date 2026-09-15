@@ -360,14 +360,13 @@ class KokugoKoreApp extends ConsumerWidget {
               featureEmoji: '🎋',
               child: HaikuQuizScreen(),
             ),
-        '/ai-kanji-consultation': (context) =>
-            const AIKanjiConsultationScreen(),
+        // '/ai-kanji-consultation': (context) => const AIKanjiConsultationScreen(),  // TODO: Phase 4
         '/privacy': (context) => const PrivacyPolicyScreen(),
         '/terms': (context) => const PrivacyPolicyScreen(),
         '/shop': (context) => const ShopScreen(),
         '/learn': (context) => const LearnScreen(),
         '/lesson': (context) => const LessonScreen(),
-        '/ai-coaching': (context) => const AiCoachingDashboardScreen(),
+        // '/ai-coaching': (context) => const AiCoachingDashboardScreen(),  // TODO: Phase 4
         '/vocabulary': (context) => const PremiumGate(
               featureName: 'ことば',
               featureEmoji: '💬',
@@ -506,11 +505,12 @@ class _RootShellState extends ConsumerState<RootShell> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(screenTimeProvider);
-    final isLimitReached = ref.read(screenTimeProvider.notifier).isLimitReached;
-    if (isLimitReached) {
-      return const ScreenTimeLimitReachedWidget(primaryColor: kPrimaryColor);
-    }
+    // TODO: Phase 4 - screenTimeProvider not implemented
+    // ref.watch(screenTimeProvider);
+    // final isLimitReached = ref.read(screenTimeProvider.notifier).isLimitReached;
+    // if (isLimitReached) {
+    //   return const ScreenTimeLimitReachedWidget(primaryColor: kPrimaryColor);
+    // }
     return Scaffold(
       body: IndexedStack(
         index: _tab,
