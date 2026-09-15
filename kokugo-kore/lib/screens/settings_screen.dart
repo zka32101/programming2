@@ -9,7 +9,7 @@ import 'package:shared_core/shared_core.dart'
         DailyActivityData,
         FeedbackFormPage,
         NotificationSettingsPage,
-        requireParentalGate,
+        ParentalGateService,
         RetentionDashboard,
         ScreenTimeSettingsWidget;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,22 +70,14 @@ const _changelog = <String, List<String>>{
 
 /// 保護者向けレポート画面を開く前に、保護者ゲートで確認する。
 Future<void> _openParentReport(BuildContext context) async {
-  final passedGate = await requireParentalGate(
-    context,
-    title: 'ほごしゃかくにん',
-    description: '保護者向けレポートの閲覧には、ほごしゃの確認が必要です。',
-  );
+  final passedGate = await ParentalGateService.requireParentalGate(context);
   if (!passedGate || !context.mounted) return;
   Navigator.of(context).pushNamed('/parent-report');
 }
 
 /// 利用時間制限の設定画面を開く前に、保護者ゲートで確認する。
 Future<void> _openScreenTimeSettings(BuildContext context) async {
-  final passedGate = await requireParentalGate(
-    context,
-    title: 'ほごしゃかくにん',
-    description: '利用時間の設定変更には、ほごしゃの確認が必要です。',
-  );
+  final passedGate = await ParentalGateService.requireParentalGate(context);
   if (!passedGate || !context.mounted) return;
   Navigator.of(context).push(
     MaterialPageRoute(
@@ -455,22 +447,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
 
   List<DailyActivityData> _generateDailyActivity() {
     return [
-      DailyActivityData(day: '月', count: 0),
-      DailyActivityData(day: '火', count: 0),
-      DailyActivityData(day: '水', count: 0),
-      DailyActivityData(day: '木', count: 0),
-      DailyActivityData(day: '金', count: 0),
-      DailyActivityData(day: '土', count: 0),
-      DailyActivityData(day: '日', count: 0),
+      DailyActivityData(day: 1, questionsAnswered: 0),
+      DailyActivityData(day: 2, questionsAnswered: 0),
+      DailyActivityData(day: 3, questionsAnswered: 0),
+      DailyActivityData(day: 4, questionsAnswered: 0),
+      DailyActivityData(day: 5, questionsAnswered: 0),
+      DailyActivityData(day: 6, questionsAnswered: 0),
+      DailyActivityData(day: 7, questionsAnswered: 0),
     ];
   }
 
   List<AccuracyTrendData> _generateAccuracyTrend() {
     return [
-      AccuracyTrendData(week: 'W1', accuracy: 0.0),
-      AccuracyTrendData(week: 'W2', accuracy: 0.0),
-      AccuracyTrendData(week: 'W3', accuracy: 0.0),
-      AccuracyTrendData(week: 'W4', accuracy: 0.0),
+      AccuracyTrendData(week: 1, accuracy: 0.0),
+      AccuracyTrendData(week: 2, accuracy: 0.0),
+      AccuracyTrendData(week: 3, accuracy: 0.0),
+      AccuracyTrendData(week: 4, accuracy: 0.0),
     ];
   }
 
@@ -681,11 +673,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
           TextButton(
             onPressed: () async {
               Navigator.pop(ctx);
-              final passedGate = await requireParentalGate(
-                context,
-                title: 'ほごしゃかくにん',
-                description: 'がくしゅうきろくの全リセットには、ほごしゃの確認が必要です。',
-              );
+              final passedGate = await ParentalGateService.requireParentalGate(context);
               if (!passedGate || !context.mounted) return;
               await ref.read(progressProvider.notifier).reset();
             },

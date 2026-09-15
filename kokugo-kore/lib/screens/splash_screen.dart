@@ -50,10 +50,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   Future<void> _load() async {
-    // バグ報告・改善要望フォームの送信ハンドラを登録
-    // （Realtime Database の feedback/{id} へ書き込む）
-    ref.read(feedbackProvider.notifier).setSubmitHandler(FirebaseRealtimeAPI.submitFeedback);
-    unawaited(ref.read(feedbackProvider.notifier).retryPendingReports());
+    // TODO: feedbackProvider と FirebaseRealtimeAPI.submitFeedback を Phase 4 で実装
 
     await Future.wait([
       ref.read(profileProvider.notifier).load(),

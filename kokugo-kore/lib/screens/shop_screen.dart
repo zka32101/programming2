@@ -14,7 +14,7 @@ List<AvatarModel> _getCoinUnlockAvatars() {
 
 // ── 国語コレ 交換所アイテム ───────────────────────────────────────────────
 
-const _exchangeItems = [
+const _exchangeItems = <AppShopItem>[
   // 全アプリ共通のショップアイテム（背景テーマ・フレーム、装着対応）
   ...kCommonShopItems,
   AppShopItem(id: 'hat_crown',   emoji: '👑', name: '金のおうかん',
