@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_core/shared_core.dart' show WeeklyBarChartWidget;
+// import 'package:shared_core/shared_core.dart' show WeeklyBarChartWidget;
+// TODO: WeeklyBarChartWidget is part of Phase 4
 import '../providers/adaptive_provider.dart';
 
 import '../data/quiz_data.dart';
@@ -389,14 +390,16 @@ class _AccuracyByGrade extends StatelessWidget {
           BoxShadow(color: Colors.black.withAlpha(8), blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
-      child: WeeklyBarChartWidget(
-        values: [for (final g in grades) accuracyByGrade[g]! * 100],
-        labels: [for (final g in grades) '$g年生'],
-        primaryColor: kPrimaryColor,
-        barColorForValue: (value) => _colorForPct(value / 100),
-        maxY: 100,
-        valueSuffix: '%',
-      ),
+      // TODO: Implement WeeklyBarChartWidget from Phase 4
+      // child: WeeklyBarChartWidget(
+      //   values: [for (final g in grades) accuracyByGrade[g]! * 100],
+      //   labels: [for (final g in grades) '$g年生'],
+      //   primaryColor: kPrimaryColor,
+      //   barColorForValue: (value) => _colorForPct(value / 100),
+      //   maxY: 100,
+      //   valueSuffix: '%',
+      // ),
+      child: const Center(child: Text('グラフ表示は準備中です')),
     );
   }
 }

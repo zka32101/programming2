@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_core/shared_core.dart' show leaderboardProvider, LeaderboardView;
 import '../../providers/multiplayer_provider.dart';
@@ -38,3 +38,4 @@ class KokugoLeaderboardScreen extends ConsumerWidget {
     );
   }
 }
+
