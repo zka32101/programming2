@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_core/shared_core.dart' show missionProvider, coinProvider, weeklyBonusProvider;
+import 'package:shared_core/shared_core.dart' show coinProvider;
+// TODO: Implement missionProvider, weeklyBonusProvider in Phase 4
 
 /// リワード種別
 enum RewardType { coins, badges, characterExp }
@@ -14,37 +15,24 @@ class MissionScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final missionState = ref.watch(missionProvider);
+    // TODO: Implement missionProvider in Phase 4
+    // final missionState = ref.watch(missionProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('デイリーミッション'),
         elevation: 0,
       ),
-      body: missionState.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : missionState.error != null
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                      const SizedBox(height: 16),
-                      Text('エラーが発生しました: ${missionState.error}'),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          // ミッションを再読み込み
-                          ref.read(missionProvider.notifier).initializeMissions('current_user');
-                        },
-                        child: const Text('再読み込み'),
-                      ),
-                    ],
-                  ),
-                )
-              : missionState.missions.isEmpty
-                  ? const Center(child: Text('ミッションがありません'))
-                  : _MissionList(missions: missionState.missions, totalCoins: missionState.totalCoinsToday),
+      body: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.construction, size: 64, color: Colors.orange),
+            SizedBox(height: 16),
+            Text('デイリーミッション機能は準備中です'),
+          ],
+        ),
+      ),
     );
   }
 }

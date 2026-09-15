@@ -106,11 +106,11 @@ class _QuestScreenState extends ConsumerState<QuestScreen>
         try {
           final durationMinutes = elapsed.inSeconds ~/ 60;
 
-          // Phase 4.12: Learning Time 記録（Dynamic Pricing 用）
-          await FirebaseService().recordLearningSession(userId, durationMinutes);
+          // TODO: Phase 4 - Implement learning session recording
+          // await FirebaseService().recordLearningSession(userId, durationMinutes);
 
-          // Phase 4.13: Retention - ストリーク記録
-          await FirebaseService().updateStreak(userId);
+          // TODO: Phase 4 - Implement streak recording
+          // await FirebaseService().updateStreak(userId);
         } catch (e) {
           debugPrint('Learning session recording error: $e');
         }
@@ -273,7 +273,9 @@ class _FeaturedCharacterBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final featuredId = ref.watch(featuredCharacterProvider);
+    // TODO: Integrate featuredCharacterProvider from Phase 4
+    // final featuredId = ref.watch(featuredCharacterProvider);
+    final featuredId = null;
     final charStates = ref.watch(characterStateProvider);
 
     final unlockedIds = kKokugoCharacters

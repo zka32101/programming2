@@ -1,0 +1,3 @@
+Line 5: requireParentalGate を ParentalGateService に変更
+Line 70, 164, 268: AvatarImage をコメント化
+Line 280: requireParentalGate を ParentalGateService.requireParentalGate に変更
