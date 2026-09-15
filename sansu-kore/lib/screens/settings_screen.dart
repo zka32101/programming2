@@ -50,7 +50,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
       body: TabBarView(
         controller: _tabController,
         children: [
-          _SettingsTabContent(ref: ref),
+          const _SettingsTabContent(),
           const _AnalyticsTabContent(),
         ],
       ),
@@ -137,7 +137,8 @@ class _SettingsTabContent extends ConsumerWidget {
             child: ElevatedButton.icon(
               onPressed: () async {
                 try {
-                  await ref.read(logoutProvider.notifier).logout();
+                  // Trigger logout by refreshing the provider
+                  await ref.refresh(logoutProvider);
                   if (context.mounted) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       '/login',
@@ -263,6 +264,7 @@ class _AnalyticsTabContent extends StatelessWidget {
               AnalyticsDashboard(
                 userName: profile.userName ?? 'User',
                 totalQuestions: progress.completedQuizzes.length,
+                averageAccuracy: 0.0,
               ),
               const SizedBox(height: 16),
             ],
