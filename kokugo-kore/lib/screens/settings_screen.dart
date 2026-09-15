@@ -86,7 +86,7 @@ Future<void> _openScreenTimeSettings(BuildContext context) async {
           title: const Text('利用時間の設定'),
           backgroundColor: kPrimaryColor,
         ),
-        body: const ScreenTimeSettingsWidget(),
+        body: const Center(child: Text('利用時間設定は準備中です')),
       ),
     ),
   );
