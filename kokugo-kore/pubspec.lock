@@ -244,8 +244,8 @@ packages:
   cross_promo_kit:
     dependency: "direct main"
     description:
-      path: "../cross_promo_kit"
-      relative: true
+      path: "H:/マイドライブ/apps/cross_promo_kit"
+      relative: false
     source: path
     version: "0.1.0"
   crypto:
@@ -938,8 +938,8 @@ packages:
   shared_core:
     dependency: "direct main"
     description:
-      path: "../shared_core"
-      relative: true
+      path: "H:/マイドライブ/apps/shared_core"
+      relative: false
     source: path
     version: "0.1.0"
   shared_preferences:

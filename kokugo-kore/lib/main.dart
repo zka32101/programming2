@@ -20,10 +20,8 @@ import 'package:shared_core/shared_core.dart'
         rankingProvider,
         globalRankingProvider,
         friendProvider,
-        premiumProvider,
-        PremiumNotifier,
-        PushNotificationService,
         adaptiveDifficultyNotifierProvider;
+// TODO: Phase 4 - premiumProvider, PremiumNotifier, PushNotificationService not in shared_core
 // TODO: Phase 4 - Commented out undefined providers
 // missionProvider,
 // dailyMissionProvider,
@@ -109,44 +107,11 @@ Future<void> main() async {
     );
     await CrossPromoService.init();
 
-    // Phase 4.18: プッシュ通知サービス初期化
-    final pushService = PushNotificationService();
-    try {
-      await pushService.initialize(
-        onMessageHandler: (RemoteMessage message) {
-          debugPrint('Received message: ${message.notification?.title}');
-        },
-      );
-    } catch (e) {
-      // PushNotificationService initialization failed, continue anyway
-    }
-
-    // FCM トークンを取得・保存
-    try {
-      final fcmToken = await pushService.getFCMToken();
-      if (fcmToken != null) {
-        debugPrint('FCM Token obtained: ${fcmToken.substring(0, 20)}...');
-        // 将来: await updateUserFCMToken(userId, fcmToken);
-      }
-    } catch (e) {
-      // FCM token retrieval failed, continue anyway
-    }
-
-    // Phase 4.23: ローカル通知・リマインダーシステム初期化
-    final reminderService = ReminderService.instance;
-    // 通知コールバック設定（オプション）
-    reminderService.setNotificationCallback((notification) {
-      debugPrint('Reminder notification: ${notification.title}');
-    });
-
-// Phase 4.19: 適応難易度エンジン初期化
-    // 注: ユーザーID取得後（プロフィール画面後）に各ユーザーごとに initializeAdaptiveDifficulty() を呼ぶこと
-    debugPrint('Phase 4.19 Retention Optimization Engine: Initialized');
-
     // Phase 4.12-4.14: RemoteConfig 初期化（Dynamic Pricing・Retention・Multiplayer 用）
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.setConfigSettings(
       RemoteConfigSettings(
+        fetchTimeout: const Duration(minutes: 1),
         minimumFetchInterval: const Duration(hours: 1),
       ),
     );
@@ -162,14 +127,6 @@ Future<void> main() async {
       'multiplayer_rating_change_base': 30,  // レート変動基本値
     });
   } catch (_) {}
-
-  // RevenueCat 初期化（サブスクリプション管理）
-  final revenueCatService = RevenueCatService();
-  try {
-    await revenueCatService.initialize();
-  } catch (e) {
-    debugPrint('[RevenueCat] 初期化スキップ: $e');
-  }
 
   // AdMob 初期化
   await AdService.initialize();
@@ -196,8 +153,8 @@ Future<void> main() async {
       // screenTimeProvider.overrideWith(() => ScreenTimeNotifier()),
       // TODO: Phase 4 - Implement LessonNotifier
       // lessonProvider.overrideWith(LessonNotifier.new),
-      // Phase 4.7: 統一サブスクリプション管理（PremiumProvider）
-      premiumProvider.overrideWith(PremiumNotifier.new),
+      // TODO: Phase 4 - Implement PremiumNotifier (統一サブスクリプション管理)
+      // premiumProvider.overrideWith(PremiumNotifier.new),
       // マルチプレイ対戦（レートマッチング）のFirestoreハンドラを注入
       ...kokugoMultiplayerProviderOverrides,
     ],

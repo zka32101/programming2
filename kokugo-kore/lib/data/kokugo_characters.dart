@@ -6,7 +6,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   // ── Tier 1（基礎・小1-2年相当）4体 ─────────────────────────────────
   BaseCharacter(
     id: 'honhon', name: 'ホンホン', emoji: '📖', tier: 1, unlockAt: 1,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '読書の基本',
     backstory: 'ホンホンは本（ほん）が大好き（だいすき）な妖精（ようせい）。',
     stampPhrases: ['本読めた！', '面白い！', 'ホンホンと読もう', 'また読みたい'],
@@ -14,7 +14,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   ),
   BaseCharacter(
     id: 'penpen', name: 'ペンペン', emoji: '✏️', tier: 1, unlockAt: 3,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '書く基本',
     backstory: 'ペンペンは書くことが大好き（だいすき）なペンの精（せい）。',
     stampPhrases: ['書けた！', '上手だね', 'ペンペンと書こう', '気持ちいい'],
@@ -22,7 +22,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   ),
   BaseCharacter(
     id: 'kiku', name: 'キクくん', emoji: '👂', tier: 1, unlockAt: 5,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '聞く力',
     backstory: 'キクくんは耳（みみ）がとても良い聞き上手（ききじょうず）。',
     stampPhrases: ['よく聞けた！', '理解できた', 'キクくんと学ぼう', '気づいたよ'],
@@ -30,7 +30,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   ),
   BaseCharacter(
     id: 'yomu', name: 'ヨムくん', emoji: '📚', tier: 1, unlockAt: 8,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '読解力',
     backstory: 'ヨムくんは読む魔法使い（まほうつかい）。',
     stampPhrases: ['読み解けた！', 'わかった！', 'ヨムくんと読もう', 'すっきり'],
@@ -39,7 +39,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   // ── Tier 2（応用・小2-3年相当）4体 ─────────────────────────────────
   BaseCharacter(
     id: 'jisyon', name: 'ジション', emoji: '📖', tier: 2, unlockAt: 12,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '言葉の意味',
     backstory: 'ジションは辞書（じしょ）の番人（ばんにん）。',
     stampPhrases: ['言葉わかった！', '意味がわかった', 'ジションと学ぼう', 'なるほど！'],
@@ -47,7 +47,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   ),
   BaseCharacter(
     id: 'kaku', name: 'カクちゃん', emoji: '✍️', tier: 2, unlockAt: 16,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '創作力',
     backstory: 'カクちゃんは創作（そうさく）の魔法使い（まほうつかい）。',
     stampPhrases: ['作品できた！', 'いい話だね', 'カクちゃんと書こう', '素敵だ！'],
@@ -55,7 +55,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   ),
   BaseCharacter(
     id: 'hanasu', name: 'ハナすん', emoji: '💬', tier: 2, unlockAt: 20,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '話す力',
     backstory: 'ハナすんは話し上手（はなしじょうず）な伝え手（つたえて）。',
     stampPhrases: ['上手に話せた！', '相手が笑った', 'ハナすんと話そう', '通じたね'],
@@ -63,7 +63,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   ),
   BaseCharacter(
     id: 'kangaeru', name: 'カンガエル', emoji: '🤔', tier: 2, unlockAt: 24,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '思考力',
     backstory: 'カンガエルはじっくり考える思想家（しそうか）。',
     stampPhrases: ['理由がわかった！', 'なるほど！', 'カンガエルと考えよう', 'ああ！'],
@@ -72,7 +72,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   // ── Tier 3（高度・小3-4年相当）4体 ─────────────────────────────────
   BaseCharacter(
     id: 'maru', name: 'マルちゃん', emoji: '。', tier: 3, unlockAt: 28,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '句点の魔法',
     backstory: 'マルちゃんは文（ぶん）を終わらせる句点（くてん）の妖精（ようせい）。',
     stampPhrases: ['句点打てた！', '文がまとまった', 'マルちゃんと書こう', 'すっきり'],
@@ -80,7 +80,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   ),
   BaseCharacter(
     id: 'koma', name: 'コマちゃん', emoji: '、', tier: 3, unlockAt: 32,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '読点の力',
     backstory: 'コマちゃんは文を区切る（くぎる）読点（とうてん）の精（せい）。',
     stampPhrases: ['読点打てた！', '読みやすい！', 'コマちゃんと書こう', 'いい流れ'],
@@ -88,7 +88,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   ),
   BaseCharacter(
     id: 'kagi', name: 'カギくん', emoji: '「」', tier: 3, unlockAt: 36,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '括弧の世界',
     backstory: 'カギくんは会話（かいわ）を包む（つつむ）括弧（かっこ）の王様（おうさま）。',
     stampPhrases: ['括弧つけた！', '会話が活き活き', 'カギくんと書こう', 'はっきり！'],
@@ -96,7 +96,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   ),
   BaseCharacter(
     id: 'kuesu', name: 'クエスちゃん', emoji: '？', tier: 3, unlockAt: 40,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '疑問符の力',
     backstory: 'クエスちゃんは質問（しつもん）を促す（うながす）疑問符（ぎもんふ）の姫（ひめ）。',
     stampPhrases: ['疑問符つけた！', 'いい質問！', 'クエスちゃんと書こう', 'わくわく'],
@@ -105,7 +105,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   // ── Tier 4（完成・小4-6年相当）3体 ─────────────────────────────────
   BaseCharacter(
     id: 'warau', name: 'ワラウん', emoji: '😄', tier: 4, unlockAt: 44,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '笑い・楽しさ',
     backstory: 'ワラウんは笑顔（えがお）の魔法使い（まほうつかい）。',
     stampPhrases: ['楽しい！', 'またやりたい', 'ワラウんと学ぼう', 'いい気分'],
@@ -113,7 +113,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   ),
   BaseCharacter(
     id: 'naku', name: 'ナクちゃん', emoji: '😢', tier: 4, unlockAt: 47,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '共感・感動',
     backstory: 'ナクちゃんは感動（かんどう）を感じる感情（かんじょう）の妖精（ようせい）。',
     stampPhrases: ['感動した！', '涙が出た', 'ナクちゃんと読もう', 'いい話だ'],
@@ -121,7 +121,7 @@ const List<BaseCharacter> kKokugoCharacters = [
   ),
   BaseCharacter(
     id: 'odoroku', name: 'オドロクん', emoji: '😲', tier: 4, unlockAt: 50,
-    appSubject: 'japanese',
+    appSubject: Subject.kokugo,
     subject: '驚き・発見',
     backstory: 'オドロクんは驚き（おどろき）を感じる発見（はっけん）の精（せい）。',
     stampPhrases: ['びっくりした！', '予想外だ', 'オドロクんと読もう', 'えっ！'],
