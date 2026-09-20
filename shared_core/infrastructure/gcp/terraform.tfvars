@@ -10,10 +10,6 @@ service_account_email = "kokugo-kore-ci-bot@shougakukore.iam.gserviceaccount.com
 apps = {
   "sansu-kore" = [
     "revenuecat-api-key",
-    "admob-app-id",
-    "admob-banner-ad-unit-id",
-    "admob-interstitial-ad-unit-id",
-    "admob-rewarded-ad-unit-id",
     "android-keystore-base64",
     "android-keystore-password",
     "android-key-password",
