@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_core/shared_core.dart' show ParentalGateService;
+import '../services/parental_gate_service.dart';
 import '../providers/premium_provider.dart';
 
 import '../theme/app_theme.dart';

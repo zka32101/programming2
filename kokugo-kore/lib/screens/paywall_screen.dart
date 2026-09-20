@@ -274,9 +274,19 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     setState(() => _isLoading = true);
 
     try {
-      await ref
-          .read(subscriptionProvider.notifier)
-          .purchaseSubscription();
+      final notifier = ref.read(subscriptionProvider.notifier);
+      var packages = ref.read(subscriptionProvider).availableOfferings;
+      if (packages == null || packages.isEmpty) {
+        await notifier.refreshSubscriptionStatus();
+        packages = ref.read(subscriptionProvider).availableOfferings;
+      }
+      if (packages == null || packages.isEmpty) {
+        throw Exception('商品情報を取得できません');
+      }
+      final purchased = await notifier.purchaseSubscription(packages.first);
+      if (!purchased) {
+        throw Exception('購入を完了できませんでした');
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

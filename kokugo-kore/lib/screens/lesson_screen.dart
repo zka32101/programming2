@@ -1,32 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../theme/app_theme.dart';
+import 'learn_screen.dart';
 
-class LessonScreen extends ConsumerWidget {
+/// ホームの「学ぶ」カードの遷移先。
+///
+/// 小学校で学ぶ国語の内容（ひらがな・カタカナ、漢字の部首、ことわざ、
+/// 慣用句など。クイズの出題範囲と同じ）を一覧で確認できる [LearnScreen] を表示する。
+class LessonScreen extends StatelessWidget {
   const LessonScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      backgroundColor: kBgLight,
-      appBar: AppBar(
-        title: const Text('📚 学ぶ'),
-        backgroundColor: kPrimaryColor,
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.construction, size: 64, color: Colors.orange),
-            SizedBox(height: 16),
-            Text(
-              '学ぶ画面は準備中です',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => const LearnScreen();
 }

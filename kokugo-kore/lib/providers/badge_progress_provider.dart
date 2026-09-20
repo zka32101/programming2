@@ -53,7 +53,7 @@ class BadgeProgressNotifier extends Notifier<Map<String, BadgeProgress>> {
   /// レアリティを設定・保存
   Future<void> setRarity(String badgeId, BadgeRarity rarity) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('$_rarePrefix$badgeId', rarity.id);
+    await prefs.setString('$_rarePrefix$badgeId', rarity.name);
   }
 
   /// 初期化: 推奨レアリティを設定
@@ -63,7 +63,7 @@ class BadgeProgressNotifier extends Notifier<Map<String, BadgeProgress>> {
     final prefs = await SharedPreferences.getInstance();
 
     for (final entry in rarityMap.entries) {
-      await prefs.setString('$_rarePrefix${entry.key}', entry.value.id);
+      await prefs.setString('$_rarePrefix${entry.key}', entry.value.name);
     }
   }
 

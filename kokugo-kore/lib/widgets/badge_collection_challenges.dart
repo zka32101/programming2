@@ -393,10 +393,10 @@ class BadgeCollectionStats extends ConsumerWidget {
   Color _getRarityColor(BadgeRarity rarity) {
     return switch (rarity) {
       BadgeRarity.common => Colors.grey,
-      BadgeRarity.rare => Colors.purple,
-      BadgeRarity.epic => Colors.orange,
+      BadgeRarity.uncommon => Colors.purple,
+      BadgeRarity.rare => Colors.orange,
       BadgeRarity.legendary => Colors.amber,
-      BadgeRarity.secret => Colors.black54,
+      BadgeRarity.mythic => Colors.black54,
     };
   }
 }

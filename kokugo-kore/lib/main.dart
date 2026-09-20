@@ -12,6 +12,8 @@ import 'dart:async';
 import 'package:shared_core/shared_core.dart'
     show
         characterStateProvider,
+        equippedItemsProvider,
+        screenTimeProvider,
         coinProvider,
         avatarProvider,
         badgeProvider,
@@ -21,6 +23,7 @@ import 'package:shared_core/shared_core.dart'
         globalRankingProvider,
         friendProvider,
         adaptiveDifficultyNotifierProvider;
+import 'package:shared_core/config/subscription_config.dart';
 // TODO: Phase 4 - premiumProvider, PremiumNotifier, PushNotificationService not in shared_core
 // TODO: Phase 4 - Commented out undefined providers
 // missionProvider,
@@ -31,6 +34,9 @@ import 'package:shared_core/shared_core.dart'
 // ScreenTimeLimitReachedWidget (Phase 4)
 import 'package:shared_preferences/shared_preferences.dart';
 import 'providers/progress_provider.dart';
+import 'providers/character_provider.dart';
+import 'providers/equipped_items_provider.dart';
+import 'providers/screen_time_provider.dart';
 
 import 'data/kana_data.dart';
 import 'firebase_options.dart';
@@ -89,6 +95,7 @@ import 'screens/goal_setting_screen.dart';
 import 'screens/yojijukugo_quiz_screen.dart';
 import 'screens/synonym_antonym_quiz_screen.dart';
 import 'services/ad_service.dart';
+import 'services/kokugo_purchase_service.dart';
 import 'widgets/premium_gate.dart';
 
 Future<void> main() async {
@@ -128,6 +135,13 @@ Future<void> main() async {
     });
   } catch (_) {}
 
+  // RevenueCat 初期化（本番キー未設定=--dart-define 未指定の場合はスキップ）
+  if (SubscriptionConfig.isConfigured) {
+    try {
+      await KokugoPurchaseService().initialize();
+    } catch (_) {}
+  }
+
   // AdMob 初期化
   await AdService.initialize();
 
@@ -144,13 +158,16 @@ Future<void> main() async {
 
   final container = ProviderContainer(
     overrides: [
-      // TODO: Phase 4 - Implement missing base notifiers
-      // characterStateProvider.overrideWith(CharacterNotifier.new),
-      // equippedItemsProvider.overrideWith(EquippedItemsNotifier.new),
+      // 国語コレ！のキャラクター進捗・ショップ装着状態・利用時間制限を注入
+      characterStateProvider.overrideWith(CharacterNotifier.new),
+      equippedItemsProvider.overrideWith(EquippedItemsNotifier.new),
+      screenTimeProvider.overrideWith(ScreenTimeNotifier.new),
       // 統一バッジシステム（Phase 4.1）: 国語コレ用バッジを主題タグで初期化
-      badgeProvider.overrideWith(() => BadgeNotifier()),
-      // TODO: Phase 4 - Implement ScreenTimeNotifier
-      // screenTimeProvider.overrideWith(() => ScreenTimeNotifier()),
+      badgeProvider.overrideWith(() {
+        final notifier = BadgeNotifier();
+        notifier.setBadgeDefinitions(unifiedBadges, subject: 'kokugo');
+        return notifier;
+      }),
       // TODO: Phase 4 - Implement LessonNotifier
       // lessonProvider.overrideWith(LessonNotifier.new),
       // TODO: Phase 4 - Implement PremiumNotifier (統一サブスクリプション管理)
