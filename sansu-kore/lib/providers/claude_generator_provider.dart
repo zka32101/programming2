@@ -5,8 +5,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/quest_model.dart';
 
-String get _apiKey => dotenv.env['CLAUDE_API_KEY'] ?? '';
-String get _apiUrl => dotenv.env['CLAUDE_API_URL'] ?? 'https://api.anthropic.com/v1/messages';
+// .env はアセットに含めない(=APKにキーを同梱しない)ため、未読込なら空/既定値になる。
+String get _apiKey => dotenv.isInitialized ? (dotenv.env['CLAUDE_API_KEY'] ?? '') : '';
+String get _apiUrl => dotenv.isInitialized
+    ? (dotenv.env['CLAUDE_API_URL'] ?? 'https://api.anthropic.com/v1/messages')
+    : 'https://api.anthropic.com/v1/messages';
 
 enum MathGrade { grade1, grade2, grade3, grade4, grade5, grade6 }
 

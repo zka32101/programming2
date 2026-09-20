@@ -35,8 +35,10 @@ import 'theme/app_theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 環境変数読み込み
-  await dotenv.load();
+  // 環境変数読み込み（.env が無い配布ビルドでも起動を止めない）
+  try {
+    await dotenv.load();
+  } catch (_) {}
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(

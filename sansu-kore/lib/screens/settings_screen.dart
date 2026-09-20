@@ -35,14 +35,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text('せってい'),
         backgroundColor: kPrimaryColor,
         automaticallyImplyLeading: false,
         bottom: TabBar(
           controller: _tabController,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
           tabs: const [
-            Tab(icon: Icon(Icons.settings), text: 'Settings'),
-            Tab(icon: Icon(Icons.analytics), text: 'Analytics'),
+            Tab(icon: Icon(Icons.settings), text: '設定'),
+            Tab(icon: Icon(Icons.analytics), text: '学習分析'),
           ],
         ),
       ),
