@@ -34,7 +34,7 @@
 |---|---|---|
 | テーマ（ライト/ダーク） | ✅ | ThemeProvider 統合 |
 | Google Mobile Ads | ✅ | バナー・インタースティシャル広告 |
-| RevenueCat 統合 | ✅ | 月額¥120 サブスク対応 |
+| RevenueCat 統合 | ✅ | 月額¥300 / 年額¥2,400 サブスク対応 |
 | 領収書検証 | ✅ | Google Play/App Store API |
 
 ## 🛠️ セットアップ手順
@@ -150,7 +150,7 @@ ref.read(progressProvider.notifier).completeQuiz(quizId, score);
 
 ### サブスクリプション実装（v1.1）
 - **SDK**: RevenueCat（ベンダー中立的な決済管理）
-- **商品**: `kokugo_premium_monthly` (¥120/月)
+- **商品**: `shogaku_kore_premium_monthly` (¥300/月) / `shogaku_kore_premium_annual` (¥2,400/年)
 - **領収書検証**: Google Play Billing Library + App Store Server API
 - **実装ファイル**: `lib/services/revenue_cat_service.dart`
 
@@ -309,7 +309,7 @@ develop
 - **現状**: 社会アプリのみ RevenueCat 実装
 - **統一案**: 全アプリ RevenueCat 統合
 - **実装内容**:
-  - 月額プラン: ¥120（全アプリ共通）
+  - 月額¥300 / 年額¥2,400（全アプリ共通・固定）
   - プレミアム機能: 無制限クイズ・AI相談・広告削除
   - 領収書検証: Google Play/App Store API
 
