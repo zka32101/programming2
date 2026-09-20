@@ -157,26 +157,12 @@ class _MultiplayerMenuScreenState extends ConsumerState<MultiplayerMenuScreen> {
         ),
         const SizedBox(height: 12),
         _buildMenuButton(
-          '⚔️ レートマッチ',
-          'レートが近い相手と実際にオンライン対戦',
-          Colors.teal,
-          () => Navigator.pushNamed(context, '/multiplayer/rated-match'),
-        ),
-        const SizedBox(height: 12),
-        _buildMenuButton(
           '🎲 ランダムマッチ（練習）',
           'AI練習相手とオフラインで練習',
           Colors.purple,
           () {
             Navigator.pushNamed(context, '/random-match');
           },
-        ),
-        const SizedBox(height: 12),
-        _buildMenuButton(
-          '🏆 対戦レートランキング',
-          'レートマッチの順位を確認',
-          Colors.orange,
-          () => Navigator.pushNamed(context, '/multiplayer/leaderboard'),
         ),
         const SizedBox(height: 12),
         _buildMenuButton(

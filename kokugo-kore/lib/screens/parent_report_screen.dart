@@ -390,16 +390,42 @@ class _AccuracyByGrade extends StatelessWidget {
           BoxShadow(color: Colors.black.withAlpha(8), blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
-      // TODO: Implement WeeklyBarChartWidget from Phase 4
-      // child: WeeklyBarChartWidget(
-      //   values: [for (final g in grades) accuracyByGrade[g]! * 100],
-      //   labels: [for (final g in grades) '$g年生'],
-      //   primaryColor: kPrimaryColor,
-      //   barColorForValue: (value) => _colorForPct(value / 100),
-      //   maxY: 100,
-      //   valueSuffix: '%',
-      // ),
-      child: const Center(child: Text('グラフ表示は準備中です')),
+      child: Column(
+        children: [
+          for (final g in grades)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 52,
+                    child: Text('$g年生',
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: LinearProgressIndicator(
+                        value: accuracyByGrade[g]!,
+                        minHeight: 14,
+                        backgroundColor: Colors.grey.shade200,
+                        color: _colorForPct(accuracyByGrade[g]!),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 52,
+                    child: Text(
+                      '${(accuracyByGrade[g]! * 100).round()}%',
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

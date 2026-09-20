@@ -35,6 +35,17 @@ service cloud.firestore {
       }
     }
 
+    // Daily missions (shared_core MissionNotifier) - 本人のみアクセス可
+    match /user_missions/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Mission progress: doc id は "{uid}_{missionId}"
+    match /user_mission_progress/{progressId} {
+      allow read, write: if request.auth != null
+        && progressId.matches(request.auth.uid + '_.*');
+    }
+
     // Public data (if needed for future features)
     match /public/{document=**} {
       allow read: if true;
