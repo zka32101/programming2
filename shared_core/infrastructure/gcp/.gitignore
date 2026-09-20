@@ -1,0 +1,8 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.auto.tfvars
+secrets.tf.disabled
+*secret*.json
+*-key.json
