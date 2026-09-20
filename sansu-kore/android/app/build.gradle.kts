@@ -31,7 +31,7 @@ android {
 
     defaultConfig {
         applicationId = "com.petitworksapps.shougakukore.sansu"
-        minSdk = flutter.minSdkVersion
+        minSdk = 21
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
