@@ -23,11 +23,6 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
-
-        // AdMob App ID。ADMOB_APP_ID_ANDROID が未設定ならGoogle公式テストIDのまま。
-        // 本番公開前に実際のAdMob App IDを環境変数（またはCIのSecret）で渡すこと。
-        manifestPlaceholders["admobAppId"] =
-            System.getenv("ADMOB_APP_ID_ANDROID") ?: "ca-app-pub-3940256099942544~3347511713"
     }
 
     signingConfigs {

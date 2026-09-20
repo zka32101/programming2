@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/kana_data.dart';
 import '../theme/app_theme.dart';
-import '../widgets/banner_ad_widget.dart';
 import '../providers/premium_provider.dart';
 
 class _StudyItem {
@@ -219,7 +218,6 @@ class StudyMenuScreen extends StatelessWidget {
         },
       ),
           ),
-          const BannerAdWidget(),
           const SizedBox(height: 80),
         ],
       ),

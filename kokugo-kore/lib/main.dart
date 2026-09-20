@@ -94,7 +94,6 @@ import 'screens/writing_screen.dart';
 import 'screens/goal_setting_screen.dart';
 import 'screens/yojijukugo_quiz_screen.dart';
 import 'screens/synonym_antonym_quiz_screen.dart';
-import 'services/ad_service.dart';
 import 'services/kokugo_purchase_service.dart';
 import 'widgets/premium_gate.dart';
 
@@ -142,8 +141,6 @@ Future<void> main() async {
     } catch (_) {}
   }
 
-  // AdMob 初期化
-  await AdService.initialize();
 
   // テスト用設定: コイン初期値を999999に設定・全機能開放
   const bool isTestMode = false; // リリース版：本番機能のみ

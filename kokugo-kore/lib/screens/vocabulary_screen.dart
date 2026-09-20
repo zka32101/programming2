@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/vocab_mastery_provider.dart';
 
-import '../services/ad_service.dart';
 import '../providers/premium_provider.dart';
 import '../theme/app_theme.dart';
 
@@ -1223,8 +1222,6 @@ class _VocabularyScreenState extends ConsumerState<VocabularyScreen>
       _feedbackCtrl.reset();
     } else {
       setState(() => _finished = true);
-      final premium = ref.read(premiumProvider);
-      if (!premium.isPremium && !premium.isTrialActive) AdService.showInterstitial();
     }
   }
 

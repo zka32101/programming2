@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/premium_provider.dart';
 
-import '../services/ad_service.dart';
 import '../theme/app_theme.dart';
 
 class ProverbQuestion {
@@ -526,8 +525,6 @@ class _ProverbQuizScreenState extends ConsumerState<ProverbQuizScreen>
       _feedbackCtrl.reset();
     } else {
       setState(() => _finished = true);
-      final premium = ref.read(premiumProvider);
-      if (!premium.isPremium && !premium.isTrialActive) AdService.showInterstitial();
     }
   }
 

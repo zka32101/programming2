@@ -8,7 +8,6 @@ class AppConstants {
   // - premiumEntitlementId: Use SubscriptionConfig.premiumEntitlementId
 
   // Feature Flags
-  static const bool adsFreeWithSubscription = true;
   static const bool unlimitedQuizzesWithSubscription = true;
 
   // Pricing (for display)
