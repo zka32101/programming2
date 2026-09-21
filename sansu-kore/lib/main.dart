@@ -9,6 +9,7 @@ import 'package:shared_core/shared_core.dart'
 import 'firebase_options.dart';
 import 'models/quest_model.dart';
 import 'providers/character_provider.dart';
+import 'providers/premium_provider.dart';
 import 'screens/character_screen.dart';
 import 'screens/badge_collection_screen.dart';
 import 'screens/shop_screen.dart';
@@ -30,6 +31,7 @@ import 'screens/stage_select_screen.dart';
 import 'screens/infinite_practice_screen.dart';
 import 'screens/upgrade_screen.dart';
 import 'screens/analysis_dashboard_screen.dart';
+import 'services/sansu_purchase_service.dart';
 import 'theme/app_theme.dart';
 
 Future<void> main() async {
@@ -59,6 +61,10 @@ Future<void> main() async {
       print('❌ Firebase init error: $e');
     }
   }
+
+  try {
+    await SansuPurchaseService.instance.initialize();
+  } catch (_) {}
 
   runApp(ProviderScope(
     overrides: [
@@ -139,6 +145,13 @@ class RootShell extends ConsumerStatefulWidget {
 
 class _RootShellState extends ConsumerState<RootShell> {
   int _tab = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ref.read(premiumProvider.notifier).load());
+  }
 
   static const _screens = [
     HomeScreen(),

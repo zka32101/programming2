@@ -185,8 +185,8 @@ class _FeatureList extends StatelessWidget {
     const features = [
       ('📖', '全ステージ（4・5）無制限アクセス'),
       ('🏅', 'プレミアムバッジコレクション'),
-      ('📊', '詳細な学習レポート（coming soon）'),
-      ('👨‍👩‍👧', '保護者ダッシュボード（coming soon）'),
+      ('📊', '詳細な学習レポート'),
+      ('👨‍👩‍👧', '保護者ダッシュボード'),
     ];
 
     return Column(

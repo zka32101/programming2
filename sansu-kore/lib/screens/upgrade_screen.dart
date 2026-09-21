@@ -86,10 +86,10 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
             ),
             const SizedBox(height: 12),
             _PlanCard(
-              title: 'セット特別プラン',
-              price: '¥1,200/月',
-              description: '全6教科 + スターマスター',
-              badge: '60%OFF',
+              title: '年額プラン',
+              price: '¥2,400/年',
+              description: '算数コレ！1教科（月額の12か月分より33%おトク）',
+              badge: 'おトク',
               onTap: _purchasing ? null : () => _purchase(context, ref, monthly: false),
             ),
             const SizedBox(height: 20),
@@ -103,7 +103,7 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
             ),
             const SizedBox(height: 8),
             const Text(
-              '• 支払いはApple IDに請求されます\n• 購読はいつでもキャンセル可能\n• キャンセルは更新日の24時間前まで',
+              '• お支払いはGoogle Play / Apple IDに請求されます\n• 購読はいつでもキャンセル可能\n• キャンセルは更新日の24時間前まで',
               style: TextStyle(fontSize: 11, color: kTextMuted, height: 1.6),
               textAlign: TextAlign.center,
             ),

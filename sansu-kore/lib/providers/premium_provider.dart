@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/sansu_purchase_service.dart';
+
 final premiumProvider = StateNotifierProvider<PremiumNotifier, PremiumStatus>((ref) {
   return PremiumNotifier();
 });
@@ -38,19 +40,35 @@ class PremiumNotifier extends StateNotifier<PremiumStatus> {
   }
 
   Future<void> load() async {
-    // RevenueCat/サーバーから復元
+    await _sync(await _guard(() => SansuPurchaseService.instance.premiumExpiry()));
   }
 
   Future<bool> restorePurchases() async {
-    return false;
+    return _sync(await _guard(() => SansuPurchaseService.instance.restore()));
   }
 
   Future<bool> purchaseMonthly() async {
-    return false;
+    return _sync(await _guard(
+        () => SansuPurchaseService.instance.purchase(monthly: true)));
   }
 
   Future<bool> purchaseYearly() async {
-    return false;
+    return _sync(await _guard(
+        () => SansuPurchaseService.instance.purchase(monthly: false)));
+  }
+
+  Future<DateTime?> _guard(Future<DateTime?> Function() action) async {
+    try {
+      return await action();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  bool _sync(DateTime? expiry) {
+    if (expiry == null) return false;
+    activatePremium(expiry);
+    return true;
   }
 }
 
