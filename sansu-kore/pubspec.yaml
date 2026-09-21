@@ -25,7 +25,6 @@ dependencies:
   in_app_purchase: ^3.3.0
   google_fonts: ^6.2.1
   uuid: ^4.0.0
-  google_mobile_ads: ^5.2.0
   share_plus: ^11.0.0
   flutter_tts: ^4.2.5
   http: ^1.2.0
