@@ -1,4 +1,4 @@
-﻿package com.petitworksapps.shougakukore.sansu
+package com.yourwish.shougakukore.sansu
 
 import io.flutter.embedding.android.FlutterActivity
 
