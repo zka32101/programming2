@@ -23,7 +23,7 @@ class VideoService {
     String? searchQuery,
   }) async {
     try {
-      Query query = _firestore.collection('videos').collection('pronunciation');
+      Query query = _firestore.collection('videos');
 
       // Filter by category
       if (category != null && category.isNotEmpty) {
@@ -66,7 +66,6 @@ class VideoService {
     try {
       final doc = await _firestore
           .collection('videos')
-          .collection('pronunciation')
           .doc(videoId)
           .get();
 
@@ -88,7 +87,6 @@ class VideoService {
     try {
       final snapshot = await _firestore
           .collection('videos')
-          .collection('pronunciation')
           .where('category', isEqualTo: category)
           .get();
 
@@ -110,7 +108,6 @@ class VideoService {
     try {
       final snapshot = await _firestore
           .collection('videos')
-          .collection('pronunciation')
           .orderBy('averageRating', descending: true)
           .limit(limit)
           .get();
@@ -290,7 +287,6 @@ class VideoService {
     try {
       final doc = await _firestore
           .collection('videos')
-          .collection('pronunciation')
           .doc(videoId)
           .get();
 
@@ -606,7 +602,6 @@ class VideoService {
 
       await _firestore
           .collection('videos')
-          .collection('pronunciation')
           .doc(videoId)
           .update({'averageRating': averageRating});
     } catch (e) {
@@ -646,7 +641,6 @@ class VideoService {
 
       await _firestore
           .collection('videos')
-          .collection('pronunciation')
           .doc(videoId)
           .update({'likes': likeCount});
     } catch (e) {

@@ -2,6 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/english_town_model.dart';
 import '../services/english_town_rewards_service.dart';
 import 'english_town_provider.dart';
+// Re-export types for convenience
+export '../services/english_town_rewards_service.dart'
+    show Milestone, AchievementCriteria, AchievementRarity;
 
 /// ==================== REWARDS SYSTEM (Phase 4) ====================
 
@@ -217,7 +220,3 @@ final extendedProgressStatsProvider = Provider<({
         locations.isEmpty ? 0 : ((progress.visitedLocationIds.length / locations.length) * 100).toInt(),
   );
 });
-
-// Re-export types for convenience
-export '../services/english_town_rewards_service.dart'
-    show Milestone, AchievementCriteria, AchievementRarity;

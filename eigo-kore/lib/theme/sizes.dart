@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// eigo-kore アプリケーション全体で使用するサイズ定数
 /// ボタン、アイコン、カード、その他の UI コンポーネントのサイズ
 ///

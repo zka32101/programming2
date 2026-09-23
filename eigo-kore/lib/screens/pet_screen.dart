@@ -109,7 +109,7 @@ class _PetScreenState extends ConsumerState<PetScreen> {
 
 /// ペット表示カード
 class _PetDisplayCard extends ConsumerWidget {
-  final PetModel pet;
+  final Pet pet;
   final String userId;
 
   const _PetDisplayCard({
@@ -194,7 +194,7 @@ class _PetDisplayCard extends ConsumerWidget {
 
 /// ステータスバー
 class _PetStatusBar extends StatelessWidget {
-  final PetModel pet;
+  final Pet pet;
 
   const _PetStatusBar({required this.pet});
 
@@ -290,7 +290,7 @@ class _StatusItem extends StatelessWidget {
 
 /// エサやりカード
 class _FeedingCard extends ConsumerWidget {
-  final PetModel pet;
+  final Pet pet;
   final String userId;
 
   const _FeedingCard({
@@ -347,7 +347,7 @@ class _FeedingCard extends ConsumerWidget {
 
 /// 進化情報カード
 class _EvolutionInfoCard extends StatelessWidget {
-  final PetModel pet;
+  final Pet pet;
 
   const _EvolutionInfoCard({required this.pet});
 
@@ -415,7 +415,7 @@ class _EvolutionInfoCard extends StatelessWidget {
 
 /// 装飾品カード
 class _DecorationsCard extends ConsumerWidget {
-  final PetModel pet;
+  final Pet pet;
   final String userId;
 
   const _DecorationsCard({

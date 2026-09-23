@@ -1,7 +1,7 @@
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/notification_model.dart';
+import '../models/notification_model.dart' as notif_model;
 import '../providers/notification_settings_provider.dart';
 
 class NotificationManagementScreen extends ConsumerWidget {
@@ -397,7 +397,7 @@ class _TimePickerRow extends StatelessWidget {
 }
 
 class _NotificationCard extends StatelessWidget {
-  final NotificationRecord notification;
+  final notif_model.Notification notification;
   final VoidCallback onTap;
   final VoidCallback onDelete;
 

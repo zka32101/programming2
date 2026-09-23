@@ -34,7 +34,7 @@ class SocialService {
           .collection('userProfiles')
           .doc(userId)
           .set(profile.toJson());
-      LoggerService.info('User profile updated: $userId', 'SocialService');
+      LoggerService.info('User profile updated: $userId', tag: 'SocialService');
     } catch (e) {
       LoggerService.error('Failed to update user profile: $e', tag: 'SocialService');
       rethrow;
@@ -69,7 +69,7 @@ class SocialService {
 
       LoggerService.info(
         'Friend request sent from $userId to $friendId',
-        'SocialService',
+        tag: 'SocialService',
       );
     } catch (e) {
       LoggerService.error('Failed to send friend request: $e', tag: 'SocialService');
@@ -90,7 +90,7 @@ class SocialService {
 
       LoggerService.info(
         'Friend request accepted: $friendRequestId',
-        'SocialService',
+        tag: 'SocialService',
       );
     } catch (e) {
       LoggerService.error('Failed to accept friend request: $e', tag: 'SocialService');
@@ -104,7 +104,7 @@ class SocialService {
       await _firestore.collection('friends').doc(friendRequestId).delete();
       LoggerService.info(
         'Friend request declined: $friendRequestId',
-        'SocialService',
+        tag: 'SocialService',
       );
     } catch (e) {
       LoggerService.error('Failed to decline friend request: $e', tag: 'SocialService');
@@ -136,7 +136,7 @@ class SocialService {
         await doc.reference.delete();
       }
 
-      LoggerService.info('Friend removed: $userId, $friendId', 'SocialService');
+      LoggerService.info('Friend removed: $userId, $friendId', tag: 'SocialService');
     } catch (e) {
       LoggerService.error('Failed to remove friend: $e', tag: 'SocialService');
       rethrow;
@@ -239,7 +239,7 @@ class SocialService {
 
       LoggerService.info(
         'Activity recorded for user $userId: $activityId',
-        'SocialService',
+        tag: 'SocialService',
       );
       return activity;
     } catch (e) {

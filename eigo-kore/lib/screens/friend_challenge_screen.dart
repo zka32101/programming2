@@ -230,7 +230,7 @@ class FriendChallengeScreen extends ConsumerWidget {
 
 /// フレンドチャレンジカード
 class _FriendChallengeCard extends ConsumerWidget {
-  final FriendChallenge challenge;
+  final SocialChallenge challenge;
   final String userId;
   final bool isInitiator;
 
@@ -349,7 +349,7 @@ class _FriendChallengeCard extends ConsumerWidget {
 
 /// 完了したフレンドチャレンジカード
 class _CompletedFriendChallengeCard extends StatelessWidget {
-  final FriendChallenge challenge;
+  final SocialChallenge challenge;
   final String userId;
 
   const _CompletedFriendChallengeCard({

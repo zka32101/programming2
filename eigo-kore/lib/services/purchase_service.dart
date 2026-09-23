@@ -143,7 +143,7 @@ class PurchaseService {
 
       LoggerService.info(
         'Purchase created for user $userId: $purchaseId',
-        'PurchaseService',
+        tag: 'PurchaseService',
       );
       return purchase;
     } catch (e) {
@@ -224,7 +224,7 @@ class PurchaseService {
 
       LoggerService.info(
         'Purchases restored for user $userId',
-        'PurchaseService',
+        tag: 'PurchaseService',
       );
       return purchases;
     } catch (e) {
@@ -303,7 +303,7 @@ class PurchaseService {
       // For now, this is a placeholder
       LoggerService.info(
         'Receipt verification for platform: $platform',
-        'PurchaseService',
+        tag: 'PurchaseService',
       );
       return true;
     } catch (e) {
@@ -325,7 +325,7 @@ class PurchaseService {
 
       LoggerService.info(
         'Subscription cancelled: $purchaseId',
-        'PurchaseService',
+        tag: 'PurchaseService',
       );
     } catch (e) {
       LoggerService.error(

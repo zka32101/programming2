@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/notification_model.dart';
+import '../models/notification_model.dart' as notif_model;
 import '../design_system/design_system.dart';
 
 class NotificationCard extends StatelessWidget {
-  final Notification notification;
+  final notif_model.Notification notification;
   final VoidCallback onTap;
   final VoidCallback? onDismiss;
 
