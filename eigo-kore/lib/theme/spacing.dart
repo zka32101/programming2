@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// eigo-kore アプリケーション全体で使用するスペーシング定数
 /// 8dp グリッドシステムに基づく統一されたスペーシング値
 ///

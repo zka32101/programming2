@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/guild.dart';
 import '../providers/guild_service_provider.dart';
-import '../providers/auth_provider.dart';
+import '../providers/user_profile_provider.dart';
 import '../design_system/design_system.dart';
 import '../widgets/guild_card.dart';
 import '../widgets/guild_member_item.dart';
@@ -36,7 +36,7 @@ class _GuildsScreenState extends ConsumerState<GuildsScreen> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = ref.watch(authProvider).value;
+    final currentUser = ref.watch(currentUserProvider);
     final viewMode = ref.watch(guildViewModeProvider);
 
     return Scaffold(
@@ -196,7 +196,7 @@ class _BrowseGuildsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final publicGuilds = ref.watch(publicGuildsProvider);
-    final currentUser = ref.watch(authProvider).value;
+    final currentUser = ref.watch(currentUserProvider);
 
     return publicGuilds.when(
       data: (guilds) {
@@ -252,7 +252,7 @@ class _GuildDetailsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedGuildId = ref.watch(selectedGuildProvider);
-    final currentUser = ref.watch(authProvider).value;
+    final currentUser = ref.watch(currentUserProvider);
 
     if (selectedGuildId == null) {
       return Center(

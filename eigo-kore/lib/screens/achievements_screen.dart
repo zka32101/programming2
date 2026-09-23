@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/achievement.dart';
 import '../providers/achievement_service_provider.dart';
-import '../providers/auth_provider.dart';
+import '../providers/user_profile_provider.dart';
 import '../design_system/design_system.dart';
 import '../widgets/achievement_item.dart';
 
@@ -32,7 +32,7 @@ class _AchievementsScreenState extends ConsumerState<AchievementsScreen>
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = ref.watch(authProvider).value;
+    final currentUser = ref.watch(currentUserProvider);
 
     return Scaffold(
       appBar: AppBar(

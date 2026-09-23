@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/badge_model.dart';
 import '../providers/badge_provider.dart';
-import '../design_system/app_theme.dart';
-import '../design_system/spacing.dart';
-import '../design_system/sizes.dart';
-import '../design_system/typography.dart';
+import '../theme/app_theme.dart';
+import '../theme/spacing.dart';
+import '../theme/sizes.dart';
+import '../theme/typography.dart';
 import '../widgets/educational_illustrations.dart';
 
 class BadgeScreen extends ConsumerWidget {

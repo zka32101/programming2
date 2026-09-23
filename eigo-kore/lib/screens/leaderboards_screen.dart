@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/leaderboard.dart';
 import '../providers/leaderboard_service_provider.dart';
-import '../providers/auth_provider.dart';
+import '../providers/user_profile_provider.dart';
 import '../design_system/design_system.dart';
 import '../widgets/leaderboard_entry_item.dart';
 
@@ -19,7 +19,7 @@ class _LeaderboardsScreenState extends ConsumerState<LeaderboardsScreen> {
   Widget build(BuildContext context) {
     final selectedType = ref.watch(selectedLeaderboardTypeProvider);
     final selectedLevel = ref.watch(selectedLevelProvider);
-    final currentUser = ref.watch(authProvider).value;
+    final currentUser = ref.watch(currentUserProvider);
 
     return Scaffold(
       appBar: AppBar(

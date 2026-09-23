@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import '../data/vocabulary_data.dart';
 import '../models/question.dart';
-import '../design_system/app_theme.dart';
-import '../design_system/spacing.dart';
-import '../design_system/sizes.dart';
-import '../design_system/typography.dart';
+import '../theme/app_theme.dart';
+import '../theme/spacing.dart';
+import '../theme/sizes.dart';
+import '../theme/typography.dart';
 import '../widgets/educational_illustrations.dart';
 
 class VocabularyScreen extends ConsumerStatefulWidget {

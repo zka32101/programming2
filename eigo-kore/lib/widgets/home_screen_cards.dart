@@ -1,7 +1,6 @@
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import '../models/stage.dart';
-import '../models/progress.dart';
 
 /// ホーム画面用の改善されたカードコンポーネント
 /// 新しいデザイン設計トークンを使用
