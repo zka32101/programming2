@@ -47,7 +47,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             const Text('データの削除', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             const Text(
-              'お子さまの個人情報の削除をご希望の場合は、設定画面から「学習データをリセット」するか、サポートまでお問い合わせください。リクエストから30日以内に完全削除いたします。',
+              'お子さまの個人情報の削除をご希望の場合は、アプリのアンインストールにより端末上のデータは削除されます。',
               style: TextStyle(fontSize: 14, color: kTextDark, height: 1.6),
             ),
           ],

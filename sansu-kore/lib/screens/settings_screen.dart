@@ -60,6 +60,49 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
   }
 }
 
+void _showFavoriteItemPicker(BuildContext context, WidgetRef ref) {
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (ctx) {
+      final current = ref.read(sansuProfileProvider).favoriteItem;
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(bottom: 12),
+                child: Text('すきなものを選んでね',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              ),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: kFavoriteItemOptions.map((item) {
+                  final selected = item == current;
+                  return ChoiceChip(
+                    label: Text(item),
+                    selected: selected,
+                    onSelected: (_) {
+                      ref.read(sansuProfileProvider.notifier).setFavoriteItem(item);
+                      Navigator.of(ctx).pop();
+                    },
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
 class _SettingsTabContent extends ConsumerWidget {
   const _SettingsTabContent();
 
@@ -90,7 +133,7 @@ class _SettingsTabContent extends ConsumerWidget {
             emoji: '🎁',
             title: 'すきなもの: ${sansuProfile.favoriteItem}',
             subtitle: '主人公に登場するもの',
-            onTap: () {},
+            onTap: () => _showFavoriteItemPicker(context, ref),
           ),
           const SizedBox(height: 16),
           _SectionHeader('デイリーログイン'),
@@ -121,7 +164,7 @@ class _SettingsTabContent extends ConsumerWidget {
           _SettingCard(
             emoji: '❓',
             title: 'ヘルプ',
-            onTap: () => Navigator.of(context).pushNamed('/help'),
+            onTap: () => Navigator.of(context).pushNamed('/math-guide'),
           ),
           const SizedBox(height: 8),
           _SettingCard(

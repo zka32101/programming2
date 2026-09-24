@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/infinite_generator.dart';
 import '../models/quest_model.dart';
 import '../providers/adaptive_provider.dart';
+import '../providers/coin_provider.dart';
 import '../providers/profile_provider.dart';
 import '../theme/app_theme.dart';
 import '../widgets/furigana_text.dart';
@@ -387,9 +388,14 @@ class _InfinitePracticeScreenState
               onPressed: () => Navigator.pop(ctx),
               child: const Text('続ける')),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              final correct = _session.correct;
               Navigator.pop(ctx);
-              Navigator.pop(context);
+              // 正解数に応じてコインを付与（1問正解につき2コイン）
+              if (correct > 0) {
+                await ref.read(coinProvider.notifier).addCoins(correct * 2);
+              }
+              if (mounted) Navigator.pop(context);
             },
             child: const Text('終了'),
           ),

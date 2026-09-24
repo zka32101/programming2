@@ -20,7 +20,6 @@ import 'screens/invite_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/math_guide_screen.dart';
 import 'screens/onboarding_screen.dart';
-import 'screens/org_splash_screen.dart';
 import 'screens/privacy_policy_screen.dart';
 import 'screens/profile_selection_screen.dart';
 import 'screens/quest_screen.dart';
@@ -68,7 +67,7 @@ Future<void> main() async {
 
   runApp(ProviderScope(
     overrides: [
-      // 算数コレのキャラクターノティファイアを注入
+      // 小学コレ！算数のキャラクターノティファイアを注入
       characterStateProvider.overrideWith(CharacterNotifier.new),
     ],
     child: const SansuKoreApp(),
@@ -81,13 +80,12 @@ class SansuKoreApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      title: '算数コレ！',
+      title: '小学コレ！算数',
       theme: buildSansuTheme(),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const OrgSplashScreen(),
-        '/app-splash': (context) => const SplashScreen(),
+        '/': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnboardingScreen(),
         '/profile-selection': (context) => const ProfileSelectionScreen(),
         '/home': (context) => const RootShell(),

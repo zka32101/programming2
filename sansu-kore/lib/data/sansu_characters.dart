@@ -1,7 +1,7 @@
 import 'package:shared_core/shared_core.dart';
 import 'package:shared_core/models/character_data.dart' show Subject;
 
-// 算数コレ 10体のキャラクター（設計書「小学コレシリーズ_キャラクター図鑑＋LINEスタンプ化」準拠）
+// 小学コレ！算数 10体のキャラクター（設計書「小学コレシリーズ_キャラクター図鑑＋LINEスタンプ化」準拠）
 // unlockAt: clearedStageIds.length の閾値（最大92ステージ）
 const List<BaseCharacter> kSansuCharacters = [
 
@@ -22,7 +22,7 @@ const List<BaseCharacter> kSansuCharacters = [
   ),
 
   BaseCharacter(
-    id: 'niniko', name: 'ニニコ', emoji: '✌️', tier: 1, unlockAt: 3,
+    id: 'niniko', name: 'ニニコ', emoji: '✌️', tier: 1, unlockAt: 0,
     imageAsset: 'assets/characters/tier1/niniko/niniko_lv1_normal.png',
     subject: 'ひき算',
     backstory: '双子の「2」がぴったり寄り添ったのがニニコ。\n'
@@ -37,7 +37,7 @@ const List<BaseCharacter> kSansuCharacters = [
   ),
 
   BaseCharacter(
-    id: 'trai', name: 'トライ', emoji: '🔺', tier: 1, unlockAt: 5,
+    id: 'trai', name: 'トライ', emoji: '🔺', tier: 1, unlockAt: 0,
     imageAsset: 'assets/characters/tier1/trai/trai_lv1_normal.png',
     subject: 'かけ算',
     backstory: '三角形の頂点から生まれたトライは「安定」の象徴。\n'
@@ -52,7 +52,7 @@ const List<BaseCharacter> kSansuCharacters = [
   ),
 
   BaseCharacter(
-    id: 'fouku', name: 'フォーク', emoji: '🍴', tier: 1, unlockAt: 8,
+    id: 'fouku', name: 'フォーク', emoji: '🍴', tier: 1, unlockAt: 0,
     imageAsset: 'assets/characters/tier1/fouku/fouku_lv1_normal.png',
     subject: 'わり算',
     backstory: '4本の枝に分かれる形をしたフォーク。\n'

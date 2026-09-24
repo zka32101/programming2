@@ -46,7 +46,7 @@ class _StageSelectScreenState extends ConsumerState<StageSelectScreen> {
               label: premium.isTrialActive
                   ? Text('トライアル${premium.trialDaysLeft}日',
                       style: const TextStyle(color: Colors.white, fontSize: 12))
-                  : const Text('PRO', style: TextStyle(color: Colors.white)),
+                  : const Text('プレミアム', style: TextStyle(color: Colors.white)),
             ),
         ],
       ),

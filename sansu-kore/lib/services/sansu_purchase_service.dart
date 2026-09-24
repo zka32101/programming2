@@ -1,6 +1,6 @@
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-/// 算数コレ！用 RevenueCat サービス（月額¥300 / 年額¥2,400 固定）。
+/// 小学コレ！算数用 RevenueCat サービス（月額¥300 / 年額¥2,400 固定）。
 ///
 /// API キーは `--dart-define=REVENUE_CAT_GOOGLE_KEY=goog_...` で渡す。
 /// 未設定なら初期化をスキップし、購入・復元は何もしない（false を返す）。

@@ -58,7 +58,7 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
                   const Text('⭐', style: TextStyle(fontSize: 56)),
                   const SizedBox(height: 12),
                   const Text(
-                    '算数コレ！プレミアム',
+                    '小学コレ！算数プレミアム',
                     style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
@@ -80,7 +80,7 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
             _PlanCard(
               title: '月額プラン',
               price: '¥300/月',
-              description: '算数コレ！1教科',
+              description: '小学コレ！算数1教科',
               badge: null,
               onTap: _purchasing ? null : () => _purchase(context, ref, monthly: true),
             ),
@@ -88,7 +88,7 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
             _PlanCard(
               title: '年額プラン',
               price: '¥2,400/年',
-              description: '算数コレ！1教科（月額の12か月分より33%おトク）',
+              description: '小学コレ！算数1教科（月額の12か月分より33%おトク）',
               badge: 'おトク',
               onTap: _purchasing ? null : () => _purchase(context, ref, monthly: false),
             ),
@@ -135,7 +135,6 @@ class _FeatureList extends StatelessWidget {
   Widget build(BuildContext context) {
     const features = [
       ('🔢', '全ステージ解放（小1〜小6）'),
-      ('🤖', 'AIアダプティブ学習'),
       ('📅', 'デイリーログインボーナス'),
       ('👨‍👩‍👧', '親のほめ導線自動通知'),
       ('🏆', '全キャラクター収集'),

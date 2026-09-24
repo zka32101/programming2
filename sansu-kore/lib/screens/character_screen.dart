@@ -6,7 +6,7 @@ import 'package:shared_core/shared_core.dart'
 import '../data/sansu_characters.dart';
 import '../providers/progress_provider.dart';
 
-/// 算数コレ版キャラクター図鑑。
+/// 小学コレ！算数版キャラクター図鑑。
 /// 表示ロジックはすべて [CharacterCollectionPage] に委譲する。
 class CharacterScreen extends ConsumerWidget {
   const CharacterScreen({super.key});

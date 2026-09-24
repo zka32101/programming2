@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/sansu_purchase_service.dart';
@@ -58,9 +59,21 @@ class PremiumNotifier extends StateNotifier<PremiumStatus> {
   }
 
   Future<DateTime?> _guard(Future<DateTime?> Function() action) async {
+    if (!SansuPurchaseService.instance.isConfigured) {
+      // REVENUE_CAT_GOOGLE_KEY が --dart-define で渡されていないビルドでは
+      // RevenueCat が初期化されず、購入は常に失敗する。
+      if (kDebugMode) {
+        debugPrint(
+            '⚠️ RevenueCat is not configured (REVENUE_CAT_GOOGLE_KEY missing). '
+            'Purchases will always fail until the key is supplied at build time.');
+      }
+    }
     try {
       return await action();
-    } catch (_) {
+    } catch (e, st) {
+      if (kDebugMode) {
+        debugPrint('❌ Purchase error: $e\n$st');
+      }
       return null;
     }
   }

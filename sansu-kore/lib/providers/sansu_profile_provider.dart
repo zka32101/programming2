@@ -7,7 +7,7 @@ import 'firestore_provider.dart';
 const _favoriteItemKey = 'sansu_favorite_item';
 const _characterLevelsKey = 'sansu_character_levels';
 
-/// 算数コレ独自のプロフィール拡張（主人公文章題で使用）
+/// 小学コレ！算数独自のプロフィール拡張（主人公文章題で使用）
 class SansuProfileState {
   /// 文章題に登場する好きなもの（例: りんご、ケーキ、チョコ）
   final String favoriteItem;
