@@ -7,7 +7,7 @@ import '../providers/ghost_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/sansu_profile_provider.dart';
 import '../theme/app_theme.dart';
-import '../providers/tts_provider.dart' as tts_enums show TtsSource;
+import '../providers/tts_provider.dart';
 import '../widgets/furigana_text.dart';
 import '../widgets/calculation_steps_widget.dart';
 import '../widgets/geometry_visual_widget.dart';
