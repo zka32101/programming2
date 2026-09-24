@@ -6,6 +6,7 @@ import '../providers/adaptive_provider.dart';
 import '../providers/coin_provider.dart';
 import '../providers/profile_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/grade_utils.dart';
 import '../widgets/furigana_text.dart';
 
 /// 無限とっくん画面
@@ -76,7 +77,7 @@ class _InfinitePracticeScreenState
   void _initialize() {
     final adaptive = ref.read(adaptiveProvider);
     final profile = ref.read(profileProvider).currentProfile;
-    _grade = profile?.grade ?? 1;
+    _grade = clampToStageGrade(profile?.grade ?? 1);
 
     // トピック：引数 > 最弱トピック > デフォルト(たし算)
     _selectedTopic = widget.initialTopic ??
