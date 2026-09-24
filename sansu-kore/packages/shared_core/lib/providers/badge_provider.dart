@@ -81,7 +81,13 @@ class BadgeNotifier extends Notifier<BadgeState> {
         BadgeCategory.score    => p.justPerfect && badge.requiredCount <= 1,
         BadgeCategory.content1 => p.totalPrimaryCorrect >= badge.requiredCount,
         BadgeCategory.content2 => p.totalSecondaryCorrect >= badge.requiredCount,
-        BadgeCategory.special  => p.maxStageCleared >= badge.requiredCount,
+        // special カテゴリは「ステージクリア数」だけで判定できるバッジ
+        // （id が "stage_" で始まるもの）に限定する。
+        // grade_complete_* / weekly_* / ranking_* / character_* 等、
+        // 別の達成条件を持つバッジを maxStageCleared だけで
+        // 誤って一括付与してしまわないようにするため。
+        BadgeCategory.special  => badge.id.startsWith('stage_') &&
+            p.maxStageCleared >= badge.requiredCount,
         // 国語コレ専用カテゴリ
         BadgeCategory.kanji    => p.totalPrimaryCorrect >= badge.requiredCount,
         BadgeCategory.reading  => p.totalSecondaryCorrect >= badge.requiredCount,

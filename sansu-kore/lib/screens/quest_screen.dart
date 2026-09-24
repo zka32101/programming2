@@ -6,9 +6,7 @@ import '../providers/adaptive_provider.dart';
 import '../providers/ghost_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/sansu_profile_provider.dart';
-import '../providers/character_level_provider.dart';
 import '../theme/app_theme.dart';
-import '../providers/tts_provider.dart';
 import '../providers/tts_provider.dart' as tts_enums show TtsSource;
 import '../widgets/furigana_text.dart';
 import '../widgets/calculation_steps_widget.dart';
@@ -140,88 +138,6 @@ class _QuestScreenState extends ConsumerState<QuestScreen>
     return 'ichiko'; // デフォルト
   }
 
-  /// キャラクター画像表示ウィジェット（Lv対応）
-  Widget _buildCharacterImage({
-    required String characterId,
-    required int level,
-  }) {
-    final imagePath = getCharacterImagePath(characterId, level);
-
-    return Container(
-      height: 180,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.blue.shade50,
-            Colors.blue.shade100.withAlpha(30),
-          ],
-        ),
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // キャラクター画像
-          Image.asset(
-            imagePath,
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.image_not_supported,
-                        size: 48, color: Colors.grey.shade300),
-                    const SizedBox(height: 8),
-                    Text(
-                      '画像が見つかりません',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-
-          // Lvバッジ（右下）
-          Positioned(
-            bottom: 12,
-            right: 12,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.deepOrange,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withAlpha(25),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Text(
-                'Lv. $level',
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   void dispose() {
     ref.read(ttsProvider.notifier).stop();
@@ -297,10 +213,6 @@ class _QuestScreenState extends ConsumerState<QuestScreen>
     final adaptive = ref.watch(adaptiveProvider);
     final shouldShowHint = adaptive.shouldShowHint(widget.stage.topicType);
     final tts = ref.watch(ttsProvider);
-
-    // キャラクターレベルを取得
-    final sansuProfile = ref.watch(sansuProfileProvider);
-    final characterLevel = sansuProfile.getCharacterLevel(_displayCharacterId);
 
     return Scaffold(
       appBar: AppBar(
@@ -378,13 +290,6 @@ class _QuestScreenState extends ConsumerState<QuestScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // ─── キャラクター画像（Lv対応） ────────────────
-                  _buildCharacterImage(
-                    characterId: _displayCharacterId,
-                    level: characterLevel,
-                  ),
-                  const SizedBox(height: 16),
-
                   // ─── ヒント ────────────────────────────────────
                   if (_showHint && _current.hint != null)
                     Container(

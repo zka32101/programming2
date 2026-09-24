@@ -64,7 +64,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    '算数コレ！を紹介してお友達と一緒に勉強しよう',
+                    '小学コレ！算数を紹介してお友達と一緒に勉強しよう',
                     style: TextStyle(fontSize: 13, color: Colors.white70),
                     textAlign: TextAlign.center,
                   ),
@@ -88,7 +88,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
             const SizedBox(height: 12),
             _BonusCard(
               icon: '⭐',
-              title: '一緒に算数コレ！',
+              title: '一緒に小学コレ！算数',
               description: '小学1〜6年の算数が遊びながら学べる！',
             ),
             const SizedBox(height: 24),
@@ -278,7 +278,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
     final message = '''
 $childName のお友達へ
 
-算数コレ！に招待します！🎓
+小学コレ！算数に招待します！🎓
 
 👉 このコードを使ってサインアップしてね:
    $code
@@ -288,11 +288,11 @@ $childName のお友達へ
 🏆 正解するとキャラクターもゲット
 
 一緒に算数を楽しもう！
-#算数コレ #小学算数
+#小学コレ！算数 #小学算数
 ''';
 
     try {
-      await Share.share(message, subject: '算数コレ！へのお招待');
+      await Share.share(message, subject: '小学コレ！算数へのお招待');
     } catch (_) {
       // シェアキャンセル
     }

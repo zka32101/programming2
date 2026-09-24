@@ -431,10 +431,10 @@ class _ShareAchievementButton extends ConsumerWidget {
     final name = profile?.name ?? '小学生';
     final grade = profile?.grade ?? 1;
     final emoji = result.isPerfect ? '🏆' : result.score >= 80 ? '⭐' : '✅';
-    final text = '$emoji $name（小${grade}年生）が算数コレ！で\n'
+    final text = '$emoji $name（小${grade}年生）が小学コレ！算数で\n'
         '「${stage.title}」をクリア！\n'
         '${result.correctCount}/${result.totalCount}問正解 (${result.score}点)\n\n'
-        '#算数コレ #小学算数 #算数好きな子と繋がりたい';
+        '#小学コレ！算数 #小学算数 #算数好きな子と繋がりたい';
     try {
       await Share.share(text);
     } catch (_) {}

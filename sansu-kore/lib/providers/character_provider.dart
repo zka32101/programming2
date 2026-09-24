@@ -1,7 +1,7 @@
 import 'package:shared_core/shared_core.dart';
 import '../data/sansu_characters.dart';
 
-/// 算数コレ固有のキャラクターノティファイア。
+/// 小学コレ！算数固有のキャラクターノティファイア。
 /// main.dart で characterStateProvider をこれで上書きする:
 /// ```dart
 /// characterStateProvider.overrideWith(CharacterNotifier.new)

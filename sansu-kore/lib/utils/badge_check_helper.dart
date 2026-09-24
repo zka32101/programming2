@@ -1,7 +1,7 @@
 import 'package:shared_core/shared_core.dart';
 import '../data/badge_data.dart';
 
-/// 算数コレ専用のバッジ判定ロジックを集約したHelper
+/// 小学コレ！算数専用のバッジ判定ロジックを集約したHelper
 /// 新規追加バッジの獲得条件を管理
 class SansuBadgeCheckHelper {
   /// ストリークバッジ判定

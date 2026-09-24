@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_core/shared_core.dart';
 import '../data/sansu_characters.dart';
 
-// ── 算数コレ 交換所アイテム ──────────────────────────────────────────────
+// ── 小学コレ！算数 交換所アイテム ──────────────────────────────────────────────
 // 2026-07: 交換所・期間限定タブはいったん非表示（ラインナップ見直し中）。
 // 復活する際は _exchangeItems / _seasonalItems をそのまま CoinShopPage に渡す。
 
@@ -30,11 +30,11 @@ const _exchangeItemsArchive = [
       description: '算数王者の金色フレーム', category: 'フレーム', coinCost: 250),
   AppShopItem(id: 'stamp_coupon_sansu', emoji: '🎁',
       name: 'LINEスタンプ無料引換券',
-      description: '算数コレキャラのスタンプ1セットが無料！',
+      description: '小学コレ！算数キャラのスタンプ1セットが無料！',
       category: 'スペシャル', coinCost: 1000),
 ];
 
-// ── 算数コレ 期間限定アイテム ─────────────────────────────────────────────
+// ── 小学コレ！算数 期間限定アイテム ─────────────────────────────────────────────
 
 // ignore: unused_element
 const _seasonalItemsArchive = <String, List<AppShopItem>>{
@@ -76,7 +76,7 @@ const _seasonalItemsArchive = <String, List<AppShopItem>>{
 
 // ── ShopScreen ────────────────────────────────────────────────────────────
 
-/// 算数コレ版ショップ。
+/// 小学コレ！算数版ショップ。
 /// レイアウト・購入ロジックはすべて [CoinShopPage] に委譲する。
 class ShopScreen extends StatelessWidget {
   const ShopScreen({super.key});
