@@ -8,9 +8,9 @@ const _premiumKey = 'is_premium';
 const _trialStartKey = 'trial_start_date';
 const _trialDays = 14;
 
-/// Google Play 商品ID（コンソールで設定する）
-const kProductIdMonthly = 'kokugo-premium-monthly';
-const kProductIdYearly = 'kokugo-premium-annual';
+/// Google Play 商品ID（Play Consoleで実際に有効な基本プランを持つID）
+const kProductIdMonthly = 'premium_monthly';
+const kProductIdYearly = 'premium_annual2';
 
 /// 無料で遊べる最大ステージ番号
 const kFreeStageLimit = 3;
