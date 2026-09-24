@@ -129,6 +129,30 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       'たし算からかんすうまで',
                       style: TextStyle(color: Colors.white70, fontSize: 14),
                     ),
+                    const SizedBox(height: 40),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.asset(
+                            'assets/logos/company_app_icon.jpg',
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          'Your Wish',
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

@@ -55,6 +55,7 @@ flutter:
   assets:
     - assets/branding/
     - assets/app_icon/
+    - assets/logos/
     - assets/avatars/
     - assets/legal/
     - assets/characters/tier1/fouku/

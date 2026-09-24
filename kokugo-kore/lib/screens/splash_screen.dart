@@ -157,8 +157,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                           borderRadius: BorderRadius.circular(12),
                           child: Image.asset(
                             'assets/logos/company_app_icon.jpg',
-                            width: 40,
-                            height: 40,
+                            width: 120,
+                            height: 120,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -167,7 +167,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                           'Your Wish',
                           style: TextStyle(
                             color: Colors.white70,
-                            fontSize: 16,
+                            fontSize: 24,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
