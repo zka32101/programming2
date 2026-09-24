@@ -2,7 +2,7 @@ name: kokugo_kore
 description: "小学1～6年生向け国語学習アプリ。ひらがな・漢字・読解・作文をゲーム感覚で学習。バッジシステムで楽しくモチベーション向上。学年別カリキュラム対応。"
 publish_to: 'none'
 
-version: 1.5.1+18
+version: 1.5.1+19
 
 environment:
   sdk: ^3.9.0
