@@ -10,7 +10,7 @@ class SansuPurchaseService {
 
   static const String _googleKey =
       String.fromEnvironment('REVENUE_CAT_GOOGLE_KEY');
-  static const String premiumEntitlementId = 'premium';
+  static const String premiumEntitlementId = '小学コレ_pro';
 
   bool _configured = false;
   bool get isConfigured => _configured;
