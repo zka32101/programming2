@@ -30,6 +30,7 @@ import 'screens/stage_select_screen.dart';
 import 'screens/infinite_practice_screen.dart';
 import 'screens/upgrade_screen.dart';
 import 'screens/analysis_dashboard_screen.dart';
+import 'screens/avatar_selection_screen.dart';
 import 'services/sansu_purchase_service.dart';
 import 'theme/app_theme.dart';
 
@@ -102,6 +103,7 @@ class SansuKoreApp extends ConsumerWidget {
         '/invite': (context) => const InviteScreen(),
         '/math-guide': (context) => const MathGuideScreen(),
         '/analysis': (context) => const AnalysisDashboardScreen(),
+        '/avatar-selection': (context) => const AvatarSelectionScreen(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/quest') {

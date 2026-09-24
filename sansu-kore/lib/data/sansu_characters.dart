@@ -68,7 +68,7 @@ const List<BaseCharacter> kSansuCharacters = [
 
   // ── Tier 2（計算の達人）3体 ──────────────────────────────────────
   BaseCharacter(
-    id: 'gogo', name: 'ゴーゴ', emoji: '✋', tier: 2, unlockAt: 12,
+    id: 'gogo', name: 'ゴーゴ', emoji: '✋', tier: 2, unlockAt: 22,
     imageAsset: 'assets/characters/tier2/gogo/gogo_lv1_normal.png',
     subject: '分数・小数',
     backstory: '手の指5本から生まれたゴーゴは行動派。\n'
@@ -83,7 +83,7 @@ const List<BaseCharacter> kSansuCharacters = [
   ),
 
   BaseCharacter(
-    id: 'multiko', name: 'マルティプル', emoji: '✖️', tier: 2, unlockAt: 18,
+    id: 'multiko', name: 'マルティプル', emoji: '✖️', tier: 2, unlockAt: 32,
     imageAsset: 'assets/characters/tier2/multiko/multiko_lv1_normal.png',
     subject: '大きい数のかけ算',
     backstory: 'かけ算記号「×」が目になった強力なキャラクター。\n'
@@ -98,7 +98,7 @@ const List<BaseCharacter> kSansuCharacters = [
   ),
 
   BaseCharacter(
-    id: 'divido', name: 'ディバイド', emoji: '➗', tier: 2, unlockAt: 24,
+    id: 'divido', name: 'ディバイド', emoji: '➗', tier: 2, unlockAt: 42,
     imageAsset: 'assets/characters/tier2/divido/divido_lv1_normal.png',
     subject: 'わり算の筆算',
     backstory: '割り算記号「÷」の形をしたディバイドは公平の守護者。\n'
@@ -114,7 +114,7 @@ const List<BaseCharacter> kSansuCharacters = [
 
   // ── Tier 3（図形と量の世界）2体 ──────────────────────────────────
   BaseCharacter(
-    id: 'geome', name: 'ジオメ', emoji: '📐', tier: 3, unlockAt: 32,
+    id: 'geome', name: 'ジオメ', emoji: '📐', tier: 3, unlockAt: 56,
     imageAsset: 'assets/characters/tier3/geome/geome_lv1_normal.png',
     subject: '図形',
     backstory: '幾何学模様とコンパスが融合したジオメは完璧主義者。\n'
@@ -129,7 +129,7 @@ const List<BaseCharacter> kSansuCharacters = [
   ),
 
   BaseCharacter(
-    id: 'calcuku', name: 'カルキュ', emoji: '🧮', tier: 3, unlockAt: 40,
+    id: 'calcuku', name: 'カルキュ', emoji: '🧮', tier: 3, unlockAt: 70,
     imageAsset: 'assets/characters/tier3/calcuku/calcuku_lv1_normal.png',
     subject: '算数総合',
     backstory: '古い計算機とそろばんを背負ったカルキュは算数の賢者。\n'
@@ -145,7 +145,7 @@ const List<BaseCharacter> kSansuCharacters = [
 
   // ── Tier 4（伝説の存在）1体 ──────────────────────────────────────
   BaseCharacter(
-    id: 'plus_minus', name: 'プラスマイナス', emoji: '⚡', tier: 4, unlockAt: 48,
+    id: 'plus_minus', name: 'プラスマイナス', emoji: '⚡', tier: 4, unlockAt: 86,
     imageAsset: 'assets/characters/tier4/plus_minus/plus_minus_lv1_normal.png',
     subject: '算数マスター',
     backstory: '+と−が合体した伝説の存在、プラスマイナス。\n'

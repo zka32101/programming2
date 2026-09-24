@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/profile_provider.dart';
 import '../providers/grade_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/grade_utils.dart';
 
 class ProfileSelectionScreen extends ConsumerStatefulWidget {
   const ProfileSelectionScreen({super.key});
@@ -69,8 +70,8 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
               DropdownButton<int>(
                 value: _selectedGrade,
                 isExpanded: true,
-                items: List.generate(6, (i) => i + 1).map((g) {
-                  return DropdownMenuItem(value: g, child: Text('小学$g年生'));
+                items: [0, 1, 2, 3, 4, 5, 6, 7].map((g) {
+                  return DropdownMenuItem(value: g, child: Text(gradeLabel(g)));
                 }).toList(),
                 onChanged: (val) => setDialogState(() => _selectedGrade = val ?? 1),
               ),
@@ -199,7 +200,9 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                             child: GestureDetector(
                               onTap: () async {
                                 await ref.read(profileProvider.notifier).setCurrentProfile(profile.id);
-                                await ref.read(gradeProvider.notifier).setGrade(profile.grade);
+                                await ref
+                                    .read(gradeProvider.notifier)
+                                    .setGrade(clampToStageGrade(profile.grade));
                                 if (mounted) {
                                   Navigator.of(context).pushReplacementNamed('/home');
                                 }
@@ -233,7 +236,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            '小学${profile.grade}年生',
+                                            gradeLabel(profile.grade),
                                             style: const TextStyle(fontSize: 14, color: kTextMuted),
                                           ),
                                         ],

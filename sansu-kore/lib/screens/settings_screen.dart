@@ -7,7 +7,10 @@ import '../providers/premium_provider.dart';
 import '../providers/daily_login_provider.dart';
 import '../providers/logout_provider.dart';
 import '../providers/sansu_profile_provider.dart';
+import '../providers/selected_avatar_provider.dart';
+import '../screens/avatar_selection_screen.dart';
 import '../theme/app_theme.dart';
+import '../utils/grade_utils.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -123,10 +126,20 @@ class _SettingsTabContent extends ConsumerWidget {
             _SettingCard(
               emoji: '👤',
               title: profile.name,
-              subtitle: '学年${profile.grade}年生',
+              subtitle: '学年${gradeLabel(profile.grade)}',
               onTap: () => Navigator.of(context).pushNamed('/profile-selection'),
             ),
           ],
+          const SizedBox(height: 16),
+          _SectionHeader('アバター'),
+          _SettingCard(
+            emoji: ref.watch(selectedAvatarProvider).emoji,
+            title: 'アバターを変更',
+            subtitle: ref.watch(selectedAvatarProvider).name,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const AvatarSelectionScreen()),
+            ),
+          ),
           const SizedBox(height: 16),
           _SectionHeader('主人公設定'),
           _SettingCard(

@@ -8,10 +8,13 @@ import '../providers/profile_provider.dart';
 import '../providers/daily_login_provider.dart';
 import '../providers/adaptive_provider.dart';
 import '../providers/weekly_challenge_provider.dart';
+import '../providers/selected_avatar_provider.dart';
 import '../models/quest_model.dart';
+import '../screens/avatar_selection_screen.dart';
 import '../screens/daily_bonus_screen.dart';
 import '../screens/math_guide_screen.dart';
 import '../theme/app_theme.dart';
+import '../utils/grade_utils.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -26,6 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkDailyBonus();
+      ref.read(selectedAvatarProvider.notifier).load();
     });
   }
 
@@ -49,6 +53,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final currentProfile = profileState.currentProfile;
     final adaptive = ref.watch(adaptiveProvider);
     final daily = ref.watch(dailyLoginProvider);
+    final selectedAvatar = ref.watch(selectedAvatarProvider);
     ref.watch(weeklyChallengeProvider); // ウィークリーチャレンジ初期化
 
     return Scaffold(
@@ -59,6 +64,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             pinned: true,
             backgroundColor: kPrimaryColor,
             forceElevated: true,
+            leading: Padding(
+              padding: const EdgeInsets.all(8),
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (_) => const AvatarSelectionScreen()),
+                ),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Text(selectedAvatar.emoji,
+                      style: const TextStyle(fontSize: 20)),
+                ),
+              ),
+            ),
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: const BoxDecoration(
@@ -85,7 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   if (currentProfile != null)
                     Text(
-                      '${currentProfile.name} (${currentProfile.grade}年生)',
+                      '${currentProfile.name} (${gradeLabel(currentProfile.grade)})',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(color: Colors.white70, fontSize: 12),
@@ -173,7 +192,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: _QuickStartCard(
               progress: progress,
               onStart: () {
-                final grade = currentProfile?.grade ?? 1;
+                final grade = clampToStageGrade(currentProfile?.grade ?? 1);
                 for (final stage in getStagesForGrade(grade)) {
                   if (!progress.isCleared(stage.grade, stage.stageNumber)) {
                     Navigator.of(context).pushNamed('/quest', arguments: stage);

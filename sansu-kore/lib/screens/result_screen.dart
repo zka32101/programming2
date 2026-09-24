@@ -13,6 +13,7 @@ import '../providers/adaptive_provider.dart';
 import '../providers/ghost_provider.dart';
 import '../services/notification_service.dart';
 import '../theme/app_theme.dart';
+import '../utils/grade_utils.dart';
 
 class ResultScreen extends ConsumerStatefulWidget {
   final QuestResult result;
@@ -431,7 +432,7 @@ class _ShareAchievementButton extends ConsumerWidget {
     final name = profile?.name ?? '小学生';
     final grade = profile?.grade ?? 1;
     final emoji = result.isPerfect ? '🏆' : result.score >= 80 ? '⭐' : '✅';
-    final text = '$emoji $name（小${grade}年生）が小学コレ！算数で\n'
+    final text = '$emoji $name（${gradeLabel(grade)}）が小学コレ！算数で\n'
         '「${stage.title}」をクリア！\n'
         '${result.correctCount}/${result.totalCount}問正解 (${result.score}点)\n\n'
         '#小学コレ！算数 #小学算数 #算数好きな子と繋がりたい';

@@ -200,10 +200,18 @@ class _LevelUpCard extends ConsumerWidget {
             Stack(
               alignment: Alignment.topRight,
               children: [
-                Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(character.emoji,
-                        style: const TextStyle(fontSize: 40))),
+                if (character.imageAsset != null)
+                  SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: Image.asset(character.imageAsset!,
+                        fit: BoxFit.contain),
+                  )
+                else
+                  Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Text(character.emoji,
+                          style: const TextStyle(fontSize: 40))),
                 if (state.hasSparkle)
                   const Text('✨', style: TextStyle(fontSize: 12)),
               ],
