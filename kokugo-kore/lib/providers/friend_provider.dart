@@ -132,7 +132,9 @@ class FriendNotifier extends StateNotifier<List<Friend>> {
       // Add friend to list
       await addFriend(userId, friendData);
 
-      // Mark request as accepted
+      // Remove the request now that it has been accepted
+      await FirebaseRealtimeAPI.removeFriendRequest(userId, request.requestId);
+
       debugPrint('✅ Friend request accepted from ${request.senderId}');
     } catch (e) {
       debugPrint('❌ Error accepting friend request: $e');
@@ -141,12 +143,41 @@ class FriendNotifier extends StateNotifier<List<Friend>> {
   }
 
   /// Decline friend request
-  Future<void> declineFriendRequest(FriendRequest request) async {
+  Future<void> declineFriendRequest(String userId, FriendRequest request) async {
     try {
+      await FirebaseRealtimeAPI.removeFriendRequest(userId, request.requestId);
       debugPrint('✅ Friend request declined from ${request.senderId}');
     } catch (e) {
       debugPrint('❌ Error declining friend request: $e');
       rethrow;
     }
+  }
+
+  /// 招待コード（相手のuserId）からユーザーを検索し、フレンド申請を送る。
+  /// ユーザーが見つからない場合は false を返す。
+  Future<bool> sendFriendRequestByCode(
+    String senderId,
+    String senderName,
+    String senderImageUrl,
+    String recipientCode,
+  ) async {
+    if (recipientCode.trim().isEmpty || recipientCode.trim() == senderId) {
+      return false;
+    }
+    final recipientId = recipientCode.trim();
+    final profile = await FirebaseRealtimeAPI.findUserProfileById(recipientId);
+    if (profile == null) return false;
+
+    final recipientName = (profile['name'] as String?) ?? 'User';
+
+    await sendFriendRequest(
+      senderId,
+      recipientId,
+      recipientName,
+      '',
+      senderName: senderName,
+      senderImageUrl: senderImageUrl,
+    );
+    return true;
   }
 }

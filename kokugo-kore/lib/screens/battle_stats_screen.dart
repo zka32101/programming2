@@ -1,48 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../providers/battle_stats_provider.dart';
+import '../providers/profile_provider.dart';
 import '../theme/app_theme.dart';
 
-class BattleStatsScreen extends StatelessWidget {
+class BattleStatsScreen extends ConsumerWidget {
   const BattleStatsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final statsAsync = ref.watch(battleStatsProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('対戦統計'),
         backgroundColor: kPrimaryColor,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildStatCard('総対戦数', '42', Colors.blue),
-            const SizedBox(height: 12),
-            _buildStatCard('勝利数', '28', Colors.green),
-            const SizedBox(height: 12),
-            _buildStatCard('敗北数', '14', Colors.red),
-            const SizedBox(height: 24),
-            const Text(
-              '統計情報',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            _buildDetailRow('勝率', '66.7%'),
-            _buildDetailRow('平均スコア', '87.3点'),
-            _buildDetailRow('最高スコア', '100点'),
-            _buildDetailRow('最低スコア', '62点'),
-            const SizedBox(height: 24),
-            const Text(
-              '最近の対戦',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            _buildBattleRecord('太郎', '勝ち', '95点', '2時間前'),
-            _buildBattleRecord('花子', '負け', '78点', '5時間前'),
-            _buildBattleRecord('次郎', '勝ち', '88点', '1日前'),
-            _buildBattleRecord('三郎', '勝ち', '92点', '3日前'),
-          ],
+      body: statsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, _) => Center(child: Text('統計を取得できませんでした: $err')),
+        data: (stats) => SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildStatCard('総対戦数', '${stats.totalBattles}', Colors.blue),
+              const SizedBox(height: 12),
+              _buildStatCard('勝利数', '${stats.wins}', Colors.green),
+              const SizedBox(height: 12),
+              _buildStatCard('敗北数', '${stats.losses}', Colors.red),
+              const SizedBox(height: 24),
+              const Text(
+                '統計情報',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              _buildDetailRow('勝率', '${stats.winRate.toStringAsFixed(1)}%'),
+              _buildDetailRow('平均スコア', '${stats.averageScore.toStringAsFixed(1)}点'),
+              _buildDetailRow('最高スコア', '${stats.highestScore}点'),
+              _buildDetailRow('最低スコア', '${stats.lowestScore}点'),
+              const SizedBox(height: 24),
+              const Text(
+                '最近の対戦',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              if (stats.recentBattles.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    'まだ対戦記録がありません',
+                    style: TextStyle(color: kTextMuted),
+                  ),
+                )
+              else
+                ...stats.recentBattles.map((battle) {
+                  final userId = ref.read(profileProvider).currentProfile?.id;
+                  final myScore = battle.player1Id == userId ? battle.player1Score : battle.player2Score;
+                  final isWin = battle.winnerId.isNotEmpty && battle.winnerId == userId;
+                  return _buildBattleRecord(
+                    isWin ? '勝ち' : '負け',
+                    '$myScore点',
+                    _relativeTime(battle.completedDate),
+                  );
+                }),
+            ],
+          ),
         ),
       ),
     );
@@ -79,7 +104,7 @@ class BattleStatsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBattleRecord(String opponent, String result, String score, String time) {
+  Widget _buildBattleRecord(String result, String score, String time) {
     return Container(
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 8),
@@ -91,13 +116,7 @@ class BattleStatsScreen extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(opponent, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(time, style: const TextStyle(fontSize: 11, color: kTextMuted)),
-              ],
-            ),
+            child: Text(time, style: const TextStyle(fontSize: 11, color: kTextMuted)),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -119,5 +138,12 @@ class BattleStatsScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _relativeTime(DateTime date) {
+    final diff = DateTime.now().difference(date);
+    if (diff.inMinutes < 60) return '${diff.inMinutes}分前';
+    if (diff.inHours < 24) return '${diff.inHours}時間前';
+    return '${diff.inDays}日前';
   }
 }

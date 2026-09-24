@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/friend_model.dart';
 import '../providers/badge_metrics_provider.dart';
-import '../theme/app_theme.dart';
-import '../providers/friend_provider.dart';
 import '../providers/badge_provider.dart';
+import '../providers/friend_provider.dart';
+import '../providers/profile_provider.dart';
+import '../theme/app_theme.dart';
 import 'battle_screen.dart';
 
 class FriendInvitationScreen extends ConsumerStatefulWidget {
@@ -18,23 +21,42 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
   String _searchQuery = '';
+  bool _isSendingRequest = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final userId = ref.read(profileProvider).currentProfile?.id;
+      if (userId != null) {
+        await ref.read(friendListProvider.notifier).loadFriends(userId);
+      }
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _searchController.dispose();
+    _codeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final friendCount = ref.watch(friendListProvider).length;
+    final userId = ref.watch(profileProvider).currentProfile?.id;
+    final requestCount = userId == null
+        ? 0
+        : ref.watch(friendRequestsProvider(userId)).maybeWhen(
+              data: (requests) => requests.length,
+              orElse: () => 0,
+            );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('友人と対戦'),
@@ -42,51 +64,51 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
       ),
       body: SafeArea(
         child: Column(
-        children: [
-          // 検索バー
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: '友人名で検索...',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+          children: [
+            // 検索バー
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: '友人名で検索...',
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                onChanged: (value) {
+                  setState(() => _searchQuery = value);
+                },
               ),
-              onChanged: (value) {
-                setState(() => _searchQuery = value);
-              },
             ),
-          ),
 
-          // タブ
-          TabBar(
-            controller: _tabController,
-            labelColor: kPrimaryColor,
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: kPrimaryColor,
-            tabs: const [
-              Tab(text: '👥 登録済み (8)'),
-              Tab(text: '📨 リクエスト (3)'),
-              Tab(text: '➕ 追加'),
-            ],
-          ),
-
-          // タブコンテンツ
-          Expanded(
-            child: TabBarView(
+            // タブ
+            TabBar(
               controller: _tabController,
-              children: [
-                _buildRegisteredFriendsTab(),
-                _buildFriendRequestsTab(),
-                _buildAddFriendsTab(),
+              labelColor: kPrimaryColor,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: kPrimaryColor,
+              tabs: [
+                Tab(text: '👥 登録済み ($friendCount)'),
+                Tab(text: '📨 リクエスト ($requestCount)'),
+                const Tab(text: '➕ 追加'),
               ],
             ),
-          ),
-        ],
+
+            // タブコンテンツ
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildRegisteredFriendsTab(),
+                  _buildFriendRequestsTab(userId),
+                  _buildAddFriendsTab(userId),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -94,22 +116,21 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
 
   /// 登録済み友人タブ
   Widget _buildRegisteredFriendsTab() {
-    final friendsList = [
-      ('太郎', '小学1年', 95, 2850, '🔴'),
-      ('花子', '小学2年', 88, 3120, '🟢'),
-      ('次郎', '小学1年', 85, 2640, '🔴'),
-      ('三郎', '小学3年', 92, 3500, '🟢'),
-      ('四郎', '小学2年', 78, 2200, '🔴'),
-      ('五郎', '小学1年', 81, 2800, '🟢'),
-      ('六郎', '小学4年', 88, 3100, '🔴'),
-      ('七郎', '小学2年', 85, 2950, '🟢'),
-    ];
+    final friends = ref.watch(friendListProvider);
 
     final filtered = _searchQuery.isEmpty
-        ? friendsList
-        : friendsList
-            .where((f) => f.$1.toLowerCase().contains(_searchQuery.toLowerCase()))
+        ? friends
+        : friends
+            .where((f) => f.displayName.toLowerCase().contains(_searchQuery.toLowerCase()))
             .toList();
+
+    if (filtered.isEmpty) {
+      return _buildEmptyState(
+        icon: Icons.people_outline,
+        title: friends.isEmpty ? 'まだ友人がいません' : '一致する友人がいません',
+        subtitle: friends.isEmpty ? '「追加」タブから友人を招待しましょう' : '検索キーワードを変えてお試しください',
+      );
+    }
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
@@ -119,19 +140,14 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: _buildFriendCard(
-            friend.$1,
-            friend.$2,
-            friend.$3,
-            friend.$4,
-            friend.$5,
+            friend,
             () {
-              // Start battle with friend
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => BattleScreen(
-                    opponentId: 'friend_${index}',
-                    opponentName: friend.$1,
+                    opponentId: friend.userId,
+                    opponentName: friend.displayName,
                   ),
                 ),
               );
@@ -143,116 +159,180 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
   }
 
   /// 友人リクエストタブ
-  Widget _buildFriendRequestsTab() {
-    final requests = [
-      ('健太', '小学1年'),
-      ('美咲', '小学3年'),
-      ('悟', '小学2年'),
-    ];
+  Widget _buildFriendRequestsTab(String? userId) {
+    if (userId == null) {
+      return _buildEmptyState(
+        icon: Icons.person_off_outlined,
+        title: 'プロフィール未設定です',
+        subtitle: 'プロフィールを作成してからご利用ください',
+      );
+    }
 
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: requests.length,
-      itemBuilder: (context, index) {
-        final req = requests[index];
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: kPrimaryColor.withAlpha(25),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Center(child: Text('😊', style: TextStyle(fontSize: 24))),
+    final requestsAsync = ref.watch(friendRequestsProvider(userId));
+
+    return requestsAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, _) => _buildEmptyState(
+        icon: Icons.error_outline,
+        title: 'リクエストを取得できませんでした',
+        subtitle: '$err',
+      ),
+      data: (requests) {
+        if (requests.isEmpty) {
+          return _buildEmptyState(
+            icon: Icons.mail_outline,
+            title: '届いているリクエストはありません',
+            subtitle: '友人があなたを招待すると、ここに表示されます',
+          );
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: requests.length,
+          itemBuilder: (context, index) {
+            final req = requests[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        req.$1,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        req.$2,
-                        style: const TextStyle(fontSize: 12, color: kTextMuted),
-                      ),
-                    ],
-                  ),
-                ),
-                Column(
+                child: Row(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('${req.$1}を承認しました')),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor.withAlpha(25),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Text(
-                        '承認',
-                        style: TextStyle(fontSize: 11, color: Colors.white),
+                      child: const Center(child: Text('😊', style: TextStyle(fontSize: 24))),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            req.senderName,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            req.senderId,
+                            style: const TextStyle(fontSize: 11, color: kTextMuted),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    TextButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('${req.$1}を却下しました')),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                      ),
-                      child: const Text(
-                        '却下',
-                        style: TextStyle(fontSize: 11, color: Colors.red),
-                      ),
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () => _acceptRequest(userId, req),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                          ),
+                          child: const Text(
+                            '承認',
+                            style: TextStyle(fontSize: 11, color: Colors.white),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        TextButton(
+                          onPressed: () => _declineRequest(userId, req),
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                          ),
+                          child: const Text(
+                            '却下',
+                            style: TextStyle(fontSize: 11, color: Colors.red),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
   }
 
+  Future<void> _acceptRequest(String userId, FriendRequest req) async {
+    try {
+      final friendData = Friend(
+        userId: req.senderId,
+        displayName: req.senderName,
+        profileImageUrl: req.senderImageUrl,
+        grade: 0,
+        addedDate: DateTime.now(),
+        isOnline: false,
+        totalScore: 0,
+        averageAccuracy: 0,
+      );
+      await ref.read(friendListProvider.notifier).acceptFriendRequest(userId, req, friendData);
+
+      // 招待受諾数のバッジ判定
+      final metricsState = ref.read(badgeMetricsProvider);
+      final socialBadges = await ref.read(badgeProvider.notifier).checkSocialBadges(
+            friendInviteCount: metricsState.friendInvites,
+            multiplayerWins: metricsState.multiplayerWins,
+            isTopTenRanker: metricsState.isTopTenRanker,
+          );
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${req.senderName}を友人に追加しました')),
+      );
+      if (socialBadges.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('🎉 ${socialBadges.map((b) => b.title).join(', ')} を獲得しました！'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('承認に失敗しました: $e')),
+      );
+    }
+  }
+
+  Future<void> _declineRequest(String userId, FriendRequest req) async {
+    try {
+      await ref.read(friendListProvider.notifier).declineFriendRequest(userId, req);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${req.senderName}のリクエストを却下しました')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('却下に失敗しました: $e')),
+      );
+    }
+  }
+
   /// 友人追加タブ
-  Widget _buildAddFriendsTab() {
+  Widget _buildAddFriendsTab(String? userId) {
+    final profile = ref.watch(profileProvider).currentProfile;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // おすすめ友人
-          const Text(
-            'おすすめの友人',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 12),
-          _buildSuggestedFriendsList(),
-          const SizedBox(height: 24),
-
           // 招待コード
           const Text(
             '招待コードで追加',
@@ -260,6 +340,7 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
           ),
           const SizedBox(height: 12),
           TextField(
+            controller: _codeController,
             decoration: InputDecoration(
               hintText: '友人の招待コードを入力',
               border: OutlineInputBorder(
@@ -270,41 +351,20 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
           const SizedBox(height: 12),
           SizedBox(
             width: double.infinity,
-            child: Consumer(
-              builder: (context, ref, child) => ElevatedButton(
-                onPressed: () async {
-                  // 招待数を増やす
-                  await ref.read(badgeMetricsProvider.notifier).incrementFriendInvites();
-
-                  // Phase 2+ 社交バッジチェック
-                  final metricsState = ref.read(badgeMetricsProvider);
-                  final socialBadges = await ref.read(badgeProvider.notifier).checkSocialBadges(
-                    friendInviteCount: metricsState.friendInvites,
-                    multiplayerWins: metricsState.multiplayerWins,
-                    isTopTenRanker: metricsState.isTopTenRanker,
-                  );
-
-                  if (!context.mounted) return;
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('招待リクエストを送信しました')),
-                  );
-
-                  // 新規バッジ取得時は表示
-                  if (socialBadges.isNotEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('🎉 ${socialBadges.map((b) => b.title).join(', ')} を獲得しました！'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: kPrimaryColor,
-                ),
-                child: const Text('招待を送る'),
+            child: ElevatedButton(
+              onPressed: (userId == null || _isSendingRequest)
+                  ? null
+                  : () => _sendRequest(userId, profile?.name ?? ''),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kPrimaryColor,
               ),
+              child: _isSendingRequest
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    )
+                  : const Text('招待を送る'),
             ),
           ),
           const SizedBox(height: 24),
@@ -325,30 +385,35 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'KOKUGO-ABC123XYZ',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'monospace',
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        userId ?? '---',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'monospace',
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'この招待コードを友人と共有してください',
-                      style: TextStyle(fontSize: 11, color: kTextMuted),
-                    ),
-                  ],
+                      const SizedBox(height: 4),
+                      const Text(
+                        'この招待コードを友人と共有してください',
+                        style: TextStyle(fontSize: 11, color: kTextMuted),
+                      ),
+                    ],
+                  ),
                 ),
                 IconButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('コピーしました')),
-                    );
-                  },
+                  onPressed: userId == null
+                      ? null
+                      : () {
+                          Clipboard.setData(ClipboardData(text: userId));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('コピーしました')),
+                          );
+                        },
                   icon: const Icon(Icons.copy),
                   color: kPrimaryColor,
                 ),
@@ -360,95 +425,91 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
     );
   }
 
-  /// 推奨友人リスト
-  Widget _buildSuggestedFriendsList() {
-    final suggested = [
-      ('八郎', '小学1年', 'あなたと同じ学年'),
-      ('九郎', '小学2年', 'あなたの友人と友人'),
-      ('十郎', '小学1年', 'オンラインで活動中'),
-    ];
+  Future<void> _sendRequest(String userId, String senderName) async {
+    final code = _codeController.text.trim();
+    if (code.isEmpty) return;
 
-    return Column(
-      children: suggested
-          .map(
-            (friend) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 45,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: kPrimaryColor.withAlpha(25),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Center(child: Text('😊', style: TextStyle(fontSize: 22))),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            friend.$1,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            friend.$2,
-                            style: const TextStyle(fontSize: 11, color: kTextMuted),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            friend.$3,
-                            style: const TextStyle(fontSize: 10, color: Colors.green),
-                          ),
-                        ],
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('${friend.$1}に招待を送りました')),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: kPrimaryColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      ),
-                      child: const Text(
-                        '追加',
-                        style: TextStyle(fontSize: 11, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+    setState(() => _isSendingRequest = true);
+    try {
+      final sent = await ref.read(friendListProvider.notifier).sendFriendRequestByCode(
+            userId,
+            senderName,
+            '',
+            code,
+          );
+
+      if (!mounted) return;
+
+      if (!sent) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('その招待コードのユーザーが見つかりませんでした')),
+        );
+        return;
+      }
+
+      await ref.read(badgeMetricsProvider.notifier).incrementFriendInvites();
+      final metricsState = ref.read(badgeMetricsProvider);
+      final socialBadges = await ref.read(badgeProvider.notifier).checkSocialBadges(
+            friendInviteCount: metricsState.friendInvites,
+            multiplayerWins: metricsState.multiplayerWins,
+            isTopTenRanker: metricsState.isTopTenRanker,
+          );
+
+      if (!mounted) return;
+      _codeController.clear();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('招待リクエストを送信しました')),
+      );
+      if (socialBadges.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('🎉 ${socialBadges.map((b) => b.title).join(', ')} を獲得しました！'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('招待の送信に失敗しました: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _isSendingRequest = false);
+    }
+  }
+
+  Widget _buildEmptyState({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+  }) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 48, color: kTextMuted),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.bold, color: kTextMuted),
+              textAlign: TextAlign.center,
             ),
-          )
-          .toList(),
+            const SizedBox(height: 8),
+            Text(
+              subtitle,
+              style: const TextStyle(fontSize: 12, color: kTextMuted),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   /// 友人カード
-  Widget _buildFriendCard(
-    String name,
-    String grade,
-    int accuracy,
-    int score,
-    String status,
-    VoidCallback onTap,
-  ) {
+  Widget _buildFriendCard(Friend friend, VoidCallback onTap) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -465,14 +526,16 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
               color: kPrimaryColor.withAlpha(25),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Center(
-              child: Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  const Text('😊', style: TextStyle(fontSize: 24)),
-                  Text(status, style: const TextStyle(fontSize: 14)),
-                ],
-              ),
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                const Center(child: Text('😊', style: TextStyle(fontSize: 24))),
+                Icon(
+                  Icons.circle,
+                  size: 10,
+                  color: friend.isOnline ? Colors.green : Colors.grey,
+                ),
+              ],
             ),
           ),
           const SizedBox(width: 12),
@@ -481,26 +544,26 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  friend.displayName,
                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
                 Row(
                   children: [
                     Text(
-                      grade,
+                      '${friend.grade}年生',
                       style: const TextStyle(fontSize: 11, color: kTextMuted),
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      '正答率 $accuracy%',
+                      '正答率 ${(friend.averageAccuracy * 100).toStringAsFixed(0)}%',
                       style: const TextStyle(fontSize: 11, color: Colors.green),
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'スコア: $score',
+                  'スコア: ${friend.totalScore}',
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
