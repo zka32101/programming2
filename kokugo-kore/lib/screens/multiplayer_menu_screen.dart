@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../providers/battle_stats_provider.dart';
+import '../providers/profile_provider.dart';
 import '../theme/app_theme.dart';
 
 class MultiplayerMenuScreen extends ConsumerStatefulWidget {
@@ -13,6 +15,8 @@ class MultiplayerMenuScreen extends ConsumerStatefulWidget {
 class _MultiplayerMenuScreenState extends ConsumerState<MultiplayerMenuScreen> {
   @override
   Widget build(BuildContext context) {
+    final statsAsync = ref.watch(battleStatsProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('マルチプレイ'),
@@ -28,7 +32,7 @@ class _MultiplayerMenuScreenState extends ConsumerState<MultiplayerMenuScreen> {
             const SizedBox(height: 24),
 
             // クイック統計
-            _buildQuickStats(),
+            _buildQuickStats(statsAsync),
             const SizedBox(height: 24),
 
             // メニューオプション
@@ -46,7 +50,7 @@ class _MultiplayerMenuScreenState extends ConsumerState<MultiplayerMenuScreen> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
-            _buildRecentBattles(),
+            _buildRecentBattles(statsAsync),
           ],
         ),
       ),
@@ -81,25 +85,15 @@ class _MultiplayerMenuScreenState extends ConsumerState<MultiplayerMenuScreen> {
             '友人と対戦して、スコアを競おう！',
             style: TextStyle(color: Colors.white70, fontSize: 14),
           ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.white24,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Text(
-              '🏆 ランキング1位まであと42ポイント',
-              style: TextStyle(color: Colors.white, fontSize: 12),
-            ),
-          ),
         ],
       ),
     );
   }
 
   /// クイック統計
-  Widget _buildQuickStats() {
+  Widget _buildQuickStats(AsyncValue<BattleStats> statsAsync) {
+    final stats = statsAsync.valueOrNull ?? const BattleStats();
+
     return GridView.count(
       crossAxisCount: 3,
       shrinkWrap: true,
@@ -107,9 +101,9 @@ class _MultiplayerMenuScreenState extends ConsumerState<MultiplayerMenuScreen> {
       mainAxisSpacing: 12,
       crossAxisSpacing: 12,
       children: [
-        _buildStatCard('対戦数', '24', Icons.sports_score),
-        _buildStatCard('勝利数', '18', Icons.emoji_events),
-        _buildStatCard('勝率', '75%', Icons.trending_up),
+        _buildStatCard('対戦数', '${stats.totalBattles}', Icons.sports_score),
+        _buildStatCard('勝利数', '${stats.wins}', Icons.emoji_events),
+        _buildStatCard('勝率', '${stats.winRate.toStringAsFixed(0)}%', Icons.trending_up),
       ],
     );
   }
@@ -240,18 +234,47 @@ class _MultiplayerMenuScreenState extends ConsumerState<MultiplayerMenuScreen> {
   }
 
   /// 最近の対戦
-  Widget _buildRecentBattles() {
-    final recentBattles = [
-      ('太郎', '勝ち', '95点', '2時間前'),
-      ('花子', '負け', '78点', '5時間前'),
-      ('次郎', '勝ち', '88点', '1日前'),
-      ('三郎', '勝ち', '92点', '3日前'),
-    ];
+  Widget _buildRecentBattles(AsyncValue<BattleStats> statsAsync) {
+    return statsAsync.when(
+      loading: () => const Padding(
+        padding: EdgeInsets.symmetric(vertical: 24),
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      error: (err, _) => Text('対戦履歴を取得できませんでした: $err', style: const TextStyle(color: kTextMuted)),
+      data: (stats) {
+        if (stats.recentBattles.isEmpty) {
+          return Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Column(
+              children: [
+                Icon(Icons.sports_score, size: 36, color: kTextMuted),
+                SizedBox(height: 8),
+                Text(
+                  'まだ対戦記録がありません',
+                  style: TextStyle(fontWeight: FontWeight.bold, color: kTextMuted),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  '友人と対戦するとここに記録が表示されます',
+                  style: TextStyle(fontSize: 12, color: kTextMuted),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
 
-    return Column(
-      children: recentBattles
-          .map(
-            (battle) => Padding(
+        final userId = ref.read(profileProvider).currentProfile?.id;
+
+        return Column(
+          children: stats.recentBattles.map((battle) {
+            final isWin = battle.winnerId.isNotEmpty && battle.winnerId == userId;
+            return Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: Container(
                 padding: const EdgeInsets.all(12),
@@ -262,7 +285,6 @@ class _MultiplayerMenuScreenState extends ConsumerState<MultiplayerMenuScreen> {
                 ),
                 child: Row(
                   children: [
-                    // アバター
                     Container(
                       width: 40,
                       height: 40,
@@ -276,57 +298,40 @@ class _MultiplayerMenuScreenState extends ConsumerState<MultiplayerMenuScreen> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            battle.$1,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            battle.$4,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: kTextMuted,
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        _relativeTime(battle.completedDate),
+                        style: const TextStyle(fontSize: 11, color: kTextMuted),
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: battle.$2 == '勝ち' ? Colors.green.shade100 : Colors.red.shade100,
+                        color: isWin ? Colors.green.shade100 : Colors.red.shade100,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        battle.$2,
+                        isWin ? '勝ち' : '負け',
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          color: battle.$2 == '勝ち' ? Colors.green : Colors.red,
+                          color: isWin ? Colors.green : Colors.red,
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      battle.$3,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: kPrimaryColor,
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-          )
-          .toList(),
+            );
+          }).toList(),
+        );
+      },
     );
+  }
+
+  String _relativeTime(DateTime date) {
+    final diff = DateTime.now().difference(date);
+    if (diff.inMinutes < 60) return '${diff.inMinutes}分前';
+    if (diff.inHours < 24) return '${diff.inHours}時間前';
+    return '${diff.inDays}日前';
   }
 }

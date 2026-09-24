@@ -236,6 +236,33 @@ class FirebaseRealtimeAPI {
         });
   }
 
+  /// Remove a friend request (承認・却下いずれの場合も呼び出す)
+  static Future<void> removeFriendRequest(String userId, String requestId) async {
+    try {
+      final ref = _db.ref(
+        '${FirebaseRealtimeDB.userFriendRequestsPath(userId)}/$requestId',
+      );
+      await ref.remove();
+    } catch (e) {
+      debugPrint('❌ Error removing friend request: $e');
+      rethrow;
+    }
+  }
+
+  /// 招待コード（相手のuserId）からプロフィールを検索する。
+  /// 見つからない場合は null を返す。
+  static Future<Map<String, dynamic>?> findUserProfileById(String userId) async {
+    try {
+      final ref = _db.ref(FirebaseRealtimeDB.userProfilePath(userId));
+      final snapshot = await ref.get();
+      if (!snapshot.exists) return null;
+      return Map<String, dynamic>.from(snapshot.value as Map);
+    } catch (e) {
+      debugPrint('❌ Error finding user profile: $e');
+      return null;
+    }
+  }
+
   // ===== Battles API =====
 
   /// Create battle
