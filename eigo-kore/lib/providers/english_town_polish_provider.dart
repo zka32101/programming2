@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/english_town_model.dart';
 import '../models/english_town_advanced.dart';
+import '../models/npc_schedule_model.dart' show TimeOfDay;
 import '../providers/english_town_provider.dart';
 export '../models/english_town_advanced.dart'
     show
