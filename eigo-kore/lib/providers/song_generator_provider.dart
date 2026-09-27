@@ -77,6 +77,12 @@ class SongGenerationRequestNotifier
     await _saveRequest(request);
     state = AsyncValue.data(request);
   }
+
+  /// 既に組み立て済みのリクエストを直接登録する
+  Future<void> addRequest(SongGenerationRequest request) async {
+    await _saveRequest(request);
+    state = AsyncValue.data(request);
+  }
 }
 
 /// 生成された歌プロバイダー
@@ -232,6 +238,12 @@ class GeneratedSongsNotifier extends StateNotifier<AsyncValue<List<GeneratedSong
     await _saveSongs(updated);
     state = AsyncValue.data(updated);
   }
+
+  /// incrementPlayCount のエイリアス
+  Future<void> recordPlay(String songId) => incrementPlayCount(songId);
+
+  /// shareSong のエイリアス
+  Future<void> toggleShare(String songId) => shareSong(songId);
 }
 
 /// ユーザーの歌ライブラリプロバイダー
@@ -338,6 +350,9 @@ class SongLibraryNotifier extends StateNotifier<AsyncValue<SongLibrary?>> {
     await _saveLibrary(updated);
     state = AsyncValue.data(updated);
   }
+
+  /// toggleFavoriteSong のエイリアス
+  Future<void> toggleFavorite(String songId) => toggleFavoriteSong(songId);
 
   Future<void> addToPlayHistory(String songId) async {
     final currentLibrary = state.value;

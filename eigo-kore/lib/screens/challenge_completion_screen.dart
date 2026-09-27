@@ -280,13 +280,13 @@ class _RewardSummaryCard extends ConsumerWidget {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: _getTierColor(reward.tier),
+                      color: _getTierColor(_tierToInt(reward.tier)),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(_getTierEmoji(reward.tier)),
+                        Text(_getTierEmoji(_tierToInt(reward.tier))),
                         AppSpacing.horizontalSpacerSm,
                         Text(
                           reward.tierLabel,
@@ -322,6 +322,17 @@ class _RewardSummaryCard extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  int _tierToInt(String tier) {
+    switch (tier) {
+      case 'gold':
+        return 3;
+      case 'silver':
+        return 2;
+      default:
+        return 1;
+    }
   }
 
   Color _getTierColor(int tier) {

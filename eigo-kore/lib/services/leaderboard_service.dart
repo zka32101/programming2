@@ -212,7 +212,7 @@ class LeaderboardService {
       final higherScoreSnapshot = await _firestore
           .collection('users')
           .where('score', isGreaterThan: userScore)
-          .count
+          .count()
           .get();
 
       final rank = (higherScoreSnapshot.count ?? 0) + 1;

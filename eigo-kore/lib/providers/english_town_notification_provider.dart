@@ -82,7 +82,7 @@ final rankChangeNotificationThresholdProvider =
 final previousUserRankProvider = StateProvider<int?>((ref) => null);
 
 /// Track rank changes and create notifications
-Future<void> checkRankChange(WidgetRef ref) async {
+Future<void> checkRankChange(Ref ref) async {
   final currentRank = ref.read(userLeaderboardRankProvider).value;
   final previousRank = ref.read(previousUserRankProvider);
   final enableNotifications =

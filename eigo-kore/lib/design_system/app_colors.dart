@@ -93,6 +93,12 @@ class AppColors {
   /// ホワイトテキスト
   static const Color textWhite = Colors.white;
 
+  /// ホワイトテキスト（70%不透明度）
+  static const Color textWhite70 = Color(0xB3FFFFFF);
+
+  /// ホワイトテキスト（24%不透明度）
+  static const Color textWhite24 = Color(0x3DFFFFFF);
+
   // ===== 背景カラー =====
 
   /// ライト背景: 淡いブルー (#F0F4FF)

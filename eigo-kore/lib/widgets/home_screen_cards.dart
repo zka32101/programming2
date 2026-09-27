@@ -1,4 +1,5 @@
 import '../design_system/design_system.dart';
+import '../theme/component_styles.dart';
 import 'package:flutter/material.dart';
 import '../models/stage.dart';
 
@@ -23,7 +24,7 @@ class ImprovedDailyMissionCard extends StatelessWidget {
       padding: AppSpacing.allPaddingLg,
       child: Container(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             colors: [AppColors.primary, AppColors.primary.withAlpha(25)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,

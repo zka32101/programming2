@@ -27,7 +27,7 @@ class FriendService {
       // Check if already friends
       final isFriend = await _areFriends(senderId, receiverId);
       if (isFriend) {
-        LoggerService.warning('Already friends', null);
+        LoggerService.warning('Already friends');
         return false;
       }
 
@@ -39,7 +39,7 @@ class FriendService {
           .get();
 
       if (existingRequest.exists) {
-        LoggerService.warning('Friend request already exists', null);
+        LoggerService.warning('Friend request already exists');
         return false;
       }
 

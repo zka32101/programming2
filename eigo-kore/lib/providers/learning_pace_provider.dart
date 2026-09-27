@@ -149,6 +149,23 @@ class UserPacePreference {
     'autoNotificationEnabled': autoNotificationEnabled,
     'lastUpdated': lastUpdated?.toIso8601String(),
   };
+
+  UserPacePreference copyWith({
+    String? preferredPaceLevel,
+    int? preferredStartHour,
+    int? preferredStartMinute,
+    bool? autoNotificationEnabled,
+    DateTime? lastUpdated,
+  }) {
+    return UserPacePreference(
+      preferredPaceLevel: preferredPaceLevel ?? this.preferredPaceLevel,
+      preferredStartHour: preferredStartHour ?? this.preferredStartHour,
+      preferredStartMinute: preferredStartMinute ?? this.preferredStartMinute,
+      autoNotificationEnabled:
+          autoNotificationEnabled ?? this.autoNotificationEnabled,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+    );
+  }
 }
 
 class UserPacePreferenceNotifier extends StateNotifier<UserPacePreference> {

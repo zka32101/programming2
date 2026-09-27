@@ -13,6 +13,14 @@ class DailyChallenge {
   final DateTime releaseTime; // When phrase was released (7:00 UTC)
   final DateTime expiresAt; // When challenge expires (next day 7:00 UTC)
 
+  // ===== English Town のデイリークエスト表示用（任意項目） =====
+  final String title;
+  final String description;
+  final int targetCount;
+  final int currentCount;
+  final bool isCompleted;
+  final int xpReward;
+
   const DailyChallenge({
     required this.challengeId,
     required this.phrase,
@@ -21,7 +29,13 @@ class DailyChallenge {
     required this.audioUrl,
     required this.releaseTime,
     required this.expiresAt,
-  });
+    String? title,
+    this.description = '',
+    this.targetCount = 1,
+    this.currentCount = 0,
+    this.isCompleted = false,
+    this.xpReward = 10,
+  }) : title = title ?? phrase;
 
   factory DailyChallenge.fromJson(Map<String, dynamic> json) =>
       _$DailyChallengeFromJson(json);
@@ -156,6 +170,34 @@ class ChallengeReward {
 
   /// Total coins including bonus
   int get totalCoins => coinsAwarded + bonusCoins;
+
+  /// rewardId のエイリアス
+  String get id => rewardId;
+
+  /// 獲得コイン（totalCoins のエイリアス）
+  int get coinReward => totalCoins;
+
+  /// 獲得XP（コイン報酬から換算）
+  int get xpReward => totalCoins * 2;
+
+  /// 報酬ランク（ボーナスコインの多さで判定）
+  String get tier {
+    if (bonusCoins >= 50) return 'gold';
+    if (bonusCoins >= 20) return 'silver';
+    return 'bronze';
+  }
+
+  /// 報酬ランクの表示名
+  String get tierLabel {
+    switch (tier) {
+      case 'gold':
+        return '🥇 ゴールド';
+      case 'silver':
+        return '🥈 シルバー';
+      default:
+        return '🥉 ブロンズ';
+    }
+  }
 }
 
 /// Share card data for social media

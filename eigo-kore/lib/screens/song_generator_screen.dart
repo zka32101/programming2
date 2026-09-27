@@ -270,7 +270,7 @@ class _SongGeneratorScreenState extends ConsumerState<SongGeneratorScreen>
   }
 
   Widget _buildWorksTab() {
-    final generatedSongs = ref.watch(generatedSongsProvider);
+    final generatedSongs = ref.watch(generatedSongsProvider).value ?? [];
 
     if (generatedSongs.isEmpty) {
       return Center(
@@ -422,13 +422,15 @@ class _SongGeneratorScreenState extends ConsumerState<SongGeneratorScreen>
   }
 
   Widget _buildLibraryTab() {
-    final library = ref.watch(songLibraryProvider);
-    final allSongs = ref.watch(generatedSongsProvider);
+    final library = ref.watch(songLibraryProvider).value;
+    final allSongs = ref.watch(generatedSongsProvider).value ?? [];
 
+    final savedSongIds = library?.savedSongIds ?? const [];
+    final favoriteSongIds = library?.favoriteSongIds ?? const [];
     final savedSongs =
-        allSongs.where((s) => library.savedSongIds.contains(s.songId)).toList();
+        allSongs.where((s) => savedSongIds.contains(s.songId)).toList();
     final favoriteSongs = allSongs
-        .where((s) => library.favoriteSongIds.contains(s.songId))
+        .where((s) => favoriteSongIds.contains(s.songId))
         .toList();
 
     return DefaultTabController(
@@ -501,8 +503,9 @@ class _SongGeneratorScreenState extends ConsumerState<SongGeneratorScreen>
   }
 
   Widget _buildStatisticsTab() {
-    final stats = ref.watch(songGenerationStatsProvider);
-    final allSongs = ref.watch(generatedSongsProvider);
+    final stats = ref.watch(songGenerationStatsProvider).value ??
+        SongGenerationStats.empty();
+    final allSongs = ref.watch(generatedSongsProvider).value ?? [];
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),

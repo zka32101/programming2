@@ -38,7 +38,7 @@ class _PromotionScreenState extends ConsumerState<PromotionScreen> {
         appBar: AppBar(
           title: const Text('📢 おすすめアプリ'),
           backgroundColor: AppColors.primary,
-          bottom: const TabBar(
+          bottom: TabBar(
             labelColor: AppColors.textWhite,
             unselectedLabelColor: AppColors.textWhite.withOpacity(0.7),
             indicatorColor: AppColors.accentOrange,

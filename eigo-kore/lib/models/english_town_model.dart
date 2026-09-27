@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'npc_schedule_model.dart' as schedule;
 
 part 'english_town_model.g.dart';
 
@@ -148,6 +150,31 @@ class NPC {
   factory NPC.fromJson(Map<String, dynamic> json) => _$NPCFromJson(json);
 
   Map<String, dynamic> toJson() => _$NPCToJson(this);
+
+  /// npcId のエイリアス
+  String get id => npcId;
+
+  /// NPCのテーマカラー（emoji/professionから決定的に導出）
+  Color get characterColor {
+    const palette = [
+      Color(0xFF1A73E8),
+      Color(0xFF34A853),
+      Color(0xFFFB8C00),
+      Color(0xFFE53935),
+      Color(0xFF7B1FA2),
+      Color(0xFF00BCD4),
+    ];
+    return palette[npcId.hashCode.abs() % palette.length];
+  }
+
+  /// NPCの性格（学習テーマから簡易表示）
+  String get personality => learningTheme;
+
+  /// NPCの出身地（areaId ベースの簡易表示）
+  String get nativeLocation => areaId;
+
+  /// NPCの紹介文
+  String get description => '$name is a friendly $profession who loves talking about $learningTheme.';
 }
 
 /// タウンエリア
@@ -220,6 +247,42 @@ class TownArea {
       _$TownAreaFromJson(json);
 
   Map<String, dynamic> toJson() => _$TownAreaToJson(this);
+
+  TownArea copyWith({
+    String? areaId,
+    String? areaType,
+    String? englishName,
+    String? japaneseName,
+    String? description,
+    String? backgroundTile,
+    List<String>? npcIds,
+    List<String>? learningThemes,
+    int? difficultyLevel,
+    int? progressPercentage,
+    int? wordsLearned,
+    int? coinsEarned,
+    bool? isUnlocked,
+    DateTime? firstVisitedAt,
+    DateTime? lastVisitedAt,
+  }) {
+    return TownArea(
+      areaId: areaId ?? this.areaId,
+      areaType: areaType ?? this.areaType,
+      englishName: englishName ?? this.englishName,
+      japaneseName: japaneseName ?? this.japaneseName,
+      description: description ?? this.description,
+      backgroundTile: backgroundTile ?? this.backgroundTile,
+      npcIds: npcIds ?? this.npcIds,
+      learningThemes: learningThemes ?? this.learningThemes,
+      difficultyLevel: difficultyLevel ?? this.difficultyLevel,
+      progressPercentage: progressPercentage ?? this.progressPercentage,
+      wordsLearned: wordsLearned ?? this.wordsLearned,
+      coinsEarned: coinsEarned ?? this.coinsEarned,
+      isUnlocked: isUnlocked ?? this.isUnlocked,
+      firstVisitedAt: firstVisitedAt ?? this.firstVisitedAt,
+      lastVisitedAt: lastVisitedAt ?? this.lastVisitedAt,
+    );
+  }
 }
 
 /// NPCとの会話
@@ -376,6 +439,63 @@ class TownProgress {
       _$TownProgressFromJson(json);
 
   Map<String, dynamic> toJson() => _$TownProgressToJson(this);
+
+  /// currentTimeOfDay（String）を schedule.TimeOfDay enum に変換
+  schedule.TimeOfDay get timeOfDayEnum => schedule.TimeOfDay.values.firstWhere(
+        (t) => t.name == currentTimeOfDay,
+        orElse: () => schedule.TimeOfDay.morning,
+      );
+
+  TownProgress copyWith({
+    String? progressId,
+    String? userId,
+    int? totalAreas,
+    int? unlockedAreas,
+    int? visitedAreas,
+    int? totalConversations,
+    int? correctConversations,
+    double? averageScore,
+    int? totalLearningPoints,
+    int? totalCoinsEarned,
+    int? totalXpEarned,
+    List<String>? visitedLocationIds,
+    List<String>? unlockedAchievements,
+    Map<String, int>? npcConversationCounts,
+    String? currentTimeOfDay,
+    String? currentWeather,
+    String? currentAreaId,
+    String? currentNPCId,
+    DateTime? firstVisitedAt,
+    DateTime? lastVisitedAt,
+    DateTime? lastUpdatedAt,
+  }) {
+    return TownProgress(
+      progressId: progressId ?? this.progressId,
+      userId: userId ?? this.userId,
+      totalAreas: totalAreas ?? this.totalAreas,
+      unlockedAreas: unlockedAreas ?? this.unlockedAreas,
+      visitedAreas: visitedAreas ?? this.visitedAreas,
+      totalConversations: totalConversations ?? this.totalConversations,
+      correctConversations:
+          correctConversations ?? this.correctConversations,
+      averageScore: averageScore ?? this.averageScore,
+      totalLearningPoints: totalLearningPoints ?? this.totalLearningPoints,
+      totalCoinsEarned: totalCoinsEarned ?? this.totalCoinsEarned,
+      totalXpEarned: totalXpEarned ?? this.totalXpEarned,
+      visitedLocationIds: visitedLocationIds ?? this.visitedLocationIds,
+      unlockedAchievements:
+          unlockedAchievements ?? this.unlockedAchievements,
+      npcConversationCounts:
+          npcConversationCounts ?? this.npcConversationCounts,
+      currentTimeOfDay: currentTimeOfDay ?? this.currentTimeOfDay,
+      currentWeather: currentWeather ?? this.currentWeather,
+      currentAreaId: currentAreaId ?? this.currentAreaId,
+      currentNPCId: currentNPCId ?? this.currentNPCId,
+      firstVisitedAt: firstVisitedAt ?? this.firstVisitedAt,
+      lastVisitedAt: lastVisitedAt ?? this.lastVisitedAt,
+      lastUpdatedAt: lastUpdatedAt ?? this.lastUpdatedAt,
+    );
+  }
 }
 
 /// ユーザープロフィール（町内）
@@ -436,6 +556,36 @@ class TownPlayerProfile {
       _$TownPlayerProfileFromJson(json);
 
   Map<String, dynamic> toJson() => _$TownPlayerProfileToJson(this);
+
+  TownPlayerProfile copyWith({
+    String? profileId,
+    String? userId,
+    String? playerCharacter,
+    int? level,
+    int? experience,
+    int? totalCoinsEarned,
+    int? currentCoins,
+    int? uniqueWordsLearned,
+    String? bestFriendNPCId,
+    List<String>? milestonesClaimed,
+    List<String>? badgesEarned,
+    DateTime? lastUpdatedAt,
+  }) {
+    return TownPlayerProfile(
+      profileId: profileId ?? this.profileId,
+      userId: userId ?? this.userId,
+      playerCharacter: playerCharacter ?? this.playerCharacter,
+      level: level ?? this.level,
+      experience: experience ?? this.experience,
+      totalCoinsEarned: totalCoinsEarned ?? this.totalCoinsEarned,
+      currentCoins: currentCoins ?? this.currentCoins,
+      uniqueWordsLearned: uniqueWordsLearned ?? this.uniqueWordsLearned,
+      bestFriendNPCId: bestFriendNPCId ?? this.bestFriendNPCId,
+      milestonesClaimed: milestonesClaimed ?? this.milestonesClaimed,
+      badgesEarned: badgesEarned ?? this.badgesEarned,
+      lastUpdatedAt: lastUpdatedAt ?? this.lastUpdatedAt,
+    );
+  }
 }
 
 /// 町の統計
@@ -508,6 +658,43 @@ class TownStats {
       _$TownStatsFromJson(json);
 
   Map<String, dynamic> toJson() => _$TownStatsToJson(this);
+
+  TownStats copyWith({
+    String? statsId,
+    String? userId,
+    int? totalPlayTime,
+    int? totalConversations,
+    double? averageScore,
+    int? highScore,
+    int? visitDays,
+    int? consecutiveVisitDays,
+    String? mostVisitedArea,
+    String? mostTalkedNPC,
+    int? totalWordsLearned,
+    int? totalCoinsEarned,
+    int? badgesCount,
+    int? milestonesCount,
+    DateTime? lastUpdatedAt,
+  }) {
+    return TownStats(
+      statsId: statsId ?? this.statsId,
+      userId: userId ?? this.userId,
+      totalPlayTime: totalPlayTime ?? this.totalPlayTime,
+      totalConversations: totalConversations ?? this.totalConversations,
+      averageScore: averageScore ?? this.averageScore,
+      highScore: highScore ?? this.highScore,
+      visitDays: visitDays ?? this.visitDays,
+      consecutiveVisitDays:
+          consecutiveVisitDays ?? this.consecutiveVisitDays,
+      mostVisitedArea: mostVisitedArea ?? this.mostVisitedArea,
+      mostTalkedNPC: mostTalkedNPC ?? this.mostTalkedNPC,
+      totalWordsLearned: totalWordsLearned ?? this.totalWordsLearned,
+      totalCoinsEarned: totalCoinsEarned ?? this.totalCoinsEarned,
+      badgesCount: badgesCount ?? this.badgesCount,
+      milestonesCount: milestonesCount ?? this.milestonesCount,
+      lastUpdatedAt: lastUpdatedAt ?? this.lastUpdatedAt,
+    );
+  }
 }
 
 /// 個別の会話ターン（ダイアログ交換）
@@ -592,6 +779,12 @@ class InteractionScene {
       _$InteractionSceneFromJson(json);
 
   Map<String, dynamic> toJson() => _$InteractionSceneToJson(this);
+
+  /// シーンのタイトル表示（最初のグリーティングから短く生成）
+  String get title =>
+      initialGreeting.length > 24
+          ? '${initialGreeting.substring(0, 24)}...'
+          : initialGreeting;
 }
 
 /// ロケーション（エリア）の拡張版
@@ -879,4 +1072,27 @@ class TownMap {
       _$TownMapFromJson(json);
 
   Map<String, dynamic> toJson() => _$TownMapToJson(this);
+
+  /// IDからロケーションを取得
+  Location? getLocation(String locationId) {
+    try {
+      return locations.firstWhere((l) => l.id == locationId);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// IDからNPCを取得
+  NPC? getNPC(String npcId) {
+    try {
+      return npcs.firstWhere((n) => n.npcId == npcId);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// ロケーションで利用可能なインタラクションシーン一覧
+  List<InteractionScene> getLocationScenes(String locationId) {
+    return scenes.where((s) => s.locationId == locationId).toList();
+  }
 }

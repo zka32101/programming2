@@ -709,7 +709,7 @@ class _BadgesTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final badgesAsync = ref.watch(globalBadgesProvider);
+    final badgesAsync = AsyncValue.data(ref.watch(globalBadgesProvider));
     final achievementsAsync = ref.watch(userBadgeAchievementsProvider);
 
     return achievementsAsync.when(

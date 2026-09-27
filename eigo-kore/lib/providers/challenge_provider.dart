@@ -276,3 +276,238 @@ enum ChallengeSortBy { newest, mostPopular, endingSoon }
 final challengeSortProvider = StateProvider<ChallengeSortBy>((ref) {
   return ChallengeSortBy.newest;
 });
+
+// ==================== フレンドチャレンジ（1対1） ====================
+
+/// ユーザーが参加しているフレンドチャレンジ（1対1）
+final userFriendChallengesProvider =
+    FutureProvider.family<List<SocialChallenge>, String>((ref, userId) async {
+  final service = ref.watch(challengeServiceProvider);
+  final created = await service.getUserCreatedChallenges(userId);
+  final joined = await service.getUserJoinedChallenges(userId);
+  return [
+    ...created.where((c) => c.type == ChallengeType.individual),
+    ...joined.where((c) => c.type == ChallengeType.individual),
+  ];
+});
+
+class CreateFriendChallengeParams {
+  final String userId;
+  final String friendId;
+  final String description;
+  final int targetValue;
+
+  CreateFriendChallengeParams({
+    required this.userId,
+    required this.friendId,
+    required this.description,
+    required this.targetValue,
+  });
+}
+
+final createFriendChallengeActionProvider =
+    FutureProvider.family<SocialChallenge, CreateFriendChallengeParams>(
+  (ref, params) async {
+    final now = DateTime.now();
+    final challenge = SocialChallenge(
+      id: 'friend_challenge_${now.millisecondsSinceEpoch}',
+      creatorId: params.userId,
+      creatorName: params.userId,
+      creatorAvatar: '🧒',
+      title: params.description,
+      description: params.description,
+      type: ChallengeType.individual,
+      status: ChallengeStatus.active,
+      goalMetric: ChallengeGoalMetric.totalScore,
+      goalValue: params.targetValue,
+      startDate: now,
+      endDate: now.add(const Duration(days: 7)),
+      createdAt: now,
+      maxParticipants: 2,
+      currentParticipants: 2,
+      isPublic: false,
+      invitedUserIds: [params.friendId],
+      participants: {params.userId: 0, params.friendId: 0},
+    );
+    ref.read(_localChallengesProvider.notifier).add(challenge);
+    return challenge;
+  },
+);
+
+/// ローカルに保持しているフレンドチャレンジ一覧（作成直後の即時反映用）
+final _localChallengesProvider =
+    StateNotifierProvider<_LocalChallengesNotifier, List<SocialChallenge>>(
+        (ref) {
+  return _LocalChallengesNotifier();
+});
+
+class _LocalChallengesNotifier extends StateNotifier<List<SocialChallenge>> {
+  _LocalChallengesNotifier() : super([]);
+
+  void add(SocialChallenge challenge) {
+    state = [...state, challenge];
+  }
+
+  void update(String challengeId, SocialChallenge Function(SocialChallenge) updater) {
+    state = state
+        .map((c) => c.id == challengeId ? updater(c) : c)
+        .toList();
+  }
+}
+
+class UpdateFriendChallengeProgressParams {
+  final String challengeId;
+  final String userId;
+  final int progress;
+
+  UpdateFriendChallengeProgressParams({
+    required this.challengeId,
+    required this.userId,
+    required this.progress,
+  });
+}
+
+final updateFriendChallengeProgressActionProvider =
+    FutureProvider.family<void, UpdateFriendChallengeProgressParams>(
+  (ref, params) async {
+    ref.read(_localChallengesProvider.notifier).update(params.challengeId, (c) {
+      final updated = Map<String, int>.from(c.participants);
+      updated[params.userId] = params.progress;
+      return c.copyWith(participants: updated);
+    });
+    ref.read(userChallengeProgressProvider('${params.userId}:${params.challengeId}'));
+  },
+);
+
+// ==================== チャレンジ進捗・ランキング（共通） ====================
+
+class UserChallengeProgress {
+  final String userId;
+  final String challengeId;
+  final int progress;
+  final bool isCompleted;
+  final DateTime joinedAt;
+  final List<String> earnedRewardIds;
+
+  UserChallengeProgress({
+    required this.userId,
+    required this.challengeId,
+    required this.progress,
+    this.isCompleted = false,
+    required this.joinedAt,
+    this.earnedRewardIds = const [],
+  });
+
+  UserChallengeProgress copyWith({
+    int? progress,
+    bool? isCompleted,
+    List<String>? earnedRewardIds,
+  }) {
+    return UserChallengeProgress(
+      userId: userId,
+      challengeId: challengeId,
+      progress: progress ?? this.progress,
+      isCompleted: isCompleted ?? this.isCompleted,
+      joinedAt: joinedAt,
+      earnedRewardIds: earnedRewardIds ?? this.earnedRewardIds,
+    );
+  }
+}
+
+final _userChallengeProgressStore =
+    StateNotifierProvider<_UserChallengeProgressNotifier, Map<String, UserChallengeProgress>>(
+        (ref) {
+  return _UserChallengeProgressNotifier();
+});
+
+class _UserChallengeProgressNotifier
+    extends StateNotifier<Map<String, UserChallengeProgress>> {
+  _UserChallengeProgressNotifier() : super({});
+
+  void setProgress(String key, int progress) {
+    final parts = key.split(':');
+    final existing = state[key];
+    state = {
+      ...state,
+      key: (existing ?? UserChallengeProgress(
+        userId: parts[0],
+        challengeId: parts.length > 1 ? parts[1] : '',
+        progress: 0,
+        joinedAt: DateTime.now(),
+      ))
+          .copyWith(progress: progress),
+    };
+  }
+
+  void claimRewards(String key) {
+    final existing = state[key];
+    if (existing == null) return;
+    state = {
+      ...state,
+      key: existing.copyWith(isCompleted: true),
+    };
+  }
+}
+
+/// "userId:challengeId" 形式のキーでユーザーの進捗を取得
+final userChallengeProgressProvider =
+    FutureProvider.family<UserChallengeProgress?, String>((ref, key) async {
+  final store = ref.watch(_userChallengeProgressStore);
+  final parts = key.split(':');
+  return store[key] ??
+      UserChallengeProgress(
+        userId: parts[0],
+        challengeId: parts.length > 1 ? parts[1] : '',
+        progress: 0,
+        joinedAt: DateTime.now(),
+      );
+});
+
+/// "userId:challengeId" 形式のキーでユーザーの順位を取得
+final userChallengeRankProvider =
+    FutureProvider.family<int?, String>((ref, key) async {
+  final parts = key.split(':');
+  if (parts.length < 2) return null;
+  final challengeId = parts[1];
+  final challenge = await ref.watch(challengeProvider(challengeId).future);
+  return challenge?.getUserRank(parts[0]);
+});
+
+/// チャレンジのリーダーボード（参加者のスコア降順）
+final challengeLeaderboardProvider =
+    FutureProvider.family<List<MapEntry<String, int>>, String>(
+        (ref, challengeId) async {
+  final challenge = await ref.watch(challengeProvider(challengeId).future);
+  return challenge?.getTopParticipants(limit: 50) ?? [];
+});
+
+/// 進捗更新アクション（フレンドチャレンジ以外の一般チャレンジ用）
+class UpdateChallengeProgressParams {
+  final String userId;
+  final String challengeId;
+  final int progress;
+
+  UpdateChallengeProgressParams({
+    required this.userId,
+    required this.challengeId,
+    required this.progress,
+  });
+}
+
+final updateChallengeProgressActionProvider =
+    FutureProvider.family<void, UpdateChallengeProgressParams>(
+  (ref, params) async {
+    ref
+        .read(_userChallengeProgressStore.notifier)
+        .setProgress('${params.userId}:${params.challengeId}', params.progress);
+    ref.invalidate(
+        userChallengeProgressProvider('${params.userId}:${params.challengeId}'));
+  },
+);
+
+/// 報酬受け取りアクション（"userId:challengeId" 形式のキー）
+final claimRewardsActionProvider =
+    FutureProvider.family<void, String>((ref, key) async {
+  ref.read(_userChallengeProgressStore.notifier).claimRewards(key);
+  ref.invalidate(userChallengeProgressProvider(key));
+});

@@ -25,6 +25,9 @@ class Question {
     this.phonetic,
     this.points = 10,
   });
+
+  /// 解説文（textJa のエイリアス）
+  String get explanation => textJa;
 }
 
 class SpeakingResult {

@@ -23,15 +23,15 @@ ThemeData buildDarkAppTheme() => ThemeData(
     elevation: 0,
   ),
   cardColor: const Color(0xFF1E1E1E),
-  textTheme: const TextTheme(
+  textTheme: TextTheme(
     bodyMedium: TextStyle(color: AppColors.textWhite.withOpacity(0.7)),
-    titleMedium: TextStyle(color: AppColors.textWhite),
+    titleMedium: const TextStyle(color: AppColors.textWhite),
   ),
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
     fillColor: const Color(0xFF2A2A2A),
-    labelStyle: const TextStyle(color: AppColors.textWhite.withOpacity(0.7)),
-    hintStyle: const TextStyle(color: AppColors.textWhite.withOpacity(0.38)),
+    labelStyle: TextStyle(color: AppColors.textWhite.withOpacity(0.7)),
+    hintStyle: TextStyle(color: AppColors.textWhite.withOpacity(0.38)),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
       borderSide: const BorderSide(color: Color(0xFF3A3A3A)),

@@ -2,7 +2,8 @@ import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_core/shared_core.dart';
+import 'package:shared_core/shared_core.dart' hide FirebaseService, Stage, buildAppTheme;
+import 'theme/app_theme.dart';
 import 'models/stage.dart';
 import 'models/challenge_model.dart';
 import 'models/video_model.dart';
@@ -10,6 +11,8 @@ import 'models/pet_model.dart';
 import 'providers/character_provider.dart';
 import 'providers/purchase_provider.dart';
 import 'providers/settings_provider.dart';
+import 'providers/user_profile_provider.dart';
+import 'providers/pet_provider.dart';
 import 'screens/badge_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/lesson_screen.dart';
@@ -180,7 +183,10 @@ class EigoKoreApp extends ConsumerWidget {
         '/promotions': (context) => const PromotionScreen(),
         '/profile-management': (context) => const ProfileManagementScreen(),
         '/leaderboard': (context) => const LeaderboardScreen(),
-        '/friends': (context) => const FriendsScreen(),
+        '/friends': (context) => Consumer(builder: (context, ref, _) {
+          final userId = ref.watch(currentUserProvider)?.id ?? '';
+          return FriendsScreen(currentUserId: userId);
+        }),
         '/analytics': (context) => const AnalyticsScreen(),
         '/notifications': (context) => const NotificationManagementScreen(),
         '/achievements': (context) => const AchievementsScreen(),
@@ -198,7 +204,12 @@ class EigoKoreApp extends ConsumerWidget {
         '/video-gallery': (context) => const VideoGalleryScreen(),
         '/pet-adoption': (context) => const PetAdoptionScreen(),
         '/pet-status': (context) => const PetStatusScreen(),
-        '/pet-interaction': (context) => const PetInteractionScreen(),
+        '/pet-interaction': (context) => Consumer(builder: (context, ref, _) {
+          final pet = ref.watch(currentPetProvider);
+          return pet != null
+              ? PetInteractionScreen(pet: pet)
+              : const PetScreen();
+        }),
         '/activity-feed': (context) => const ActivityFeedScreen(),
         '/leaderboard': (context) => const LeaderboardScreen(),
         '/conversations': (context) => const ConversationListScreen(),

@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
@@ -388,8 +389,8 @@ class _GamificationPainter extends CustomPainter {
     for (int i = 0; i < 5; i++) {
       final angle = i * angleSlice - 3.14159 / 2;
       points.add(Offset(
-        center.dx + radius * 0.5 * 3.14159.cos() * (i.isEven ? 2 : 1),
-        center.dy + radius * 0.5 * 3.14159.sin() * (i.isEven ? 2 : 1),
+        center.dx + radius * 0.5 * math.cos(angle) * (i.isEven ? 2 : 1),
+        center.dy + radius * 0.5 * math.sin(angle) * (i.isEven ? 2 : 1),
       ));
     }
 

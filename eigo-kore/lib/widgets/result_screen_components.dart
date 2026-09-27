@@ -6,6 +6,7 @@ import '../theme/component_styles.dart';
 import '../theme/sizes.dart';
 import '../theme/spacing.dart';
 import '../theme/typography.dart';
+import '../design_system/app_colors.dart';
 
 /// 結果画面用の改善されたコンポーネント
 

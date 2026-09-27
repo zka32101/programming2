@@ -89,7 +89,7 @@ class _RankingScreenState extends ConsumerState<RankingScreen> {
                   style: AppTypography.labelLarge.copyWith(color: AppColors.textPrimary),
                 ),
                 AppSpacing.verticalSpacerXs,
-                const Text(
+                Text(
                   '週次の平均スピーキングスコアで順位が決まります',
                   style: AppTypography.bodySmall.copyWith(color: AppColors.textMuted),
                 ),
@@ -101,7 +101,7 @@ class _RankingScreenState extends ConsumerState<RankingScreen> {
                       color: AppColors.accentOrange.withAlpha(30),
                       borderRadius: BorderRadius.circular(AppSizes.borderRadius),
                     ),
-                    child: const Text(
+                    child: Text(
                       '⚠️ オフラインモード: Firebase 接続後に実際のランキングが表示されます',
                       style: AppTypography.bodySmall.copyWith(color: AppColors.accentOrange),
                       textAlign: TextAlign.center,

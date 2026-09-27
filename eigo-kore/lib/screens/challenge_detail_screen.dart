@@ -160,6 +160,8 @@ class _ChallengeDetailScreenState extends ConsumerState<ChallengeDetailScreen> {
                                 JoinChallengeParams(
                                   userId: widget.userId,
                                   challengeId: widget.challenge.id,
+                                  userName: widget.userId,
+                                  userAvatar: '🧒',
                                 ),
                               ));
                             },
@@ -398,7 +400,7 @@ class _ChallengeDetailScreenState extends ConsumerState<ChallengeDetailScreen> {
                         itemBuilder: (context, index) {
                           final entry = leaderboard[index];
                           final rank = index + 1;
-                          final isCurrentUser = entry['userId'] == widget.userId;
+                          final isCurrentUser = entry.key == widget.userId;
 
                           return Container(
                             margin: const EdgeInsets.only(bottom: 8),
@@ -442,7 +444,7 @@ class _ChallengeDetailScreenState extends ConsumerState<ChallengeDetailScreen> {
                                       ),
                                       AppSpacing.verticalSpacerSm,
                                       Text(
-                                        '進捗: ${entry['progress']}/${widget.challenge.goalValue}',
+                                        '進捗: ${entry.value}/${widget.challenge.goalValue}',
                                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                                               color: Colors.grey,
                                             ),
@@ -451,7 +453,7 @@ class _ChallengeDetailScreenState extends ConsumerState<ChallengeDetailScreen> {
                                   ),
                                 ),
                                 Text(
-                                  '${(entry['progress'] / widget.challenge.goalValue * 100).toStringAsFixed(0)}%',
+                                  '${(entry.value / widget.challenge.goalValue * 100).toStringAsFixed(0)}%',
                                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blue,

@@ -327,3 +327,152 @@ class NotificationStats {
       _$NotificationStatsFromJson(json);
   Map<String, dynamic> toJson() => _$NotificationStatsToJson(this);
 }
+
+/// 通知設定（ローカル保存用、SharedPreferences で永続化）
+class NotificationSettings {
+  final bool dailyRemindersEnabled;
+  final int dailyReminderHour;
+  final bool streakRemindersEnabled;
+  final int streakReminderHour;
+  final bool achievementNotifications;
+  final bool friendNotifications;
+  final bool promotionalNotifications;
+  final bool soundEnabled;
+  final bool vibrationEnabled;
+  final DateTime lastUpdated;
+
+  NotificationSettings({
+    this.dailyRemindersEnabled = true,
+    this.dailyReminderHour = 18,
+    this.streakRemindersEnabled = true,
+    this.streakReminderHour = 20,
+    this.achievementNotifications = true,
+    this.friendNotifications = true,
+    this.promotionalNotifications = false,
+    this.soundEnabled = true,
+    this.vibrationEnabled = true,
+    required this.lastUpdated,
+  });
+
+  NotificationSettings copyWith({
+    bool? dailyRemindersEnabled,
+    int? dailyReminderHour,
+    bool? streakRemindersEnabled,
+    int? streakReminderHour,
+    bool? achievementNotifications,
+    bool? friendNotifications,
+    bool? promotionalNotifications,
+    bool? soundEnabled,
+    bool? vibrationEnabled,
+    DateTime? lastUpdated,
+  }) {
+    return NotificationSettings(
+      dailyRemindersEnabled:
+          dailyRemindersEnabled ?? this.dailyRemindersEnabled,
+      dailyReminderHour: dailyReminderHour ?? this.dailyReminderHour,
+      streakRemindersEnabled:
+          streakRemindersEnabled ?? this.streakRemindersEnabled,
+      streakReminderHour: streakReminderHour ?? this.streakReminderHour,
+      achievementNotifications:
+          achievementNotifications ?? this.achievementNotifications,
+      friendNotifications: friendNotifications ?? this.friendNotifications,
+      promotionalNotifications:
+          promotionalNotifications ?? this.promotionalNotifications,
+      soundEnabled: soundEnabled ?? this.soundEnabled,
+      vibrationEnabled: vibrationEnabled ?? this.vibrationEnabled,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+    );
+  }
+
+  factory NotificationSettings.fromJson(Map<String, dynamic> json) {
+    return NotificationSettings(
+      dailyRemindersEnabled: json['dailyRemindersEnabled'] as bool? ?? true,
+      dailyReminderHour: json['dailyReminderHour'] as int? ?? 18,
+      streakRemindersEnabled: json['streakRemindersEnabled'] as bool? ?? true,
+      streakReminderHour: json['streakReminderHour'] as int? ?? 20,
+      achievementNotifications:
+          json['achievementNotifications'] as bool? ?? true,
+      friendNotifications: json['friendNotifications'] as bool? ?? true,
+      promotionalNotifications:
+          json['promotionalNotifications'] as bool? ?? false,
+      soundEnabled: json['soundEnabled'] as bool? ?? true,
+      vibrationEnabled: json['vibrationEnabled'] as bool? ?? true,
+      lastUpdated: json['lastUpdated'] != null
+          ? DateTime.parse(json['lastUpdated'] as String)
+          : DateTime.now(),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'dailyRemindersEnabled': dailyRemindersEnabled,
+        'dailyReminderHour': dailyReminderHour,
+        'streakRemindersEnabled': streakRemindersEnabled,
+        'streakReminderHour': streakReminderHour,
+        'achievementNotifications': achievementNotifications,
+        'friendNotifications': friendNotifications,
+        'promotionalNotifications': promotionalNotifications,
+        'soundEnabled': soundEnabled,
+        'vibrationEnabled': vibrationEnabled,
+        'lastUpdated': lastUpdated.toIso8601String(),
+      };
+}
+
+/// 通知履歴の1件（ローカル保存用、SharedPreferences で永続化）
+class NotificationRecord {
+  final String notificationId;
+  final NotificationType type;
+  final String title;
+  final String message;
+  final DateTime createdAt;
+  final bool isRead;
+
+  NotificationRecord({
+    required this.notificationId,
+    required this.type,
+    required this.title,
+    required this.message,
+    required this.createdAt,
+    this.isRead = false,
+  });
+
+  NotificationRecord copyWith({
+    String? notificationId,
+    NotificationType? type,
+    String? title,
+    String? message,
+    DateTime? createdAt,
+    bool? isRead,
+  }) {
+    return NotificationRecord(
+      notificationId: notificationId ?? this.notificationId,
+      type: type ?? this.type,
+      title: title ?? this.title,
+      message: message ?? this.message,
+      createdAt: createdAt ?? this.createdAt,
+      isRead: isRead ?? this.isRead,
+    );
+  }
+
+  factory NotificationRecord.fromJson(Map<String, dynamic> json) {
+    return NotificationRecord(
+      notificationId: json['notificationId'] as String,
+      type: NotificationType.values.firstWhere(
+        (t) => t.name == json['type'],
+        orElse: () => NotificationType.custom,
+      ),
+      title: json['title'] as String,
+      message: json['message'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      isRead: json['isRead'] as bool? ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'notificationId': notificationId,
+        'type': type.name,
+        'title': title,
+        'message': message,
+        'createdAt': createdAt.toIso8601String(),
+        'isRead': isRead,
+      };
+}

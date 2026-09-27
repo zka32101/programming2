@@ -86,6 +86,8 @@ final npcDialogueVariationProvider =
 final timeOfDayXpModifierProvider =
     Provider.family<double, TimeOfDay>((ref, timeOfDay) {
   switch (timeOfDay) {
+    case TimeOfDay.earlyMorning:
+      return 1.0; // Normal
     case TimeOfDay.morning:
       return 1.0; // Normal
     case TimeOfDay.afternoon:
@@ -94,6 +96,8 @@ final timeOfDayXpModifierProvider =
       return 1.2; // 20% bonus (prime learning time)
     case TimeOfDay.night:
       return 1.05; // 5% bonus
+    case TimeOfDay.lateNight:
+      return 1.0; // Normal
   }
 });
 
@@ -114,8 +118,12 @@ final weatherXpModifierProvider =
 
 /// Combined XP modifier for current conditions
 final currentXpModifierProvider = Provider<double>((ref) {
-  final timeOfDay = ref.watch(townProgressProvider).currentTimeOfDay;
-  final weather = ref.watch(townProgressProvider).currentWeather;
+  final progress = ref.watch(townProgressProvider);
+  final timeOfDay = progress.timeOfDayEnum;
+  final weather = WeatherEffect.values.firstWhere(
+    (w) => w.name == progress.currentWeather,
+    orElse: () => WeatherEffect.sunny,
+  );
 
   final timeModifier = ref.watch(timeOfDayXpModifierProvider(timeOfDay));
   final weatherModifier = ref.watch(weatherXpModifierProvider(weather));
@@ -145,7 +153,6 @@ final dialogueCacheProvider =
 final engagementAnalyticsProvider =
     Provider<EngagementAnalytics>((ref) {
   final progress = ref.watch(townProgressProvider);
-  final npcStats = ref.watch(npcStatsProvider);
 
   return EngagementAnalytics(
     totalSessionsPlayed: 1, // TODO: Track sessions

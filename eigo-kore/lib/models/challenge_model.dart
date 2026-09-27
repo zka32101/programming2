@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'daily_challenge_model.dart';
 
 part 'challenge_model.g.dart';
 
@@ -148,6 +149,47 @@ class SocialChallenge {
       ..sort((a, b) => b.value.compareTo(a.value));
     return sortedEntries.take(limit).toList();
   }
+
+  // ===== 1対1フレンドチャレンジ用のエイリアス =====
+  // participants は userId -> score のマップ。1対1対戦の場合、
+  // creatorId が initiator、それ以外の唯一の参加者が opponent とみなす。
+
+  /// 挑戦者（作成者）のID（creatorId のエイリアス）
+  String get initiatorId => creatorId;
+
+  /// 対戦相手のID
+  String? get opponentId =>
+      participants.keys.firstWhere((id) => id != creatorId, orElse: () => '');
+
+  /// 挑戦者の進捗（スコア）
+  int get initiatorProgress => participants[creatorId] ?? 0;
+
+  /// 対戦相手の進捗（スコア）
+  int get opponentProgress =>
+      opponentId != null && opponentId!.isNotEmpty
+          ? (participants[opponentId] ?? 0)
+          : 0;
+
+  /// 目標値（goalValue のエイリアス）
+  int get targetValue => goalValue;
+
+  /// 現在リードしているユーザーID
+  String? get currentLeader {
+    if (initiatorProgress == opponentProgress) return null;
+    return initiatorProgress > opponentProgress ? creatorId : opponentId;
+  }
+
+  /// リード差
+  int get leadAmount => (initiatorProgress - opponentProgress).abs();
+
+  /// 勝者ID（winnerUserId のエイリアス）
+  String? get winnerId => winnerUserId;
+
+  /// 参加者数（currentParticipants のエイリアス）
+  int get participantCount => currentParticipants;
+
+  /// このチャレンジの報酬リスト
+  List<ChallengeReward> get rewards => const [];
 
   SocialChallenge copyWith({
     String? id,
