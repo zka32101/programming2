@@ -59,6 +59,35 @@ class AppTypography {
     letterSpacing: 0,
   );
 
+  // ===== タイトル =====
+
+  /// Title Large: 22sp / SemiBold / 1.3 行間
+  /// 用途: カード・ダイアログの主タイトル
+  static const TextStyle titleLarge = TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.w600,
+    height: 1.3,
+    letterSpacing: 0,
+  );
+
+  /// Title Medium: 16sp / SemiBold / 1.4 行間
+  /// 用途: セクションタイトル、リストのタイトル
+  static const TextStyle titleMedium = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    height: 1.4,
+    letterSpacing: 0.15,
+  );
+
+  /// Title Small: 14sp / SemiBold / 1.4 行間
+  /// 用途: 小さめのタイトル、カードヘッダー
+  static const TextStyle titleSmall = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    height: 1.4,
+    letterSpacing: 0.1,
+  );
+
   // ===== 本文 =====
 
   /// Body Large: 16sp / Normal / 1.5 行間
