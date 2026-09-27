@@ -28,7 +28,6 @@ dependencies:
   firebase_database: ^11.3.10
   firebase_remote_config: ^5.1.0 # Phase 4.12-4.14: Dynamic Pricing・Retention・Multiplayer 設定
   cloud_firestore: ^5.5.0 # shared_core のマルチプレイ対戦(レートマッチング)用 FirestoreMatchmakingService
-  cloud_functions: ^5.1.3
   in_app_purchase: ^3.2.0
   google_fonts: ^6.2.1
   flutter_tts: ^4.0.2
