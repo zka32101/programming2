@@ -170,7 +170,7 @@ class _VocabSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(left: AppSpacing.xs, bottom: AppSpacing.xs),
           child: Text(
             '📝 キーワード',
@@ -271,7 +271,7 @@ class _TipCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'ポイント！',
                     style: AppTypography.labelLarge.copyWith(
                       color: AppColors.accentOrange,
@@ -308,7 +308,7 @@ class _ExampleCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               '🗣️ 例文',
               style: AppTypography.labelLarge.copyWith(color: AppColors.textPrimary),
             ),

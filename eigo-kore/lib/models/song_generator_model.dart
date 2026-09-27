@@ -414,4 +414,20 @@ class SongGenerationStats {
       _$SongGenerationStatsFromJson(json);
 
   Map<String, dynamic> toJson() => _$SongGenerationStatsToJson(this);
+
+  factory SongGenerationStats.empty([String userId = '']) {
+    return SongGenerationStats(
+      statsId: 'empty',
+      userId: userId,
+      totalSongsGenerated: 0,
+      averageQualityScore: 0,
+      mostUsedMelody: '-',
+      mostUsedTheme: '-',
+      totalVocabularyLearned: 0,
+      totalSingPracticeTime: 0,
+      averageSongDuration: 0,
+      estimatedLearningEffectiveness: 0,
+      lastUpdatedAt: DateTime.now(),
+    );
+  }
 }

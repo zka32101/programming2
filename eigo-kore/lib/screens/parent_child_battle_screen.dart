@@ -11,8 +11,8 @@ class ParentChildBattleScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentBattle = ref.watch(currentParentChildBattleProvider);
     final leaderboard = ref.watch(weeklyFamilyLeagueProvider);
-    final pass = ref.watch(parentBattlePassProvider);
-    final achievements = ref.watch(familyBattleAchievementsProvider);
+    final pass = AsyncValue.data(ref.watch(parentBattlePassProvider));
+    final achievements = AsyncValue.data(ref.watch(familyBattleAchievementsProvider));
 
     return DefaultTabController(
       length: 5,
@@ -70,7 +70,14 @@ class _BattleTabState extends ConsumerState<_BattleTab> {
     final battle = ref.read(currentParentChildBattleProvider);
     if (battle == null) {
       // Start new battle
-      ref.read(currentParentChildBattleProvider.notifier).startBattle();
+      ref.read(currentParentChildBattleProvider.notifier).startBattle(
+            'parent_001',
+            'child_001',
+            'おうちのひと',
+            'こども',
+            'How are you today?',
+            '今日は元気ですか？',
+          );
     }
   }
 
@@ -289,10 +296,11 @@ class _BattleSetupSection extends ConsumerWidget {
             child: ElevatedButton.icon(
               onPressed: () {
                 ref.read(currentParentChildBattleProvider.notifier).completeRound(
-                  parentResponse: 'ready',
-                  parentScore: 0,
-                  childResponse: 'ready',
-                  childScore: 0,
+                  1,
+                  0,
+                  0,
+                  'ready',
+                  'ready',
                 );
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('バトル開始！親から始まります')),
@@ -348,17 +356,13 @@ class _DuoBattleInterfaceState extends ConsumerState<_DuoBattleInterface> {
   }
 
   void _finalizeBattle() {
+    ref.read(currentParentChildBattleProvider.notifier).completeBattle();
+
     final winner = _parentScore > _childScore
         ? 'parent'
         : _childScore > _parentScore
             ? 'child'
             : 'tie';
-
-    ref.read(currentParentChildBattleProvider.notifier).completeBattle(
-      winner: winner,
-      parentScore: _parentScore,
-      childScore: _childScore,
-    );
 
     ref.read(familyBattleStatsProvider.notifier).recordBattle(
       ParentChildBattle(
@@ -855,8 +859,8 @@ class _PassTab extends ConsumerWidget {
             icon: '⭐',
             onTap: () {
               ref.read(parentBattlePassProvider.notifier).purchasePass(
+                'parent_001',
                 'weekly_unlimited',
-                200,
               );
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('週間パスを購入しました！')),
@@ -873,8 +877,8 @@ class _PassTab extends ConsumerWidget {
             icon: '👑',
             onTap: () {
               ref.read(parentBattlePassProvider.notifier).purchasePass(
+                'parent_001',
                 'monthly_unlimited',
-                500,
               );
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('月間パスを購入しました！')),

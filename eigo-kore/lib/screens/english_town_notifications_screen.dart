@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/english_town_notification_provider.dart';
+import '../services/english_town_notification_service.dart';
 import '../design_system/design_system.dart';
 
 /// Notifications center and settings screen

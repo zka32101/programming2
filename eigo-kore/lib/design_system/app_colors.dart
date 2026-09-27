@@ -58,6 +58,10 @@ class AppColors {
   /// 用途: 読む関連、新規、成長
   static const Color accentGreen = Color(0xFF4CAF50);
 
+  /// アクセント青 (#2196F3)
+  /// 用途: 情報提示、リンク強調
+  static const Color accentBlue = Color(0xFF2196F3);
+
   // ===== スキル別カラー =====
 
   /// リスニングスキルのカラー
@@ -89,6 +93,12 @@ class AppColors {
   /// ホワイトテキスト
   static const Color textWhite = Colors.white;
 
+  /// ホワイトテキスト（70%不透明度）
+  static const Color textWhite70 = Color(0xB3FFFFFF);
+
+  /// ホワイトテキスト（24%不透明度）
+  static const Color textWhite24 = Color(0x3DFFFFFF);
+
   // ===== 背景カラー =====
 
   /// ライト背景: 淡いブルー (#F0F4FF)
@@ -103,6 +113,13 @@ class AppColors {
 
   /// サーフェスダーク
   static const Color surfaceDark = Color(0xFF1E1E1E);
+
+  /// サーフェス（既定）
+  static const Color surface = surfaceLight;
+
+  /// サーフェスバリアント: やや濃いグレー背景
+  /// 用途: アバターの背景、カード内のセカンダリー領域
+  static const Color surfaceVariant = Color(0xFFE8EAF0);
 
   // ===== ボーダー・ディバイダー =====
 

@@ -241,7 +241,6 @@ class _PetAdoptionCard extends StatelessWidget {
               children: traits
                   .map((trait) => Chip(
                         label: Text(trait),
-                        compact: true,
                       ))
                   .toList(),
             ),

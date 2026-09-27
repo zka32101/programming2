@@ -144,7 +144,7 @@ class _FrontCard extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             colors: [AppColors.primary, AppColors.primary.withAlpha(25)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,

@@ -76,9 +76,11 @@ class MessageCard extends ConsumerWidget {
                         color: isCurrentUser
                             ? AppColors.primary.withOpacity(0.1)
                             : AppColors.surfaceVariant,
-                        borderLeft: BorderSide(
-                          color: AppColors.primary,
-                          width: 2,
+                        border: Border(
+                          left: BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
                         ),
                       ),
                       child: Text(

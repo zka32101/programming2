@@ -127,13 +127,13 @@ class TeacherModeStatsNotifier extends StateNotifier<TeacherModeStats> {
   static const String _storageKey = 'eigo_kore_teacher_mode_stats';
 
   TeacherModeStatsNotifier() : super(
-    const TeacherModeStats(
+    TeacherModeStats(
       totalSessions: 0,
       totalCorrections: 0,
       averageAccuracy: 0.0,
       totalCoinsEarned: 0,
       phrasesLearned: [],
-      lastSessionAt: DateTime.epoch,
+      lastSessionAt: DateTime.fromMillisecondsSinceEpoch(0),
     ),
   ) {
     _loadStats();
@@ -187,13 +187,13 @@ class TeacherModeStatsNotifier extends StateNotifier<TeacherModeStats> {
   }
 
   Future<void> resetStats() async {
-    state = const TeacherModeStats(
+    state = TeacherModeStats(
       totalSessions: 0,
       totalCorrections: 0,
       averageAccuracy: 0.0,
       totalCoinsEarned: 0,
       phrasesLearned: [],
-      lastSessionAt: DateTime.epoch,
+      lastSessionAt: DateTime.fromMillisecondsSinceEpoch(0),
     );
     await _saveStats();
   }

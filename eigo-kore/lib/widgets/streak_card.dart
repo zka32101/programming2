@@ -67,7 +67,7 @@ class StreakCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const Text(
+                    Text(
                       '日連続',
                       style: TextStyle(
                         color: AppColors.textWhite.withOpacity(0.7),
@@ -101,7 +101,7 @@ class StreakCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               days >= 30 ? '🎉 目標達成！' : '目標: 30日',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textWhite.withOpacity(0.7),
                 fontSize: 12,
               ),

@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import '../theme/spacing.dart';
 import '../theme/sizes.dart';
 import '../theme/typography.dart';
+import '../design_system/app_colors.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});

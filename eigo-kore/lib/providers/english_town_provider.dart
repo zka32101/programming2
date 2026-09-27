@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/english_town_model.dart';
+import '../models/daily_challenge_model.dart';
 
 // ========== State Notifiers ==========
 
@@ -287,6 +288,12 @@ class TownProgressNotifier extends StateNotifier<TownProgress> {
             averageScore: 0,
             totalLearningPoints: 0,
             totalCoinsEarned: 0,
+            totalXpEarned: 0,
+            visitedLocationIds: const [],
+            unlockedAchievements: const [],
+            npcConversationCounts: const {},
+            currentTimeOfDay: 'morning',
+            currentWeather: 'sunny',
             lastUpdatedAt: DateTime.now(),
           ),
         );
@@ -328,6 +335,31 @@ class TownProgressNotifier extends StateNotifier<TownProgress> {
   Future<void> unlockNewArea() async {
     state = state.copyWith(
       unlockedAreas: state.unlockedAreas + 1,
+    );
+    await _saveProgress();
+  }
+
+  /// ロケーションを訪問済みとして記録する
+  Future<void> visitLocation(String locationId) async {
+    final visited = {...state.visitedLocationIds, locationId}.toList();
+    state = state.copyWith(
+      currentAreaId: locationId,
+      visitedLocationIds: visited,
+      visitedAreas: visited.length,
+      lastVisitedAt: DateTime.now(),
+    );
+    await _saveProgress();
+  }
+
+  /// NPCとの会話を記録する
+  Future<void> recordNPCConversation(String npcId) async {
+    final counts = Map<String, int>.from(state.npcConversationCounts);
+    counts[npcId] = (counts[npcId] ?? 0) + 1;
+    state = state.copyWith(
+      currentNPCId: npcId,
+      npcConversationCounts: counts,
+      totalConversations: state.totalConversations + 1,
+      lastUpdatedAt: DateTime.now(),
     );
     await _saveProgress();
   }
@@ -529,4 +561,114 @@ final overallProgressPercentage = Provider<double>((ref) {
   final progress = ref.watch(townProgressProvider);
   if (progress.totalAreas == 0) return 0;
   return (progress.visitedAreas / progress.totalAreas) * 100;
+});
+
+// ========== 派生プロバイダー（タウンマップ・進捗率・デイリークエスト） ==========
+
+/// townAreas/npcs から組み立てるタウンマップ
+final townMapProvider = Provider<TownMap>((ref) {
+  final areas = ref.watch(townAreasProvider);
+  final npcs = ref.watch(npcsProvider);
+
+  final locations = areas
+      .map((a) => Location(
+            id: a.areaId,
+            name: a.englishName,
+            emoji: a.backgroundTile,
+            description: a.description,
+            position: 'x:0,y:0',
+            npcIds: a.npcIds,
+            sceneIds: a.npcIds.map((id) => 'scene_$id').toList(),
+            backgroundImage: a.backgroundTile,
+            difficultyLevel: a.difficultyLevel,
+          ))
+      .toList();
+
+  final scenes = npcs
+      .map((n) => InteractionScene(
+            id: 'scene_${n.npcId}',
+            npcId: n.npcId,
+            locationId: n.areaId,
+            initialGreeting: n.conversationPhrases.isNotEmpty
+                ? n.conversationPhrases.first
+                : 'Hello!',
+            conversationFlow: const [],
+            xpReward: 10,
+            coinReward: 5,
+            difficultyLevel: 'beginner',
+            topicKeywords: const [],
+          ))
+      .toList();
+
+  return TownMap(
+    id: 'main_map',
+    name: 'English Town',
+    locations: locations,
+    npcs: npcs,
+    scenes: scenes,
+    createdAt: DateTime.now(),
+    mapWidth: 1000,
+    mapHeight: 1000,
+    backgroundAsset: 'assets/town/background.png',
+  );
+});
+
+/// タウン探索の進捗率（0〜100の整数パーセント）
+final townProgressPercentageProvider = Provider<int>((ref) {
+  final progress = ref.watch(townProgressProvider);
+  if (progress.totalAreas == 0) return 0;
+  return ((progress.visitedAreas / progress.totalAreas) * 100)
+      .clamp(0, 100)
+      .round();
+});
+
+/// タウンのデイリークエスト一覧
+final dailyChallengesProvider = Provider<List<DailyChallenge>>((ref) {
+  final now = DateTime.now();
+  final progress = ref.watch(townProgressProvider);
+  return [
+    DailyChallenge(
+      challengeId: 'town_daily_talk3',
+      phrase: 'Talk to 3 NPCs today',
+      phraseMeaning: '今日は3人のNPCと話そう',
+      phrasePronunciation: '',
+      audioUrl: '',
+      releaseTime: DateTime(now.year, now.month, now.day),
+      expiresAt: DateTime(now.year, now.month, now.day)
+          .add(const Duration(days: 1)),
+      title: 'NPCと話そう',
+      description: '今日、3人のNPCと会話しよう',
+      targetCount: 3,
+      currentCount: progress.npcConversationCounts.length.clamp(0, 3),
+      isCompleted: progress.npcConversationCounts.length >= 3,
+      xpReward: 30,
+    ),
+    DailyChallenge(
+      challengeId: 'town_daily_visit2',
+      phrase: 'Visit 2 locations today',
+      phraseMeaning: '今日は2つの場所を訪れよう',
+      phrasePronunciation: '',
+      audioUrl: '',
+      releaseTime: DateTime(now.year, now.month, now.day),
+      expiresAt: DateTime(now.year, now.month, now.day)
+          .add(const Duration(days: 1)),
+      title: '町を探検しよう',
+      description: '今日、2つの場所を訪れよう',
+      targetCount: 2,
+      currentCount: progress.visitedAreas.clamp(0, 2),
+      isCompleted: progress.visitedAreas >= 2,
+      xpReward: 20,
+    ),
+  ];
+});
+
+/// 完了済みデイリークエスト数
+final completedChallengesCountProvider = Provider<int>((ref) {
+  final challenges = ref.watch(dailyChallengesProvider);
+  return challenges.where((c) => c.isCompleted).length;
+});
+
+/// townMap から得られるロケーション一覧
+final townLocationsProvider = Provider<List<Location>>((ref) {
+  return ref.watch(townMapProvider).locations;
 });

@@ -43,7 +43,7 @@ class _CompactXpBar extends StatelessWidget {
         const SizedBox(width: 6),
         Text(
           '${level.xpToNextLevel}XP',
-          style: const TextStyle(fontSize: 11, color: AppColors.textWhite.withOpacity(0.7)),
+          style: TextStyle(fontSize: 11, color: AppColors.textWhite.withOpacity(0.7)),
         ),
       ],
     );

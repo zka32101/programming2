@@ -12,7 +12,8 @@ class PlushToyScreen extends ConsumerStatefulWidget {
   ConsumerState<PlushToyScreen> createState() => _PlushToyScreenState();
 }
 
-class _PlushToyScreenState extends ConsumerState<PlushToyScreen> {
+class _PlushToyScreenState extends ConsumerState<PlushToyScreen>
+    with SingleTickerProviderStateMixin {
   int _selectedTab = 0;
 
   @override
@@ -25,7 +26,7 @@ class _PlushToyScreenState extends ConsumerState<PlushToyScreen> {
     final userId = ref.read(currentUserProvider)?.id;
     if (userId == null) return;
 
-    final character = ref.read(plushToyCharacterProvider).value;
+    final character = ref.read(plushToyCharacterProvider);
     if (character == null) {
       if (mounted) {
         _showCharacterSelectionDialog();
@@ -48,16 +49,20 @@ class _PlushToyScreenState extends ConsumerState<PlushToyScreen> {
     if (userId == null) return;
 
     final notifier = ref.read(plushToyCharacterProvider.notifier);
-    await notifier.createCharacter(species, customName);
+    await notifier.createCharacter(
+      species: species,
+      customName: customName,
+      personality: 'friendly',
+    );
 
     if (mounted) Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final characterAsync = ref.watch(plushToyCharacterProvider);
-    final currentSessionAsync = ref.watch(currentSessionProvider);
-    final progressAsync = ref.watch(plushToyProgressProvider);
+    final characterAsync = AsyncValue.data(ref.watch(plushToyCharacterProvider));
+    final currentSessionAsync = AsyncValue.data(ref.watch(currentSessionProvider));
+    final progressAsync = AsyncValue.data(ref.watch(plushToyProgressProvider));
 
     return Scaffold(
       appBar: AppBar(
@@ -183,13 +188,21 @@ class _ConversationTabState extends ConsumerState<_ConversationTab> {
   }
 
   Future<void> _startSession(PlushToyTopic topic) async {
+    final character = ref.read(plushToyCharacterProvider);
+    if (character == null) return;
     final notifier = ref.read(currentSessionProvider.notifier);
-    await notifier.startSession(topic);
+    await notifier.startSession(
+      characterId: character.characterId,
+      topic: topic.topicId,
+    );
   }
 
   Future<void> _endSession(String? userMood) async {
     final notifier = ref.read(currentSessionProvider.notifier);
-    await notifier.endSession(userMood ?? 'satisfied');
+    await notifier.endSession(
+      userMood: userMood ?? 'satisfied',
+      sessionQuality: 0.8,
+    );
   }
 }
 
@@ -205,7 +218,7 @@ class _SessionInitiationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final topicsAsync = ref.watch(availableTopicsProvider);
+    final topicsAsync = AsyncValue.data(ref.watch(availableTopicsProvider));
 
     return ListView(
       padding: AppSpacing.allPaddingMd,
@@ -382,7 +395,7 @@ class _SessionConversationScreenState
 
   @override
   Widget build(BuildContext context) {
-    final conversationAsync = ref.watch(conversationHistoryProvider);
+    final conversationAsync = AsyncValue.data(ref.watch(conversationHistoryProvider));
 
     return Column(
       children: [
@@ -800,7 +813,7 @@ class _CharacterTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final statsAsync = ref.watch(plushToyStatsProvider);
+    final statsAsync = AsyncValue.data(ref.watch(plushToyStatsProvider));
 
     return ListView(
       padding: AppSpacing.allPaddingMd,

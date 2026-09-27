@@ -350,9 +350,9 @@ class _ScoreCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: dimmed ? AppColors.textMuted.shade100 : color.withAlpha(20),
+        color: dimmed ? AppColors.textMuted.withOpacity(0.1) : color.withAlpha(20),
         borderRadius: BorderRadius.circular(AppSizes.borderRadius),
-        border: Border.all(color: dimmed ? AppColors.textMuted.shade300 : color.withAlpha(80)),
+        border: Border.all(color: dimmed ? AppColors.textMuted.withOpacity(0.3) : color.withAlpha(80)),
       ),
       child: Column(
         children: [

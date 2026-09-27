@@ -21,7 +21,7 @@ class AdSettingsScreen extends ConsumerWidget {
         appBar: AppBar(
           title: const Text('📺 広告設定'),
           backgroundColor: AppColors.primary,
-          bottom: const TabBar(
+          bottom: TabBar(
             labelColor: AppColors.textWhite,
             unselectedLabelColor: AppColors.textWhite.withOpacity(0.7),
             indicatorColor: AppColors.accentOrange,
@@ -309,7 +309,7 @@ class _AdLimitsTabState extends ConsumerState<_AdLimitsTab> {
                   ),
                 );
               },
-              child: const Text(
+              child: Text(
                 '設定を保存',
                 style: AppTypography.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textWhite),
               ),

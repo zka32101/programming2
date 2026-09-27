@@ -16,6 +16,27 @@ enum PetSpecies {
   fox, // 🦊 Fox
 }
 
+extension PetSpeciesX on PetSpecies {
+  /// 表示名（絵文字付き）
+  String get displayName {
+    switch (this) {
+      case PetSpecies.turtle:
+        return '🐢 Turtle';
+      case PetSpecies.parrot:
+        return '🦜 Parrot';
+      case PetSpecies.fish:
+        return '🐠 Fish';
+      case PetSpecies.lion:
+        return '🦁 Lion';
+      case PetSpecies.fox:
+        return '🦊 Fox';
+    }
+  }
+
+  /// 選択画面用プレビュー画像パス
+  String get previewImageAsset => 'assets/pets/${name}_egg.png';
+}
+
 /// ペットの進化段階
 enum EvolutionStage {
   @JsonValue('egg')
@@ -26,6 +47,60 @@ enum EvolutionStage {
   kids, // キッズ
   @JsonValue('adult')
   adult, // アダルト
+}
+
+extension EvolutionStageX on EvolutionStage {
+  /// 表示名（絵文字付き）
+  String get displayName {
+    switch (this) {
+      case EvolutionStage.egg:
+        return '🥚 たまご';
+      case EvolutionStage.baby:
+        return '👶 ベビー';
+      case EvolutionStage.kids:
+        return '🧒 キッズ';
+      case EvolutionStage.adult:
+        return '🦸 アダルト';
+    }
+  }
+
+  /// この段階になるために必要なレベル
+  int get requiredLevel {
+    switch (this) {
+      case EvolutionStage.egg:
+        return 1;
+      case EvolutionStage.baby:
+        return 10;
+      case EvolutionStage.kids:
+        return 25;
+      case EvolutionStage.adult:
+        return 50;
+    }
+  }
+}
+
+/// ペットの気分
+enum PetMood {
+  sad,
+  neutral,
+  happy,
+  excited,
+}
+
+extension PetMoodX on PetMood {
+  /// 表示名（絵文字付き）
+  String get displayName {
+    switch (this) {
+      case PetMood.sad:
+        return '😢 Sad';
+      case PetMood.neutral:
+        return '😐 Neutral';
+      case PetMood.happy:
+        return '😊 Happy';
+      case PetMood.excited:
+        return '🤩 Excited';
+    }
+  }
 }
 
 /// ペットデータモデル
@@ -45,6 +120,9 @@ class Pet {
   final DateTime lastPlayedAt;
   final int totalFeedsCount;
   final int totalPlayCount;
+  final int consecutiveFeedDays;
+  final List<DateTime> evolveDates;
+  final List<String> decorationIds;
 
   const Pet({
     required this.petId,
@@ -61,6 +139,9 @@ class Pet {
     required this.lastPlayedAt,
     this.totalFeedsCount = 0,
     this.totalPlayCount = 0,
+    this.consecutiveFeedDays = 0,
+    this.evolveDates = const [],
+    this.decorationIds = const [],
   });
 
   factory Pet.fromJson(Map<String, dynamic> json) => _$PetFromJson(json);
@@ -82,6 +163,9 @@ class Pet {
     DateTime? lastPlayedAt,
     int? totalFeedsCount,
     int? totalPlayCount,
+    int? consecutiveFeedDays,
+    List<DateTime>? evolveDates,
+    List<String>? decorationIds,
   }) {
     return Pet(
       petId: petId ?? this.petId,
@@ -98,6 +182,9 @@ class Pet {
       lastPlayedAt: lastPlayedAt ?? this.lastPlayedAt,
       totalFeedsCount: totalFeedsCount ?? this.totalFeedsCount,
       totalPlayCount: totalPlayCount ?? this.totalPlayCount,
+      consecutiveFeedDays: consecutiveFeedDays ?? this.consecutiveFeedDays,
+      evolveDates: evolveDates ?? this.evolveDates,
+      decorationIds: decorationIds ?? this.decorationIds,
     );
   }
 
@@ -146,6 +233,50 @@ class Pet {
 
   /// 幸福度が低いかどうか
   bool get isUnhappy => happiness < 40;
+
+  /// 経験値（exp のエイリアス）
+  int get exp => experience;
+
+  /// 空腹度（0-100、高いほどお腹が空いている。satiety の逆数）
+  int get hunger => 100 - satiety;
+
+  /// 現在の気分
+  PetMood get currentMood {
+    if (happiness > 80) return PetMood.excited;
+    if (happiness > 50) return PetMood.happy;
+    if (happiness > 20) return PetMood.neutral;
+    return PetMood.sad;
+  }
+
+  /// 現在の進化段階（evolutionStage のエイリアス）
+  EvolutionStage get currentStage => evolutionStage;
+
+  /// 今日すでにエサをあげたか
+  bool get isFedToday {
+    final now = DateTime.now();
+    return lastFedAt.year == now.year &&
+        lastFedAt.month == now.month &&
+        lastFedAt.day == now.day;
+  }
+
+  /// 次の進化段階までに必要な残りレベル（すでに最終段階なら0）
+  int get levelToNextEvolution {
+    const stages = [
+      EvolutionStage.baby,
+      EvolutionStage.kids,
+      EvolutionStage.adult,
+    ];
+    for (final stage in stages) {
+      if (level < stage.requiredLevel) {
+        return stage.requiredLevel - level;
+      }
+    }
+    return 0;
+  }
+
+  /// ペットの画像アセットパス
+  String get imageAsset =>
+      'assets/pets/${species.name}_${evolutionStage.name}.png';
 }
 
 /// ペットフィードアイテム（エサ）
@@ -222,4 +353,50 @@ class PetStats {
       _$PetStatsFromJson(json);
 
   Map<String, dynamic> toJson() => _$PetStatsToJson(this);
+}
+
+/// ペットのステータススナップショット（軽量な状態表示用）
+class PetStatus {
+  final int level;
+  final int experience;
+  final int happiness;
+  final int hunger;
+  final bool isHungry;
+  final bool isUnhappy;
+
+  const PetStatus({
+    required this.level,
+    required this.experience,
+    required this.happiness,
+    required this.hunger,
+    required this.isHungry,
+    required this.isUnhappy,
+  });
+}
+
+/// ペット用デコレーション（プリセット定義）
+class PetDecoration {
+  final String id;
+  final String emoji;
+  final String name;
+
+  const PetDecoration({required this.id, required this.emoji, required this.name});
+}
+
+class PetDecorationPresets {
+  static const List<PetDecoration> all = [
+    PetDecoration(id: 'hat_party', emoji: '🎉', name: 'パーティーハット'),
+    PetDecoration(id: 'ribbon', emoji: '🎀', name: 'リボン'),
+    PetDecoration(id: 'glasses', emoji: '👓', name: 'メガネ'),
+    PetDecoration(id: 'crown', emoji: '👑', name: 'かんむり'),
+    PetDecoration(id: 'bowtie', emoji: '🎩', name: 'ちょうネクタイ'),
+  ];
+
+  static PetDecoration? fromId(String id) {
+    try {
+      return all.firstWhere((d) => d.id == id);
+    } catch (_) {
+      return null;
+    }
+  }
 }

@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide TimeOfDay;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/english_town_model.dart';
 import '../models/english_town_advanced.dart';
+import '../models/npc_schedule_model.dart';
 import '../providers/english_town_provider.dart';
 import '../providers/english_town_rewards_provider.dart';
 import '../providers/english_town_polish_provider.dart';
+import '../providers/english_town_conversation_state_provider.dart';
 import '../design_system/design_system.dart';
 
 /// English-Only Town Conversation Screen
@@ -60,7 +62,7 @@ class _EnglishTownConversationScreenState
     final location = townMap.getLocation(widget.locationId);
     final currentConversation = ref.watch(currentConversationProvider);
     final progress = ref.watch(townProgressProvider);
-    final timeOfDay = progress.currentTimeOfDay;
+    final timeOfDay = progress.timeOfDayEnum;
     final difficulty = ConversationDifficulty.medium; // TODO: Determine from player level
 
     if (npc == null || location == null) {
@@ -159,7 +161,9 @@ class _EnglishTownConversationScreenState
         return _buildDialogueBubble(
           message: turn.message,
           isNPC: isNPC,
-          correctness: turn.expectedCorrectness,
+          correctness: turn.expectedCorrectness == null
+              ? null
+              : (turn.expectedCorrectness! ? 100 : 0),
           feedback: turn.feedback,
         );
       },
@@ -421,7 +425,7 @@ class _EnglishTownConversationScreenState
 
     // Add player message to conversation
     final currentConversation = ref.read(currentConversationProvider);
-    final playerTurn = ConversationTurn(
+    final playerTurn = ChatTurn(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       speaker: 'PLAYER',
       message: playerMessage,
@@ -457,7 +461,7 @@ class _EnglishTownConversationScreenState
     );
 
     // Add NPC response
-    final npcTurn = ConversationTurn(
+    final npcTurn = ChatTurn(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       speaker: 'NPC',
       message: npcMessage,
@@ -484,8 +488,7 @@ class _EnglishTownConversationScreenState
     // Record progress with adjusted rewards
     ref.read(townProgressProvider.notifier).recordNPCConversation(
       npc.id,
-      adjustedXp,
-      (25 * weatherModifier).toInt(), // Coin reward with weather modifier
+      // adjustedXp, (25 * weatherModifier).toInt()) — reward tracking not yet wired into TownProgressNotifier
     );
   }
 

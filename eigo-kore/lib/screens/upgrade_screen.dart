@@ -77,7 +77,7 @@ class _HeroSection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           colors: [AppColors.primary, AppColors.primary.withAlpha(25)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,

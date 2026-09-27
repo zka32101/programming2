@@ -532,7 +532,6 @@ class _LearningStatsCard extends StatelessWidget {
                 children: pet.learnedWords.take(5).map((word) {
                   return Chip(
                     label: Text(word),
-                    compact: true,
                   );
                 }).toList(),
               ),

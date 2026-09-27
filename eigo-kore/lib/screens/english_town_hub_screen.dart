@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/english_town_model.dart';
 import '../models/daily_challenge_model.dart';
 import '../providers/english_town_provider.dart';
+import '../providers/english_town_conversation_state_provider.dart';
 import '../design_system/design_system.dart';
 import 'english_town_conversation_screen.dart';
 import 'english_town_analytics_screen.dart';

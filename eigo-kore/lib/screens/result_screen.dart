@@ -122,7 +122,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
               confettiController: _confetti,
               blastDirectionality: BlastDirectionality.explosive,
               shouldLoop: false,
-              colors: const [AppColors.primary, AppColors.accentGreen, kSpeakingColor, AppColors.accentOrange],
+              colors: [AppColors.primary, AppColors.accentGreen, AppColors.speakingColor, AppColors.accentOrange],
             ),
           ),
           // レベルアップオーバーレイ

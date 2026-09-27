@@ -260,7 +260,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final messageContent = _messageController.text;
     _messageController.clear();
 
-    ref.read(sendMessageActionProvider.notifier).state = SendMessageParams(
+    ref.read(sendMessageActionProvider(SendMessageParams(
       conversationId: widget.conversationId,
       senderId: currentUserId,
       senderName: 'Current User', // TODO: Get from user profile
@@ -268,7 +268,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       content: messageContent,
       messageType: MessageType.text,
       replyToMessageId: _replyToMessageId,
-    );
+    )).future);
 
     setState(() {
       _replyToMessageId = null;
@@ -297,10 +297,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              ref.read(deleteMessageActionProvider.notifier).state = DeleteMessageParams(
+              ref.read(deleteMessageActionProvider(DeleteMessageParams(
                 conversationId: widget.conversationId,
                 messageId: message.id,
-              );
+              )).future);
             },
             child: const Text('削除', style: TextStyle(color: Colors.red)),
           ),
@@ -314,6 +314,5 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       _replyToMessageId = message.id;
       _replyToAuthor = message.senderName;
     });
-    _messageController.requestFocus();
   }
 }

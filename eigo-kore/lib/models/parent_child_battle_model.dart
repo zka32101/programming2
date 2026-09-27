@@ -215,9 +215,35 @@ class ParentBattlePass {
 
   /// Check if pass is currently active
   bool get isActive => DateTime.now().isBefore(expiresAt) && renewalStatus == 'active';
-  
+
   /// Days remaining until expiry
   int get daysRemaining => expiresAt.difference(DateTime.now()).inDays;
+
+  ParentBattlePass copyWith({
+    String? passId,
+    String? parentId,
+    String? passType,
+    int? maxBattlesPerWeek,
+    bool? unlimitedReplay,
+    bool? premiumPrizes,
+    DateTime? purchasedAt,
+    DateTime? expiresAt,
+    int? costCoins,
+    String? renewalStatus,
+  }) {
+    return ParentBattlePass(
+      passId: passId ?? this.passId,
+      parentId: parentId ?? this.parentId,
+      passType: passType ?? this.passType,
+      maxBattlesPerWeek: maxBattlesPerWeek ?? this.maxBattlesPerWeek,
+      unlimitedReplay: unlimitedReplay ?? this.unlimitedReplay,
+      premiumPrizes: premiumPrizes ?? this.premiumPrizes,
+      purchasedAt: purchasedAt ?? this.purchasedAt,
+      expiresAt: expiresAt ?? this.expiresAt,
+      costCoins: costCoins ?? this.costCoins,
+      renewalStatus: renewalStatus ?? this.renewalStatus,
+    );
+  }
 }
 
 /// Parent-child battle statistics
@@ -289,4 +315,30 @@ class FamilyBattleAchievement {
 
   /// Progress as percentage (0-100)
   double get progress => (currentCount / targetCount * 100).clamp(0, 100);
+
+  FamilyBattleAchievement copyWith({
+    String? achievementId,
+    String? title,
+    String? description,
+    String? icon,
+    String? type,
+    int? targetCount,
+    int? currentCount,
+    bool? isUnlocked,
+    DateTime? unlockedAt,
+    int? rewardCoins,
+  }) {
+    return FamilyBattleAchievement(
+      achievementId: achievementId ?? this.achievementId,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      icon: icon ?? this.icon,
+      type: type ?? this.type,
+      targetCount: targetCount ?? this.targetCount,
+      currentCount: currentCount ?? this.currentCount,
+      isUnlocked: isUnlocked ?? this.isUnlocked,
+      unlockedAt: unlockedAt ?? this.unlockedAt,
+      rewardCoins: rewardCoins ?? this.rewardCoins,
+    );
+  }
 }

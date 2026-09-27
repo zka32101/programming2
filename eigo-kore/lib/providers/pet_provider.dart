@@ -10,6 +10,20 @@ final currentPetProvider = StateNotifierProvider<PetNotifier, Pet?>((ref) {
   return PetNotifier();
 });
 
+/// ユーザーID指定のペットプロバイダー（family）
+/// 本アプリは端末ごとの単一プロファイル運用のため、userId に関わらず
+/// [currentPetProvider] の状態をラップして返す。
+final petProvider = Provider.family<AsyncValue<Pet?>, String>((ref, userId) {
+  final pet = ref.watch(currentPetProvider);
+  return AsyncValue.data(pet);
+});
+
+/// ユーザーID指定のペット Notifier プロバイダー（family）
+final petNotifierProvider =
+    StateNotifierProvider.family<PetNotifier, Pet?, String>((ref, userId) {
+  return ref.watch(currentPetProvider.notifier);
+});
+
 /// ペット統計プロバイダー
 final petStatsProvider = StateNotifierProvider<PetStatsNotifier, PetStats>((ref) {
   return PetStatsNotifier();
@@ -82,6 +96,31 @@ class PetNotifier extends StateNotifier<Pet?> {
     }
   }
 
+  /// デコレーションを外す
+  Future<void> unequipDecoration(String decorationId) async {
+    if (state == null) return;
+    state = state!.copyWith(
+      decorationIds:
+          state!.decorationIds.where((id) => id != decorationId).toList(),
+    );
+    await _savePet();
+  }
+
+  /// デコレーションを装着する
+  Future<void> equipDecoration(String decorationId) async {
+    if (state == null) return;
+    if (state!.decorationIds.contains(decorationId)) return;
+    state = state!.copyWith(
+      decorationIds: [...state!.decorationIds, decorationId],
+    );
+    await _savePet();
+  }
+
+  /// ペットを初期化する（種類のみ指定、ニックネームは種類名から自動生成）
+  Future<void> initializePet(PetSpecies species) async {
+    await createPet(species, species.displayName.split(' ').last);
+  }
+
   /// 新しいペットを作成
   Future<void> createPet(PetSpecies species, String nickname) async {
     final now = DateTime.now();
@@ -94,6 +133,13 @@ class PetNotifier extends StateNotifier<Pet?> {
       lastPlayedAt: now,
     );
     await _savePet();
+  }
+
+  /// 発音スコアに応じてペットにエサをあげ、獲得コイン数を返す
+  Future<int> feedPetWithScore(int pronunciationScore) async {
+    final satietyRestore = (pronunciationScore / 5).clamp(5, 20).round();
+    await feedPet(satietyRestore);
+    return (pronunciationScore / 10).round();
   }
 
   /// ペットにエサをあげる（お腹を満たす）
@@ -253,14 +299,14 @@ class PetStatsNotifier extends StateNotifier<PetStats> {
 
   PetStatsNotifier()
       : super(
-          const PetStats(
+          PetStats(
             totalPets: 0,
             maxLevel: 0,
             averageSatiety: 0,
             averageHappiness: 0,
             totalFeeds: 0,
             totalPlays: 0,
-            lastInteractionAt: DateTime.epoch,
+            lastInteractionAt: DateTime.fromMillisecondsSinceEpoch(0),
           ),
         ) {
     _loadStats();
@@ -303,14 +349,14 @@ class PetStatsNotifier extends StateNotifier<PetStats> {
   }
 
   Future<void> resetStats() async {
-    state = const PetStats(
+    state = PetStats(
       totalPets: 0,
       maxLevel: 0,
       averageSatiety: 0,
       averageHappiness: 0,
       totalFeeds: 0,
       totalPlays: 0,
-      lastInteractionAt: DateTime.epoch,
+      lastInteractionAt: DateTime.fromMillisecondsSinceEpoch(0),
     );
     await _saveStats();
   }

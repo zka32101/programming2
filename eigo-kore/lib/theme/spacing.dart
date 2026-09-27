@@ -61,6 +61,15 @@ class AppSpacing {
   /// パディング: 全て md (12dp)
   static const EdgeInsets allPaddingMd = EdgeInsets.all(md);
 
+  /// パディング: 全て sm (8dp)
+  static const EdgeInsets allPaddingSm = EdgeInsets.all(sm);
+
+  /// パディング: 全て xs (4dp)
+  static const EdgeInsets allPaddingXs = EdgeInsets.all(xs);
+
+  /// パディング: 左右 sm (8dp)
+  static const EdgeInsets horizontalPaddingSm = EdgeInsets.symmetric(horizontal: sm);
+
   /// パディング: 左右 lg + 上下 lg
   static const EdgeInsets symmetricPaddingLg = EdgeInsets.symmetric(horizontal: lg, vertical: lg);
 
@@ -68,6 +77,9 @@ class AppSpacing {
   static const EdgeInsets symmetricPaddingMixed = EdgeInsets.symmetric(horizontal: lg, vertical: md);
 
   // ===== SizedBox ショートカット =====
+
+  /// 垂直スペーサー: 4dp
+  static const SizedBox verticalSpacerXs = SizedBox(height: xs);
 
   /// 垂直スペーサー: 8dp
   static const SizedBox verticalSpacerSm = SizedBox(height: sm);
@@ -84,6 +96,9 @@ class AppSpacing {
   /// 垂直スペーサー: 24dp
   static const SizedBox verticalSpacerXxl = SizedBox(height: xxl);
 
+  /// 水平スペーサー: 4dp
+  static const SizedBox horizontalSpacerXs = SizedBox(width: xs);
+
   /// 水平スペーサー: 8dp
   static const SizedBox horizontalSpacerSm = SizedBox(width: sm);
 
@@ -92,4 +107,15 @@ class AppSpacing {
 
   /// 水平スペーサー: 16dp
   static const SizedBox horizontalSpacerLg = SizedBox(width: lg);
+
+  // ===== 互換エイリアス（spacingXx 表記） =====
+
+  /// = xs (4dp)
+  static const double spacingXs = xs;
+
+  /// = md (12dp)
+  static const double spacingMd = md;
+
+  /// = lg (16dp)
+  static const double spacingLg = lg;
 }

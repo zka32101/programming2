@@ -369,9 +369,9 @@ class _ConversationPlayScreenState extends ConsumerState<_ConversationPlayScreen
     final turn = _currentTurn;
     return Container(
       padding: AppSpacing.allPaddingMd,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.textWhite,
-        boxShadow: [BoxShadow(color: AppColors.textPrimary.withAlpha(31), blurRadius: 8, offset: Offset(0, -2))],
+        boxShadow: [BoxShadow(color: AppColors.textPrimary.withAlpha(31), blurRadius: 8, offset: const Offset(0, -2))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -430,9 +430,9 @@ class _ConversationPlayScreenState extends ConsumerState<_ConversationPlayScreen
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(AppSpacing.lg),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.textWhite,
-        boxShadow: [BoxShadow(color: AppColors.textPrimary.withAlpha(31), blurRadius: 8, offset: Offset(0, -2))],
+        boxShadow: [BoxShadow(color: AppColors.textPrimary.withAlpha(31), blurRadius: 8, offset: const Offset(0, -2))],
       ),
       child: Column(
         children: [

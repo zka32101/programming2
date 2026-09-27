@@ -116,6 +116,28 @@ class BadgeProgress {
   double get progress => currentValue >= targetValue ? 1.0 : currentValue / targetValue;
   int get remaining => (targetValue - currentValue).clamp(0, targetValue);
 
+  BadgeProgress copyWith({
+    String? badgeId,
+    String? title,
+    String? icon,
+    BadgeRarity? rarity,
+    int? currentValue,
+    int? targetValue,
+    bool? isUnlocked,
+    DateTime? unlockedAt,
+  }) {
+    return BadgeProgress(
+      badgeId: badgeId ?? this.badgeId,
+      title: title ?? this.title,
+      icon: icon ?? this.icon,
+      rarity: rarity ?? this.rarity,
+      currentValue: currentValue ?? this.currentValue,
+      targetValue: targetValue ?? this.targetValue,
+      isUnlocked: isUnlocked ?? this.isUnlocked,
+      unlockedAt: unlockedAt ?? this.unlockedAt,
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         'badgeId': badgeId,
         'title': title,

@@ -24,7 +24,7 @@ class UserProfileService {
           .get();
 
       if (!doc.exists) {
-        LoggerService.warning('User profile not found', null);
+        LoggerService.warning('User profile not found');
         return null;
       }
 

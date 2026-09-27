@@ -160,7 +160,7 @@ class _PlanBadgeCard extends StatelessWidget {
                     style: AppTypography.labelLarge,
                   ),
                   if (isFree)
-                    const Text(
+                    Text(
                       '2週間無料でProをお試しください！',
                       style: AppTypography.bodySmall.copyWith(color: AppColors.accentOrange),
                     ),
@@ -300,7 +300,7 @@ class _TTSSpeedCard extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text('ゆっくり', style: AppTypography.bodySmall.copyWith(color: AppColors.textMuted)),
                 Text('速い', style: AppTypography.bodySmall.copyWith(color: AppColors.textMuted)),
               ],

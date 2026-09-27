@@ -30,7 +30,7 @@ class ProfileManagementScreen extends ConsumerWidget {
         appBar: AppBar(
           title: const Text('👤 プロフィール管理'),
           backgroundColor: AppColors.primary,
-          bottom: const TabBar(
+          bottom: TabBar(
             labelColor: AppColors.textWhite,
             unselectedLabelColor: AppColors.textWhite.withOpacity(0.7),
             indicatorColor: AppColors.accentOrange,

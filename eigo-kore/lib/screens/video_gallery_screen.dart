@@ -371,7 +371,6 @@ class _VideoListItem extends ConsumerWidget {
                   AppSpacing.horizontalSpacerMd,
                   Chip(
                     label: Text('${video.difficultyEmoji} ${video.difficultyLabel}'),
-                    compact: true,
                   ),
                 ],
               ),

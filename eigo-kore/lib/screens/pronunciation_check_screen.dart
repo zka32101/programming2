@@ -114,7 +114,7 @@ class _PronunciationCheckScreenState
                 Container(
                   padding: EdgeInsets.all(AppSpacing.xl),
                   decoration: BoxDecoration(
-                    color: AppColors.readingColor[50],
+                    color: AppColors.readingColor.withOpacity(0.08),
                     borderRadius: BorderRadius.circular(AppSizes.borderRadiusLarge),
                   ),
                   child: Column(
@@ -180,7 +180,7 @@ class _PronunciationCheckScreenState
                   Container(
                     padding: AppSpacing.allPaddingMd,
                     decoration: BoxDecoration(
-                      color: result!.isPassed ? AppColors.accentGreen[50] : AppColors.accentOrange[50],
+                      color: result!.isPassed ? AppColors.accentGreen.withOpacity(0.08) : AppColors.accentOrange.withOpacity(0.08),
                       borderRadius: BorderRadius.circular(AppSizes.borderRadius),
                       border: Border.all(
                         color: result.isPassed ? AppColors.accentGreen : AppColors.accentOrange,
@@ -207,7 +207,7 @@ class _PronunciationCheckScreenState
                           child: LinearProgressIndicator(
                             value: result.accuracy,
                             minHeight: 8,
-                            backgroundColor: AppColors.textMuted[300],
+                            backgroundColor: AppColors.textMuted.withOpacity(0.3),
                             valueColor: AlwaysStoppedAnimation<Color>(
                               result.isPassed ? AppColors.accentGreen : AppColors.accentOrange,
                             ),
@@ -263,7 +263,7 @@ class _PronunciationCheckScreenState
                   Container(
                     padding: AppSpacing.allPaddingXs,
                     decoration: BoxDecoration(
-                      color: AppColors.error[50],
+                      color: AppColors.error.withOpacity(0.08),
                       borderRadius: BorderRadius.circular(AppSizes.borderRadius),
                       border: Border.all(color: AppColors.error),
                     ),

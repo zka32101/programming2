@@ -149,13 +149,16 @@ class PetService {
       int newLevel = pet.level + (newExp ~/ 100);
       int newExpMod = newExp % 100;
 
-      final updatedPet = pet.copyWith(
+      var updatedPet = pet.copyWith(
         satiety: newSatiety,
         happiness: newHappiness,
         experience: newExpMod,
         level: newLevel,
         lastFedAt: DateTime.now(),
         totalFeedsCount: pet.totalFeedsCount + 1,
+        consecutiveFeedDays: pet.isFedToday
+            ? pet.consecutiveFeedDays
+            : pet.consecutiveFeedDays + 1,
       );
 
       // Check evolution

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../models/english_town_model.dart';
 import '../providers/english_town_provider.dart';
 import '../theme/app_theme.dart';
+import '../design_system/app_colors.dart';
 
 class EnglishTownScreen extends ConsumerStatefulWidget {
   const EnglishTownScreen({super.key});
@@ -75,7 +76,7 @@ class _EnglishTownScreenState extends ConsumerState<EnglishTownScreen>
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [kPrimaryColor.withAlpha(51), kPrimaryColor.withAlpha(26)],
+                colors: [AppColors.primary.withAlpha(51), AppColors.primary.withAlpha(26)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -100,7 +101,7 @@ class _EnglishTownScreenState extends ConsumerState<EnglishTownScreen>
                     value: progress.visitedAreas / areas.length,
                     minHeight: 8,
                     backgroundColor: Colors.grey[300],
-                    valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                   ),
                 ),
               ],
@@ -463,7 +464,7 @@ class _EnglishTownScreenState extends ConsumerState<EnglishTownScreen>
                     value: profile.experience / 500,
                     minHeight: 8,
                     backgroundColor: Colors.grey[300],
-                    valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                   ),
                   const SizedBox(height: 8),
                   Text(

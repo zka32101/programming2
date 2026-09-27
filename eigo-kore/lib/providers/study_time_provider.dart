@@ -30,6 +30,12 @@ class StudyTimeState {
       isSessionActive: isSessionActive ?? this.isSessionActive,
     );
   }
+
+  /// 直近の1日あたり平均学習時間（秒）。履歴データがないため今日の学習時間を代用。
+  int get dailyAverage => todaySeconds;
+
+  /// 今月の合計学習時間（秒）。履歴データがないため今日の学習時間から概算。
+  int get monthlyTotal => todaySeconds * DateTime.now().day;
 }
 
 class StudyTimeNotifier extends StateNotifier<StudyTimeState> {
