@@ -37,26 +37,11 @@ const _exchangeItems = <AppShopItem>[
       description: 'プロフカードに虹色の縁取り', category: 'フレーム', coinCost: 250),
   AppShopItem(id: 'frame_book',  emoji: '📔', name: '本のフレーム',
       description: '国語らしい本のフレーム', category: 'フレーム', coinCost: 200),
-  AppShopItem(id: 'avatar_panda',     emoji: '🐼', name: 'パンダアイコン',
-      description: 'プロフィールアイコンをパンダに', category: 'アイコン', coinCost: 50),
-  AppShopItem(id: 'avatar_tiger',     emoji: '🐯', name: 'トラアイコン',
-      description: 'プロフィールアイコンをトラに', category: 'アイコン', coinCost: 80),
-  AppShopItem(id: 'avatar_koala',     emoji: '🐨', name: 'コアラアイコン',
-      description: 'プロフィールアイコンをコアラに', category: 'アイコン', coinCost: 80),
-  AppShopItem(id: 'avatar_fox',       emoji: '🦊', name: 'キツネアイコン',
-      description: 'プロフィールアイコンをキツネに', category: 'アイコン', coinCost: 80),
-  AppShopItem(id: 'avatar_penguin',   emoji: '🐧', name: 'ペンギンアイコン',
-      description: 'プロフィールアイコンをペンギンに', category: 'アイコン', coinCost: 100),
-  AppShopItem(id: 'avatar_lion',      emoji: '🦁', name: 'ライオンアイコン',
-      description: 'プロフィールアイコンをライオンに', category: 'アイコン', coinCost: 120),
-  AppShopItem(id: 'avatar_wolf',      emoji: '🐺', name: 'オオカミアイコン',
-      description: 'プロフィールアイコンをオオカミに', category: 'アイコン', coinCost: 120),
-  AppShopItem(id: 'avatar_dolphin',   emoji: '🐬', name: 'イルカアイコン',
-      description: 'プロフィールアイコンをイルカに', category: 'アイコン', coinCost: 150),
-  AppShopItem(id: 'avatar_eagle',     emoji: '🦅', name: 'ワシアイコン',
-      description: 'プロフィールアイコンをワシに', category: 'アイコン', coinCost: 150),
-  AppShopItem(id: 'avatar_butterfly', emoji: '🦋', name: 'チョウアイコン',
-      description: 'プロフィールアイコンをチョウに', category: 'アイコン', coinCost: 150),
+  // 2026-09: 「アイコン」カテゴリ（架空の avatar_panda 等の id）は削除。
+  // ショップの「アバター」タブ（_AvatarTab、コード内 coinUnlockAvatars）が
+  // 実際の allAvatars 12種（5番目以降）を正しい id で販売するのと重複する
+  // うえ、こちらの架空 id はプロフィール変更画面のロック判定と噛み合わず
+  // 「買ってもアイコンが解放されない」状態だったため。
   // LINE スタンプ引換券は今後のリリース予定
   // AppShopItem(id: 'stamp_coupon_general', emoji: '🎁',
   //     name: 'LINEスタンプ無料引換券',

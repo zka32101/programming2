@@ -10,7 +10,6 @@ import '../providers/badge_provider.dart';
 import '../providers/coin_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/adaptive_provider.dart';
-import '../providers/ghost_provider.dart';
 import '../services/notification_service.dart';
 import '../theme/app_theme.dart';
 import '../utils/grade_utils.dart';
@@ -190,12 +189,6 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                     : _ScoreDisplay(emoji: emoji, message: message, r: r, color: color),
                 const SizedBox(height: 20),
                 _StageInfo(stage: widget.stage, elapsed: r.elapsed),
-                const SizedBox(height: 16),
-                // ゴーストバトル比較セクション
-                _GhostComparisonSection(
-                  stageId: widget.stage.grade * 100 + widget.stage.stageNumber,
-                  currentElapsed: r.elapsed,
-                ),
                 if (_newBadges.isNotEmpty) ...[
                   const SizedBox(height: 20),
                   _NewBadgesSection(badges: _newBadges),
@@ -439,159 +432,6 @@ class _ShareAchievementButton extends ConsumerWidget {
     try {
       await Share.share(text);
     } catch (_) {}
-  }
-}
-
-// ─── ゴーストバトル比較セクション ───────────────────────────────────────
-class _GhostComparisonSection extends ConsumerWidget {
-  final int stageId;
-  final Duration currentElapsed;
-
-  const _GhostComparisonSection({
-    required this.stageId,
-    required this.currentElapsed,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ghostState = ref.watch(ghostProvider);
-    final ghostRecord = ghostState.records[stageId];
-
-    if (ghostRecord == null) {
-      // 初回プレイ: ゴーストレコード未存在
-      return Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF5F7FF),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: const Row(
-          children: [
-            Text('👻', style: TextStyle(fontSize: 24)),
-            SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'ゴーストレコード保存中...',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: kTextMuted,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    '次回プレイで前回の自分と対戦！',
-                    style: TextStyle(fontSize: 12, color: kTextMuted),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    // ゴースト比較表示
-    final currentMs = currentElapsed.inMilliseconds;
-    final ghostMs = ghostRecord.totalMs;
-    final diffMs = ghostMs - currentMs;
-    final diffSec = (diffMs.abs() / 1000).toStringAsFixed(1);
-    final isNewRecord = diffMs > 0; // 今回が速い
-
-    final currentSec = (currentMs / 1000).toStringAsFixed(1);
-    final ghostSec = (ghostMs / 1000).toStringAsFixed(1);
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isNewRecord
-              ? [const Color(0xFFE8F5E9), const Color(0xFFC8E6C9)]
-              : [const Color(0xFFE3F2FD), const Color(0xFFC5CAE9)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: isNewRecord ? kAccentGreen : kPrimaryColor,
-          width: 1.5,
-        ),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const Text('👻', style: TextStyle(fontSize: 24)),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'ゴースト対戦',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: kTextMuted,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '前回: ${ghostSec}秒',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: kTextDark,
-                          ),
-                        ),
-                        Text(
-                          '今回: ${currentSec}秒',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: isNewRecord ? kAccentGreen : kTextDark,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  isNewRecord
-                      ? '🔥 ${diffSec}秒高速化！新記録！'
-                      : '💨 ${diffSec}秒遅れ（次回の目標）',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: isNewRecord ? const Color(0xFF2E7D32) : kPrimaryColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
 

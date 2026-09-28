@@ -69,10 +69,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                     ),
                     child: Opacity(
                       opacity: isUnlocked ? 1.0 : 0.4,
-                      child: CircleAvatar(
-                        radius: 24,
-                        child: Text(avatar.emoji, style: const TextStyle(fontSize: 24)),
-                      ),
+                      child: AvatarImage(avatar: avatar, size: 48),
                     ),
                   ),
                   if (!isUnlocked)
@@ -165,10 +162,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                               ),
                               child: Opacity(
                                 opacity: isUnlocked ? 1.0 : 0.4,
-                                child: CircleAvatar(
-                                  radius: 22,
-                                  child: Text(avatar.emoji, style: const TextStyle(fontSize: 20)),
-                                ),
+                                child: AvatarImage(avatar: avatar, size: 44),
                               ),
                             ),
                             if (!isUnlocked)
@@ -269,7 +263,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                   child: ListTile(
                     leading: CircleAvatar(
                       backgroundColor: kPrimaryColor.withAlpha(30),
-                      child: Text(avatarModel.emoji, style: const TextStyle(fontSize: 20)),
+                      child: AvatarImage(avatar: avatarModel, size: 40),
                     ),
                     title: Text(profile.name),
                     subtitle: Text('${profile.grade}年生'),

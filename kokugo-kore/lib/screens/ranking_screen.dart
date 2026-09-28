@@ -11,6 +11,7 @@ import '../providers/ranking_privacy_provider.dart';
 import '../providers/ranking_provider.dart' show rankingServiceProvider;
 import '../theme/app_theme.dart';
 import '../widgets/ranking_privacy_dialog.dart';
+import 'package:shared_core/shared_core.dart' show AvatarImage, allAvatars;
 
 class RankingScreen extends ConsumerStatefulWidget {
   const RankingScreen({super.key});
@@ -247,7 +248,17 @@ class _RankingScreenState extends ConsumerState<RankingScreen>
             child: Row(
               children: [
                 _buildRankBadge(rank),
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
+                ClipOval(
+                  child: AvatarImage(
+                    avatar: allAvatars.firstWhere(
+                      (a) => a.id == friend.profileImageUrl,
+                      orElse: () => allAvatars.first,
+                    ),
+                    size: 36,
+                  ),
+                ),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

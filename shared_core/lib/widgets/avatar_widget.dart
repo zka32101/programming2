@@ -37,10 +37,19 @@ class AvatarWidget extends StatelessWidget {
             ),
           ],
         ),
-        child: Center(
-          child: Text(
-            avatar.emoji,
-            style: TextStyle(fontSize: size * 0.5),
+        child: ClipOval(
+          child: Padding(
+            padding: EdgeInsets.all(size * 0.1),
+            child: Image.asset(
+              avatar.imageAsset,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) => Center(
+                child: Text(
+                  avatar.emoji,
+                  style: TextStyle(fontSize: size * 0.5),
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -86,7 +95,7 @@ class LockedAvatarWidget extends StatelessWidget {
                 ),
               ],
             ),
-            child: Center(
+            child: ClipOval(
               child: ColorFiltered(
                 colorFilter: const ColorFilter.matrix([
                   0.2126, 0.7152, 0.0722, 0, 0,
@@ -94,9 +103,18 @@ class LockedAvatarWidget extends StatelessWidget {
                   0.2126, 0.7152, 0.0722, 0, 0,
                   0, 0, 0, 0.4, 0,
                 ]),
-                child: Text(
-                  avatar.emoji,
-                  style: TextStyle(fontSize: size * 0.5),
+                child: Padding(
+                  padding: EdgeInsets.all(size * 0.1),
+                  child: Image.asset(
+                    avatar.imageAsset,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) => Center(
+                      child: Text(
+                        avatar.emoji,
+                        style: TextStyle(fontSize: size * 0.5),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),

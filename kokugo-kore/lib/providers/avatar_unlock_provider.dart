@@ -9,22 +9,30 @@ import 'purchased_items_provider.dart';
 class AvatarUnlockNotifier extends StateNotifier<Map<String, bool>> {
   final Ref ref;
 
+  // allAvatars（shared_core）の実際の id と一致させる。
+  // 以前はここに存在しない架空の id（avatar_panda 等）が入っており、
+  // 本来無料のはずの ahiru/inu/kitsune までロックされたままになっていた。
   static const List<String> _freeAvatarIds = [
-    'kuroneko',        // デフォルト
-    'avatar_panda',    // 無料 1
-    'avatar_tiger',    // 無料 2
-    'avatar_koala',    // 無料 3
-    'avatar_fox',      // 無料 4
+    'kuroneko',
+    'ahiru',
+    'inu',
+    'kitsune',
   ];
 
-  // ショップで購入が必要なアバター ID リスト（5番目以降）
+  // ショップで購入が必要なアバター ID リスト（5番目以降・全12種）
   static const List<String> _paidAvatarIds = [
-    'avatar_penguin',
-    'avatar_lion',
-    'avatar_wolf',
-    'avatar_dolphin',
-    'avatar_eagle',
-    'avatar_butterfly',
+    'honhon',
+    'panda',
+    'raion',
+    'koala',
+    'tora',
+    'usagi',
+    'kaeru',
+    'buta',
+    'kirin',
+    'kangaroo',
+    'arai_guma',
+    'namakemono',
   ];
 
   AvatarUnlockNotifier(this.ref) : super({});

@@ -315,30 +315,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
               ),
             ),
           ),
-          const Divider(),
-          _SectionHeader(title: 'ソーシャル'),
-          ListTile(
-            leading: const Icon(Icons.person_add, color: kPrimaryColor),
-            title: const Text('フレンドを探す'),
-            subtitle: const Text('ユーザーを検索してフレンド申請する', style: TextStyle(fontSize: 11)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: kTextMuted),
-            onTap: () => showDialog(
-              context: context,
-              builder: (context) => const AddFriendDialog(),
-            ),
-          ),
+          // 2026-09: マルチプレイ／ともコレ／ランキング／バトルは十分に
+          // テストする余裕がないため、せっていからもいったん非表示にする
+          // （home_screen.dart のマルチプレイ対戦カードと同様）。
+          // ウィジェット・ルート自体は残してあるので、テストが済み次第
+          // このブロックを復活させれば良い。
           const Divider(),
           _SectionHeader(title: 'テーマ'),
           const _ThemeSection(),
-          const Divider(),
-          _SectionHeader(title: 'ともコレ'),
-          const _TomoKoreSection(),
-          const Divider(),
-          _SectionHeader(title: 'ランキング設定'),
-          const _RankingPrivacySection(),
-          const Divider(),
-          _SectionHeader(title: 'バトル設定'),
-          const _BattleSettingsSection(),
           const Divider(),
           _SectionHeader(title: 'アプリについて'),
           ListTile(
@@ -763,11 +747,8 @@ class _TomoKoreSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileState = ref.watch(profileProvider);
-    final referral = ref.watch(referralProvider);
     final currentUserId = profileState.currentProfile?.id ?? 'unknown';
-    final myCode = referral.codes
-        .firstWhere((c) => c.generatorId == currentUserId, orElse: () => ReferralCode(code: '', generatorId: ''))
-        .code;
+    final myCode = currentUserId == 'unknown' ? '' : currentUserId;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -888,8 +869,6 @@ class _TomoKoreSection extends ConsumerWidget {
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
-              textCapitalization: TextCapitalization.characters,
-              onChanged: (val) => codeController.text = val.toUpperCase(),
             ),
           ],
         ),
@@ -902,7 +881,7 @@ class _TomoKoreSection extends ConsumerWidget {
             onPressed: () async {
               final success = await ref.read(referralProvider.notifier).useReferralCode(codeController.text, currentUserId);
               if (success) {
-                final coins = ref.read(referralProvider).findCodeByValue(codeController.text)?.coinsReward ?? 10;
+                const coins = kReferralCoinsReward;
                 await ref.read(coinProvider.notifier).addCoins(coins);
                 if (ctx.mounted) {
                   Navigator.pop(ctx);
@@ -1023,8 +1002,7 @@ class _RankingPrivacySection extends ConsumerWidget {
                   style: TextStyle(fontSize: 11),
                 ),
                 value: privacy.isNamePublic,
-                onChanged: (value) =>
-                    ref.read(rankingPrivacyProvider.notifier).setNamePublic(value),
+                onChanged: (value) => _onNamePublicChanged(context, ref, value),
                 activeColor: kPrimaryColor,
               ),
               if (!privacy.isNamePublic)
@@ -1061,6 +1039,40 @@ class _RankingPrivacySection extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _onNamePublicChanged(
+      BuildContext context, WidgetRef ref, bool value) async {
+    if (!value) {
+      await ref.read(rankingPrivacyProvider.notifier).setNamePublic(false);
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('⚠️ 名前の公開について'),
+        content: const Text(
+          '設定している名前が他のユーザーにも見えるようになります。\n\n'
+          '本名（苗字・フルネーム）を使っていないか、もう一度確認してください。'
+          'ニックネームなど、本名がわからない名前をおすすめします。',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('やめる'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('確認した、表示する'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await ref.read(rankingPrivacyProvider.notifier).setNamePublic(true);
+    }
   }
 }
 

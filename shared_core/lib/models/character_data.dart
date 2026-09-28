@@ -51,6 +51,18 @@ class BaseCharacter {
     this.imageAsset,
     required this.appSubject,
   });
+
+  /// 指定したレベル（1-5）の成長段階イラストのアセットパスを返す。
+  /// `imageAsset` が `..._lv1_normal.png` のような命名規則の場合、
+  /// `_lv1_` の部分を該当レベルに置き換える。命名規則に合わない場合は
+  /// 元の `imageAsset` をそのまま返す（後方互換）。
+  String? imageAssetForLevel(int level) {
+    final asset = imageAsset;
+    if (asset == null) return null;
+    final match = RegExp(r'_lv\d+_').firstMatch(asset);
+    if (match == null) return asset;
+    return asset.replaceRange(match.start, match.end, '_lv${level}_');
+  }
 }
 
 // ─── CharacterState ────────────────────────────────────────────────────────

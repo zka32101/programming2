@@ -5,10 +5,10 @@ import '../providers/profile_provider.dart';
 import '../providers/progress_provider.dart';
 import '../providers/premium_provider.dart';
 import '../providers/daily_login_provider.dart';
-import '../providers/logout_provider.dart';
 import '../providers/sansu_profile_provider.dart';
 import '../providers/selected_avatar_provider.dart';
 import '../screens/avatar_selection_screen.dart';
+import '../screens/customization_screen.dart';
 import '../theme/app_theme.dart';
 import '../utils/grade_utils.dart';
 
@@ -134,10 +134,21 @@ class _SettingsTabContent extends ConsumerWidget {
           _SectionHeader('アバター'),
           _SettingCard(
             emoji: ref.watch(selectedAvatarProvider).emoji,
+            leadingImage: ref.watch(selectedAvatarProvider).imageAsset,
             title: 'アバターを変更',
             subtitle: ref.watch(selectedAvatarProvider).name,
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const AvatarSelectionScreen()),
+            ),
+          ),
+          const SizedBox(height: 16),
+          _SectionHeader('見た目'),
+          _SettingCard(
+            emoji: '🎨',
+            title: '見た目をカスタマイズ',
+            subtitle: 'テーマカラー・背景・称号',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const CustomizationScreen()),
             ),
           ),
           const SizedBox(height: 16),
@@ -191,31 +202,6 @@ class _SettingsTabContent extends ConsumerWidget {
           //   appKey: 'sansu-kore',
           //   onAppSelected: (appName) {},
           // ),
-          const SizedBox(height: 24),
-          Center(
-            child: ElevatedButton.icon(
-              onPressed: () async {
-                try {
-                  // Trigger logout by refreshing the provider
-                  ref.invalidate(logoutProvider);
-                  if (context.mounted) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/login',
-                      (route) => false,
-                    );
-                  }
-                } catch (e) {
-                  debugPrint('Logout error: $e');
-                }
-              },
-              icon: const Icon(Icons.logout),
-              label: const Text('ログアウト'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-              ),
-            ),
-          ),
           const SizedBox(height: 16),
         ],
       ),
@@ -244,12 +230,14 @@ class _SectionHeader extends StatelessWidget {
 
 class _SettingCard extends StatelessWidget {
   final String emoji;
+  final String? leadingImage;
   final String title;
   final String? subtitle;
   final VoidCallback? onTap;
 
   const _SettingCard({
     required this.emoji,
+    this.leadingImage,
     required this.title,
     this.subtitle,
     this.onTap,
@@ -265,7 +253,13 @@ class _SettingCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 24)),
+              if (leadingImage != null)
+                CircleAvatar(
+                  radius: 14,
+                  backgroundImage: AssetImage(leadingImage!),
+                )
+              else
+                Text(emoji, style: const TextStyle(fontSize: 24)),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(

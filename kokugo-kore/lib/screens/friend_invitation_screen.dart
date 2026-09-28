@@ -7,8 +7,10 @@ import '../providers/badge_metrics_provider.dart';
 import '../providers/badge_provider.dart';
 import '../providers/friend_provider.dart';
 import '../providers/profile_provider.dart';
+import '../providers/profile_avatar_provider.dart';
 import '../theme/app_theme.dart';
 import 'battle_screen.dart';
+import 'package:shared_core/shared_core.dart' show AvatarImage, allAvatars;
 
 class FriendInvitationScreen extends ConsumerStatefulWidget {
   const FriendInvitationScreen({super.key});
@@ -209,7 +211,16 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
                         color: kPrimaryColor.withAlpha(25),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Center(child: Text('😊', style: TextStyle(fontSize: 24))),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: AvatarImage(
+                          avatar: allAvatars.firstWhere(
+                            (a) => a.id == req.senderImageUrl,
+                            orElse: () => allAvatars.first,
+                          ),
+                          size: 50,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -431,10 +442,11 @@ class _FriendInvitationScreenState extends ConsumerState<FriendInvitationScreen>
 
     setState(() => _isSendingRequest = true);
     try {
+      final myAvatarId = ref.read(profileAvatarProvider).getSelectedAvatar(userId);
       final sent = await ref.read(friendListProvider.notifier).sendFriendRequestByCode(
             userId,
             senderName,
-            '',
+            myAvatarId,
             code,
           );
 

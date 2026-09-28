@@ -267,7 +267,9 @@ class _CharacterCard extends StatelessWidget {
                   SizedBox(
                     width: 60,
                     height: 60,
-                    child: Image.asset(character.imageAsset!,
+                    child: Image.asset(
+                        character.imageAssetForLevel(state.level) ??
+                            character.imageAsset!,
                         fit: BoxFit.contain),
                   )
                 else
@@ -370,7 +372,9 @@ class _CharacterDetailSheet extends StatelessWidget {
                     SizedBox(
                       width: 100,
                       height: 100,
-                      child: Image.asset(character.imageAsset!,
+                      child: Image.asset(
+                          character.imageAssetForLevel(state.level) ??
+                              character.imageAsset!,
                           fit: BoxFit.contain),
                     )
                   else
@@ -417,6 +421,40 @@ class _CharacterDetailSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+            // これまでの成長イラスト（解放済みレベルすべて）
+            if (character.imageAsset != null && state.level > 1) ...[
+              const Text('🖼 これまでの成長',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 72,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.level,
+                  separatorBuilder: (_, _) => const SizedBox(width: 8),
+                  itemBuilder: (ctx, i) {
+                    final lv = i + 1;
+                    return Container(
+                      width: 64,
+                      height: 64,
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(10),
+                        border: lv == state.level
+                            ? Border.all(color: Colors.amber.shade400, width: 2)
+                            : null,
+                      ),
+                      child: Image.asset(
+                        character.imageAssetForLevel(lv) ?? character.imageAsset!,
+                        fit: BoxFit.contain,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
             // Unlocked features
             if (state.hasExpressions)
               _FeatureChip(text: '表情3種 解放済み', icon: '😊'),

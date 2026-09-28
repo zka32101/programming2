@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_core/shared_core.dart';
+import '../data/customization_shop_items.dart';
 import '../data/sansu_characters.dart';
 
 // ── 小学コレ！算数 交換所アイテム ──────────────────────────────────────────────
@@ -85,7 +86,7 @@ class ShopScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CoinShopPage(
       characters: kSansuCharacters,
-      exchangeItems: const [],
+      exchangeItems: kCustomizationShopItems,
       seasonalItems: const {},
     );
   }
