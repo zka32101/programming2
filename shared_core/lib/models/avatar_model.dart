@@ -14,6 +14,9 @@ class AvatarModel {
     required this.unlockType,
     this.coinCost,
   });
+
+  /// 各アプリ共通で lib/assets/avatars/ に同梱されているイラスト画像。
+  String get imageAsset => 'packages/shared_core/lib/assets/avatars/avatar_$id.jpg';
 }
 
 const List<AvatarModel> allAvatars = [
@@ -42,86 +45,89 @@ const List<AvatarModel> allAvatars = [
     emoji: '🦊',
     unlockType: AvatarUnlockType.free,
   ),
-  // 有料解放4種類（プレミアム）
+  // 5種類目以降はすべてコインで解放できるショップ商品（価格は昇順）
   AvatarModel(
     id: 'honhon',
     name: '茶色クマ',
     emoji: '🐻',
-    unlockType: AvatarUnlockType.premium,
+    unlockType: AvatarUnlockType.coin,
+    coinCost: 150,
   ),
   AvatarModel(
     id: 'panda',
     name: 'パンダ',
     emoji: '🐼',
-    unlockType: AvatarUnlockType.premium,
+    unlockType: AvatarUnlockType.coin,
+    coinCost: 200,
   ),
   AvatarModel(
     id: 'raion',
     name: 'ライオン',
     emoji: '🦁',
-    unlockType: AvatarUnlockType.premium,
+    unlockType: AvatarUnlockType.coin,
+    coinCost: 250,
   ),
   AvatarModel(
     id: 'koala',
     name: 'コアラ',
     emoji: '🐨',
-    unlockType: AvatarUnlockType.premium,
+    unlockType: AvatarUnlockType.coin,
+    coinCost: 300,
   ),
-  // コイン解放8種類（価格はばらつき）
   AvatarModel(
     id: 'tora',
     name: 'トラ',
     emoji: '🐯',
     unlockType: AvatarUnlockType.coin,
-    coinCost: 150,
+    coinCost: 350,
   ),
   AvatarModel(
     id: 'usagi',
     name: 'ウサギ',
     emoji: '🐰',
     unlockType: AvatarUnlockType.coin,
-    coinCost: 200,
+    coinCost: 400,
   ),
   AvatarModel(
     id: 'kaeru',
     name: 'カエル',
     emoji: '🐸',
     unlockType: AvatarUnlockType.coin,
-    coinCost: 250,
+    coinCost: 450,
   ),
   AvatarModel(
     id: 'buta',
     name: 'ブタ',
     emoji: '🐷',
     unlockType: AvatarUnlockType.coin,
-    coinCost: 300,
+    coinCost: 500,
   ),
   AvatarModel(
     id: 'kirin',
     name: 'キリン',
     emoji: '🦒',
     unlockType: AvatarUnlockType.coin,
-    coinCost: 350,
+    coinCost: 550,
   ),
   AvatarModel(
     id: 'kangaroo',
     name: 'カンガルー',
     emoji: '🦘',
     unlockType: AvatarUnlockType.coin,
-    coinCost: 400,
+    coinCost: 600,
   ),
   AvatarModel(
     id: 'arai_guma',
     name: 'アライグマ',
     emoji: '🦝',
     unlockType: AvatarUnlockType.coin,
-    coinCost: 450,
+    coinCost: 650,
   ),
   AvatarModel(
     id: 'namakemono',
     name: 'ナマケモノ',
     emoji: '🦥',
     unlockType: AvatarUnlockType.coin,
-    coinCost: 500,
+    coinCost: 700,
   ),
 ];

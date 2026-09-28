@@ -51,8 +51,6 @@ class _QuestScreenState extends ConsumerState<QuestScreen>
   QuizQuestion get _current => widget.stage.questions[_currentIndex];
   bool get _isCorrect => _selectedAnswer == _current.correctIndex;
 
-  int get _stageId => widget.stage.grade * 100 + widget.stage.stageNumber;
-
   // ゴーストの現在進捗 (0.0〜1.0)
   double get _ghostProgress {
     if (_ghostRecord == null) return 0;
@@ -89,21 +87,7 @@ class _QuestScreenState extends ConsumerState<QuestScreen>
   }
 
   void _initGhost() {
-    final record = ref.read(ghostProvider.notifier).getRecord(_stageId);
-    if (record != null) {
-      setState(() => _ghostRecord = record);
-      // 100ms ごとにゴーストの位置を更新
-      _ghostTimer = Timer.periodic(const Duration(milliseconds: 100), (_) {
-        if (!mounted) {
-          _ghostTimer?.cancel();
-          return;
-        }
-        setState(() {
-          _ghostElapsedMs =
-              DateTime.now().difference(_startTime).inMilliseconds;
-        });
-      });
-    }
+    // ゴーストバトル機能は無効化（使用しない）
   }
 
   void _loadProfile() {
@@ -191,14 +175,7 @@ class _QuestScreenState extends ConsumerState<QuestScreen>
       elapsed: elapsed,
     );
 
-    // ゴーストレコード保存（非同期・await不要）
-    if (_questionTimingsMs.length == widget.stage.questions.length) {
-      ref.read(ghostProvider.notifier).saveRecord(GhostRecord(
-            stageId: _stageId,
-            questionMs: List.from(_questionTimingsMs),
-            playedAt: DateTime.now(),
-          ));
-    }
+    // ゴーストバトル機能は無効化（レコード保存もしない）
 
     Navigator.of(context).pushReplacementNamed(
       '/result',

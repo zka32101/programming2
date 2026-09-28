@@ -1,8 +1,18 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
     id("com.google.gms.google-services")
+}
+
+// key.properties (android/key.properties) があればそちらを優先し、なければ
+// 環境変数 (CI 等) にフォールバックする。key.properties は .gitignore 対象。
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(keystorePropertiesFile.inputStream())
 }
 
 android {
@@ -26,14 +36,17 @@ android {
     }
 
     signingConfigs {
-        // storePassword / keyPassword come from the KEYSTORE_PASSWORD / KEY_PASSWORD
-        // environment variables (set locally before a release build, or from
-        // GitHub Secrets in CI) — never hardcode them here. See CLAUDE.md.
+        // key.properties があればそちらの値を、なければ KEYSTORE_PASSWORD /
+        // KEY_PASSWORD 環境変数 (CI 等) を使う。パスワードはここに直書きしない。
         create("release") {
-            storeFile = file("../keystore/release_new.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
-            keyAlias = "kokugo_release"
-            keyPassword = System.getenv("KEY_PASSWORD")
+            storeFile = file(
+                keystoreProperties.getProperty("storeFile") ?: "../keystore/release_new.jks"
+            )
+            storePassword = keystoreProperties.getProperty("storePassword")
+                ?: System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = keystoreProperties.getProperty("keyAlias") ?: "kokugo_release"
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+                ?: System.getenv("KEY_PASSWORD")
         }
     }
 

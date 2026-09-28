@@ -517,50 +517,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           ),
-          // ── マルチプレイ対戦カード ────────────────────────
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/multiplayer'),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  decoration: BoxDecoration(
-                    color: kAccentPurple.withAlpha(20),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: kAccentPurple.withAlpha(60)),
-                  ),
-                  child: Row(
-                    children: [
-                      const Text('⚔️', style: TextStyle(fontSize: 24)),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'マルチプレイ対戦',
-                              style: TextStyle(
-                                color: kAccentPurple,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            const Text(
-                              'レートが近い相手と国語でリアルタイム対戦しよう',
-                              style: TextStyle(color: kTextMuted, fontSize: 11),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(Icons.chevron_right, color: kAccentPurple.withAlpha(150)),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // 2026-09: マルチプレイ対戦（ともコレ／ランキング／バトルを含む）は
+          // 十分にテストする余裕がないため、いったんホーム画面から非表示にする。
+          // ルート('/multiplayer'等)や画面自体は残してあるので、テストが
+          // 済み次第このカードを復活させれば良い。
           SliverToBoxAdapter(
             child: _StatsRow(
               progress: progress,

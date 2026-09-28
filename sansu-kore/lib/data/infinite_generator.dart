@@ -212,7 +212,7 @@ class InfiniteGenerator {
     final count = _rng.nextInt(6) + 2;
     final price = (_rng.nextInt(9) + 1) * 10;
     final answer = count * price;
-    final cs = _intChoices(answer, answer + 100);
+    final cs = _wordChoices(price, count);
     return QuizQuestion(
       id: 'inf_word_${_rng.nextInt(99999)}',
       type: MathTopicType.word,
@@ -235,6 +235,36 @@ class InfiniteGenerator {
       case 3: return 999;
       default: return 9999;
     }
+  }
+
+  /// 文章題（単価×個数）用の選択肢。単価または個数を少しずらして
+  /// 掛け直した「間違えやすい」多め/少なめの値を作る（一の位がズレる
+  /// ±1/±2のような不自然な選択肢は避ける）。
+  static List<int> _wordChoices(int price, int count) {
+    final answer = price * count;
+    final used = <int>{answer};
+    final candidates = <int>[
+      (price + 10) * count,
+      (price - 10) * count,
+      price * (count + 1),
+      if (count > 1) price * (count - 1),
+      answer + 10,
+      answer - 10,
+      answer + 20,
+      answer - 20,
+    ];
+    for (final c in candidates) {
+      if (c > 0) used.add(c);
+      if (used.length >= 4) break;
+    }
+    while (used.length < 4) {
+      final delta = (_rng.nextInt(5) + 1) * 10 * (_rng.nextBool() ? 1 : -1);
+      final c = answer + delta;
+      if (c > 0) used.add(c);
+    }
+    final list = used.take(4).toList();
+    list.shuffle(_rng);
+    return list;
   }
 
   /// 正解 + 近似値3つをシャッフルして返す

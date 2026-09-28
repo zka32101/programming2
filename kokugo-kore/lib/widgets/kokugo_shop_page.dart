@@ -566,10 +566,7 @@ class _AvatarTab extends ConsumerWidget {
                       border: Border.all(color: Colors.green.shade400, width: 2),
                     ),
                     child: Center(
-                      child: CircleAvatar(
-                        radius: 22,
-                        child: Text(avatar.emoji, style: const TextStyle(fontSize: 24)),
-                      ),
+                      child: AvatarImage(avatar: avatar, size: 44),
                     ),
                   );
                 },
@@ -620,10 +617,7 @@ class _AvatarTab extends ConsumerWidget {
                     children: [
                       Opacity(
                         opacity: 0.4,
-                        child: CircleAvatar(
-                          radius: 22,
-                          child: Text(avatar.emoji, style: const TextStyle(fontSize: 24)),
-                        ),
+                        child: AvatarImage(avatar: avatar, size: 44),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -662,10 +656,7 @@ class _AvatarTab extends ConsumerWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(
-              radius: 32,
-              child: Text(avatar.emoji, style: const TextStyle(fontSize: 32)),
-            ),
+            AvatarImage(avatar: avatar, size: 64),
             const SizedBox(height: 12),
             Text('${avatar.name}をゲットします\n$cost コイン必要です',
                 textAlign: TextAlign.center),
@@ -687,6 +678,8 @@ class _AvatarTab extends ConsumerWidget {
                 await ref.read(purchasedItemsProvider.notifier).purchase(avatar.id);
                 // shared_core の avatarProvider にも通知（共存性のため）
                 await ref.read(avatarProvider.notifier).unlockWithCoins(avatar.id);
+                // 購入直後に解放状態を反映（次回起動を待たずに使えるように）
+                ref.read(avatarUnlockProvider.notifier).refreshUnlockStatus();
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(ctx).showSnackBar(
                   SnackBar(

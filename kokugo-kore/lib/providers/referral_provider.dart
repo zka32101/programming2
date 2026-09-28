@@ -1,169 +1,63 @@
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../services/firebase_realtime_db.dart';
 
-class ReferralCode {
-  final String code;
-  final String generatorId;
-  final int coinsReward;
-  final List<String> usedByUserIds;
-  final int maxUses;
-
-  const ReferralCode({
-    required this.code,
-    required this.generatorId,
-    this.coinsReward = 10,
-    this.usedByUserIds = const [],
-    this.maxUses = 5,
-  });
-
-  bool canBeUsedBy(String userId) => !usedByUserIds.contains(userId);
-  bool isMaxReached() => usedByUserIds.length >= maxUses;
-
-  ReferralCode copyWith({
-    String? code,
-    String? generatorId,
-    int? coinsReward,
-    List<String>? usedByUserIds,
-    int? maxUses,
-  }) {
-    return ReferralCode(
-      code: code ?? this.code,
-      generatorId: generatorId ?? this.generatorId,
-      coinsReward: coinsReward ?? this.coinsReward,
-      usedByUserIds: usedByUserIds ?? this.usedByUserIds,
-      maxUses: maxUses ?? this.maxUses,
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    'code': code,
-    'generatorId': generatorId,
-    'coinsReward': coinsReward,
-    'usedByUserIds': usedByUserIds,
-    'maxUses': maxUses,
-  };
-
-  factory ReferralCode.fromJson(Map<String, dynamic> json) => ReferralCode(
-    code: json['code'] as String,
-    generatorId: json['generatorId'] as String,
-    coinsReward: json['coinsReward'] as int? ?? 10,
-    usedByUserIds: List<String>.from(json['usedByUserIds'] as List? ?? []),
-    maxUses: json['maxUses'] as int? ?? 5,
-  );
-}
+/// ともコレ紹介コード。
+///
+/// 以前は6桁コードを端末内の SharedPreferences だけに保存・照合していたため、
+/// 発行した端末以外では常に「このコードは使用できません」になっていた
+/// （コードがFirebaseに同期されず、他端末からは存在しないコードに見えるため）。
+///
+/// バトル機能の招待（friend_provider.sendFriendRequestByCode）は
+/// 「コード＝相手のuserId」をFirebase上で直接検索する方式で、これは
+/// 端末間で正しく動作する。重複した2つの発行方式を統一し、紹介コードも
+/// 同じ「userIdをそのままコードとして使う」方式にする。
+const int kReferralCoinsReward = 10;
 
 class ReferralState {
-  final List<ReferralCode> codes;
-  final Map<String, String> userReferralHistory;
-
-  const ReferralState({
-    this.codes = const [],
-    this.userReferralHistory = const {},
-  });
-
-  ReferralCode? findCodeByValue(String codeValue) {
-    try {
-      return codes.firstWhere((c) => c.code == codeValue);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  ReferralState copyWith({
-    List<ReferralCode>? codes,
-    Map<String, String>? userReferralHistory,
-  }) {
-    return ReferralState(
-      codes: codes ?? this.codes,
-      userReferralHistory: userReferralHistory ?? this.userReferralHistory,
-    );
-  }
+  final Set<String> redeemedCodes;
+  const ReferralState({this.redeemedCodes = const {}});
 }
 
 class ReferralNotifier extends StateNotifier<ReferralState> {
+  static const _prefsKey = 'referral_redeemed_codes';
+
   ReferralNotifier() : super(const ReferralState()) {
     _load();
   }
 
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
-    final codesJson = prefs.getStringList('referral_codes') ?? [];
-    final historyJson = prefs.getString('referral_history') ?? '{}';
-
-    final codes = codesJson.map((j) => ReferralCode.fromJson(jsonDecode(j))).toList();
-    final history = Map<String, String>.from(jsonDecode(historyJson) as Map);
-
-    state = ReferralState(codes: codes, userReferralHistory: history);
+    final raw = prefs.getStringList(_prefsKey) ?? [];
+    state = ReferralState(redeemedCodes: raw.toSet());
   }
 
   Future<void> _save() async {
     final prefs = await SharedPreferences.getInstance();
-    final codesJson = state.codes.map((c) => jsonEncode(c.toJson())).toList();
-    await prefs.setStringList('referral_codes', codesJson);
-    await prefs.setString('referral_history', jsonEncode(state.userReferralHistory));
+    await prefs.setStringList(_prefsKey, state.redeemedCodes.toList());
   }
 
-  Future<String> generateReferralCode(String userId) async {
-    final code = _generateUniqueCode();
-    final newCode = ReferralCode(
-      code: code,
-      generatorId: userId,
-    );
-    state = state.copyWith(codes: [...state.codes, newCode]);
-    await _save();
-    return code;
-  }
+  /// 自分の紹介コード＝自分のuserId。発行の手続きは不要（常に同じ値）だが、
+  /// 既存の呼び出し側（せってい画面）との互換のため関数として残す。
+  Future<String> generateReferralCode(String userId) async => userId;
 
+  /// 相手のコード（＝相手のuserId）を入力してコインを受け取る。
+  /// バトル招待と同じ方式でFirebase上に実在するユーザーか直接確認する。
   Future<bool> useReferralCode(String code, String userId) async {
-    final referralCode = state.findCodeByValue(code);
-    if (referralCode == null) return false;
-    if (!referralCode.canBeUsedBy(userId)) return false;
-    if (referralCode.isMaxReached()) return false;
+    final trimmed = code.trim();
+    if (trimmed.isEmpty || trimmed == userId) return false;
+    if (state.redeemedCodes.contains(trimmed)) return false;
 
-    final updatedCode = referralCode.copyWith(
-      usedByUserIds: [...referralCode.usedByUserIds, userId],
-    );
+    final profile = await FirebaseRealtimeAPI.findUserProfileById(trimmed);
+    if (profile == null) return false;
 
-    state = state.copyWith(
-      codes: state.codes.map((c) => c.code == code ? updatedCode : c).toList(),
-      userReferralHistory: {
-        ...state.userReferralHistory,
-        userId: code,
-      },
-    );
-
+    state = ReferralState(redeemedCodes: {...state.redeemedCodes, trimmed});
     await _save();
     return true;
   }
-
-  int getReferralRewardCoins(String code) {
-    final referralCode = state.findCodeByValue(code);
-    return referralCode?.coinsReward ?? 0;
-  }
-
-  String _generateUniqueCode() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    String code;
-    do {
-      code = List.generate(6, (_) => chars[(DateTime.now().microsecond) % chars.length]).join();
-    } while (state.codes.any((c) => c.code == code));
-    return code;
-  }
-
-  String? getUserReferralCode(String userId) {
-    return state.userReferralHistory[userId];
-  }
-
-  ReferralCode? getReferralCodeByUser(String userId) {
-    try {
-      return state.codes.firstWhere((c) => c.generatorId == userId);
-    } catch (_) {
-      return null;
-    }
-  }
 }
 
-final referralProvider = StateNotifierProvider<ReferralNotifier, ReferralState>((ref) {
+final referralProvider =
+    StateNotifierProvider<ReferralNotifier, ReferralState>((ref) {
   return ReferralNotifier();
 });
