@@ -639,8 +639,17 @@ class ShopItemTile extends StatelessWidget {
                 : primary.withAlpha(20),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Center(
-              child: Text(item.emoji, style: const TextStyle(fontSize: 22))),
+          clipBehavior: Clip.antiAlias,
+          child: item.assetPath != null
+              ? Image.asset(
+                  item.assetPath!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Center(
+                      child:
+                          Text(item.emoji, style: const TextStyle(fontSize: 22))),
+                )
+              : Center(
+                  child: Text(item.emoji, style: const TextStyle(fontSize: 22))),
         ),
         title: Text(item.name,
             style:
