@@ -12,6 +12,7 @@ import 'providers/character_provider.dart';
 import 'providers/purchase_provider.dart';
 import 'providers/premium_provider.dart';
 import 'services/eigo_purchase_service.dart';
+import 'widgets/premium_gate.dart';
 import 'providers/settings_provider.dart';
 import 'providers/user_profile_provider.dart';
 import 'providers/pet_provider.dart';
@@ -227,14 +228,14 @@ class EigoKoreApp extends ConsumerWidget {
         if (settings.name == '/stage-intro') {
           final stage = settings.arguments as Stage;
           return MaterialPageRoute(
-            builder: (_) => _PremiumGate(child: StageIntroScreen(stage: stage)),
+            builder: (_) => PremiumGate(child: StageIntroScreen(stage: stage)),
             settings: settings,
           );
         }
         if (settings.name == '/lesson') {
           final stage = settings.arguments as Stage;
           return MaterialPageRoute(
-            builder: (_) => _PremiumGate(child: LessonScreen(stage: stage)),
+            builder: (_) => PremiumGate(child: LessonScreen(stage: stage)),
             settings: settings,
           );
         }
@@ -359,17 +360,5 @@ class _RootShellState extends ConsumerState<RootShell> {
         ],
       ),
     );
-  }
-}
-
-/// 無料期間(14日)が終わり、購読もしていない場合は購読画面を表示する。
-class _PremiumGate extends ConsumerWidget {
-  final Widget child;
-  const _PremiumGate({required this.child});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final premium = ref.watch(premiumProvider);
-    return premium.hasAccess ? child : const UpgradeScreen();
   }
 }
