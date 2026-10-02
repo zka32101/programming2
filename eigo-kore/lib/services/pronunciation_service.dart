@@ -11,13 +11,22 @@ class PronunciationService {
   bool get isListening => _isListening;
   String get recognizedText => _recognizedText;
 
+  bool _speechReady = false;
+
+  /// TTS only. Does not touch the microphone, so no permission prompt.
   Future<void> initialize() async {
-    await _speechToText.initialize(
+    await _tts.setLanguage('en-US');
+    await _tts.setSpeechRate(0.8);
+  }
+
+  /// Initializes speech recognition; this is what triggers the microphone
+  /// permission prompt, so call it only when the user starts speaking.
+  Future<void> ensureSpeechReady() async {
+    if (_speechReady) return;
+    _speechReady = await _speechToText.initialize(
       onError: (error) => print('Speech error: $error'),
       onStatus: (status) => print('Speech status: $status'),
     );
-    await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.8);
   }
 
   Future<void> playExample(String word) async {
@@ -25,6 +34,7 @@ class PronunciationService {
   }
 
   Future<void> startListening() async {
+    await ensureSpeechReady();
     if (!_isListening && _speechToText.isAvailable) {
       _recognizedText = '';
       _speechToText.listen(

@@ -183,7 +183,7 @@ class _VocabSection extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
-          childAspectRatio: 1.1,
+          childAspectRatio: 0.82,
           children: intro.highlights.map((v) => _VocabChip(vocab: v, tts: tts)).toList(),
         ),
       ],
@@ -202,6 +202,7 @@ class _VocabChip extends StatelessWidget {
       onTap: () => tts.speak(vocab.english),
       child: Card(
         elevation: 2,
+        color: Colors.white,
         child: Padding(
           padding: AppSpacing.allPaddingSm,
           child: Column(
@@ -231,10 +232,14 @@ class _VocabChip extends StatelessWidget {
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
               ),
-              Text(
-                vocab.japanese,
-                style: AppTypography.bodySmall.copyWith(color: AppColors.textMuted),
-                textAlign: TextAlign.center,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  vocab.japanese,
+                  style: AppTypography.bodySmall.copyWith(color: AppColors.textMuted),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                ),
               ),
               if (vocab.phonetic.isNotEmpty)
                 Text(
@@ -302,7 +307,7 @@ class _ExampleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: AppColors.primary.withAlpha(13),
+      color: const Color(0xFFEAF2FC),
       child: Padding(
         padding: AppSpacing.allPaddingLg,
         child: Column(
@@ -355,6 +360,7 @@ class _ContentBreakdownCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       child: Padding(
         padding: AppSpacing.allPaddingLg,
         child: Column(

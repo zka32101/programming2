@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/progress_provider.dart';
-import '../providers/purchase_provider.dart';
+import '../providers/premium_provider.dart';
 import '../providers/settings_provider.dart';
 import '../providers/ai_api_key_provider.dart';
 import '../providers/morning_notification_provider.dart';
-import '../services/purchase_service.dart';
 import '../services/notification_service.dart';
 import '../design_system/design_system.dart';
 
@@ -16,7 +15,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final progress = ref.watch(progressProvider);
     final settings = ref.watch(settingsProvider);
-    final purchase = ref.watch(purchaseProvider);
+    final premium = ref.watch(premiumProvider);
     final apiKeys = ref.watch(aiApiKeysProvider);
     final morningNotification = ref.watch(morningNotificationStateProvider);
 
@@ -29,7 +28,7 @@ class SettingsScreen extends ConsumerWidget {
         padding: AppSpacing.allPaddingLg,
         children: [
           // プランバッジ
-          _PlanBadgeCard(purchase: purchase),
+          _PlanBadgeCard(premium: premium),
           AppSpacing.verticalSpacerMd,
 
           // 子どもの名前
@@ -57,7 +56,7 @@ class SettingsScreen extends ConsumerWidget {
             icon: Icons.star,
             color: AppColors.accentOrange,
             label: 'プランをアップグレード',
-            subtitle: purchase.planDisplayName,
+            subtitle: _planLabel(premium),
             onTap: () => Navigator.of(context).pushNamed('/upgrade'),
           ),
           _SettingsTile(
@@ -66,10 +65,10 @@ class SettingsScreen extends ConsumerWidget {
             label: '購入を復元',
             subtitle: '以前の購入を復元します',
             onTap: () async {
-              await ref.read(purchaseProvider.notifier).restore();
+              final ok = await ref.read(premiumProvider.notifier).restorePurchases();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('購入を復元しました')),
+                  SnackBar(content: Text(ok ? '購入を復元しました' : '復元できる購入が見つかりませんでした')),
                 );
               }
             },
@@ -124,15 +123,21 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
+String _planLabel(PremiumStatus p) => p.isPremium
+    ? 'プレミアム'
+    : p.isTrialActive
+        ? '無料期間（のこり${p.trialDaysLeft}日）'
+        : '無料期間終了';
+
 // ─── Plan Badge ───────────────────────────────────────────
 
 class _PlanBadgeCard extends StatelessWidget {
-  final PurchaseState purchase;
-  const _PlanBadgeCard({required this.purchase});
+  final PremiumStatus premium;
+  const _PlanBadgeCard({required this.premium});
 
   @override
   Widget build(BuildContext context) {
-    final isFree = purchase.activePlan == PurchasePlan.free;
+    final isFree = !premium.isPremium;
     return Card(
       color: isFree ? AppColors.bgLight : AppColors.primary.withAlpha(15),
       child: Padding(
@@ -156,12 +161,12 @@ class _PlanBadgeCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '現在のプラン: ${purchase.planDisplayName}',
+                    '現在のプラン: ${_planLabel(premium)}',
                     style: AppTypography.labelLarge,
                   ),
                   if (isFree)
                     Text(
-                      '2週間無料でProをお試しください！',
+                      premium.isTrialActive ? '無料期間 のこり${premium.trialDaysLeft}日' : '無料期間は終了しました',
                       style: AppTypography.bodySmall.copyWith(color: AppColors.accentOrange),
                     ),
                 ],

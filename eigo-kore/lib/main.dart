@@ -10,6 +10,9 @@ import 'models/video_model.dart';
 import 'models/pet_model.dart';
 import 'providers/character_provider.dart';
 import 'providers/purchase_provider.dart';
+import 'providers/premium_provider.dart';
+import 'services/eigo_purchase_service.dart';
+import 'widgets/premium_gate.dart';
 import 'providers/settings_provider.dart';
 import 'providers/user_profile_provider.dart';
 import 'providers/pet_provider.dart';
@@ -82,7 +85,6 @@ import 'screens/leaderboard_screen.dart';
 import 'screens/conversation_list_screen.dart';
 import 'screens/chat_screen.dart';
 import 'services/notification_service.dart';
-import 'services/ad_service.dart';
 import 'services/firebase_service.dart';
 import 'providers/morning_notification_provider.dart';
 import 'providers/coin_provider.dart';
@@ -104,9 +106,6 @@ Future<void> main() async {
   // Firebase初期化（未設定時はgraceful fallbackでローカルのみ動作）
   await FirebaseService().init();
 
-  // AdMob初期化
-  await AdService().initialize();
-
   // 保存済みコイン残高を読み込んでから起動（未読み込みのままだと0のみで
   // 上書きされ、既存残高が消失するため必須）
   final container = ProviderContainer(
@@ -115,6 +114,10 @@ Future<void> main() async {
     ],
   );
   await container.read(coinProvider.notifier).load();
+
+  // 課金(RevenueCat)初期化と、無料期間(14日)・購読状態の読み込み
+  await EigoPurchaseService.instance.initialize();
+  await container.read(premiumProvider.notifier).load();
 
   // バグ報告・改善要望フォームの送信ハンドラを登録（Firestore `feedback` コレクションへ書き込み）
   container.read(feedbackProvider.notifier).setSubmitHandler(
@@ -156,22 +159,22 @@ class EigoKoreApp extends ConsumerWidget {
         '/parent': (context) => const ParentDashboardScreen(),
         '/privacy': (context) => const PrivacyPolicyScreen(),
         '/upgrade': (context) => const UpgradeScreen(),
-        '/test-prep': (context) => const TestPrepScreen(),
-        '/speaking-practice': (context) => const SpeakingPracticeScreen(),
+        '/test-prep': (context) => PremiumGate(child: const TestPrepScreen()),
+        '/speaking-practice': (context) => PremiumGate(child: const SpeakingPracticeScreen()),
         '/ranking': (context) => const RankingScreen(),
         '/calendar': (context) => const StudyCalendarScreen(),
         '/weekly-report': (context) => const WeeklyReportScreen(),
-        '/daily-challenge': (context) => const DailyChallengeScreen(),
-        '/pronunciation-battle': (context) => const PronunciationBattleScreen(),
-        '/conversation': (context) => const ConversationScreen(),
-        '/parent-child': (context) => const ParentChildChallengeScreen(),
+        '/daily-challenge': (context) => PremiumGate(child: const DailyChallengeScreen()),
+        '/pronunciation-battle': (context) => PremiumGate(child: const PronunciationBattleScreen()),
+        '/conversation': (context) => PremiumGate(child: const ConversationScreen()),
+        '/parent-child': (context) => PremiumGate(child: const ParentChildChallengeScreen()),
         '/invite': (context) => const InviteScreen(),
         '/notification-settings': (context) => const NotificationSettingsScreen(),
         '/notifications-center': (context) => const NotificationCenterScreen(),
         '/profile-select': (context) => const ProfileSelectScreen(),
-        '/ai-freetalk': (context) => const AiFreetalkScreen(),
-        '/vocabulary': (context) => const VocabularyScreen(),
-        '/study-guide': (context) => const ExplanationMenuScreen(),
+        '/ai-freetalk': (context) => PremiumGate(child: const AiFreetalkScreen()),
+        '/vocabulary': (context) => PremiumGate(child: const VocabularyScreen()),
+        '/study-guide': (context) => PremiumGate(child: const ExplanationMenuScreen()),
         '/feedback': (context) => const FeedbackFormPage(appName: 'eigo_kore', appVersion: '3.1.0'),
         '/pet': (context) => const PetScreen(),
         '/pet-breeding': (context) => const PetBreedingScreen(),
@@ -190,14 +193,14 @@ class EigoKoreApp extends ConsumerWidget {
         '/analytics': (context) => const AnalyticsScreen(),
         '/notifications': (context) => const NotificationManagementScreen(),
         '/achievements': (context) => const AchievementsScreen(),
-        '/camera-scan': (context) => const CameraScanScreen(),
+        '/camera-scan': (context) => PremiumGate(child: const CameraScanScreen()),
         '/parent-child-battle': (context) => const ParentChildBattleScreen(),
-        '/pronunciation-video': (context) => const PronunciationVideoScreen(),
+        '/pronunciation-video': (context) => PremiumGate(child: const PronunciationVideoScreen()),
         '/plush-toy': (context) => const PlushToyScreen(),
         '/passport': (context) => const PassportScreen(),
-        '/english-town': (context) => const EnglishTownScreen(),
+        '/english-town': (context) => PremiumGate(child: const EnglishTownScreen()),
         '/song-generator': (context) => const SongGeneratorScreen(),
-        '/english-town': (context) => const EnglishTownHubScreen(),
+        '/english-town': (context) => PremiumGate(child: const EnglishTownHubScreen()),
         '/challenges': (context) => const ChallengeHubScreen(), // Social challenges
         '/challenge-hub': (context) => const ChallengeHubScreen(),
         '/friend-challenges': (context) => const FriendChallengeScreen(),
@@ -212,7 +215,7 @@ class EigoKoreApp extends ConsumerWidget {
         }),
         '/activity-feed': (context) => const ActivityFeedScreen(),
         '/leaderboard': (context) => const LeaderboardScreen(),
-        '/conversations': (context) => const ConversationListScreen(),
+        '/conversations': (context) => PremiumGate(child: const ConversationListScreen()),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/test-prep-result') {
@@ -225,14 +228,14 @@ class EigoKoreApp extends ConsumerWidget {
         if (settings.name == '/stage-intro') {
           final stage = settings.arguments as Stage;
           return MaterialPageRoute(
-            builder: (_) => StageIntroScreen(stage: stage),
+            builder: (_) => PremiumGate(child: StageIntroScreen(stage: stage)),
             settings: settings,
           );
         }
         if (settings.name == '/lesson') {
           final stage = settings.arguments as Stage;
           return MaterialPageRoute(
-            builder: (_) => LessonScreen(stage: stage),
+            builder: (_) => PremiumGate(child: LessonScreen(stage: stage)),
             settings: settings,
           );
         }
