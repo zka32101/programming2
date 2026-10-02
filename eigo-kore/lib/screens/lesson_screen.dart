@@ -52,14 +52,9 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   @override
   void initState() {
     super.initState();
-    _initSpeech();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_current.type == QuestionType.listening) _autoPlay();
     });
-  }
-
-  Future<void> _initSpeech() async {
-    await _speech.init();
   }
 
   Future<void> _autoPlay() async {

@@ -124,7 +124,7 @@ class HomeScreen extends ConsumerWidget {
                             child: Text('${currentUser?.avatar ?? '👧'} ${currentUser?.name ?? 'プロフィール'}',
                               style: AppTypography.labelLarge.copyWith(color:AppColors.textWhite, fontWeight: FontWeight.bold)),
                           ),
-                          AppSpacing.horizontalSpacerXs,
+                          AppSpacing.horizontalSpacerMd,
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

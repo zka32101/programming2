@@ -26,7 +26,9 @@ class SpeechService {
   Future<void> startListening({
     required void Function(String text, bool isFinal) onResult,
   }) async {
-    if (!_available) return;
+    // Initialize lazily so the mic permission prompt appears only when the
+    // learner actually starts speaking.
+    if (!await init()) return;
     await _speech.listen(
       onResult: (result) {
         onResult(result.recognizedWords, result.finalResult);
