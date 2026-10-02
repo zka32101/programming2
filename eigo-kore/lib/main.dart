@@ -10,6 +10,8 @@ import 'models/video_model.dart';
 import 'models/pet_model.dart';
 import 'providers/character_provider.dart';
 import 'providers/purchase_provider.dart';
+import 'providers/premium_provider.dart';
+import 'services/eigo_purchase_service.dart';
 import 'providers/settings_provider.dart';
 import 'providers/user_profile_provider.dart';
 import 'providers/pet_provider.dart';
@@ -82,7 +84,6 @@ import 'screens/leaderboard_screen.dart';
 import 'screens/conversation_list_screen.dart';
 import 'screens/chat_screen.dart';
 import 'services/notification_service.dart';
-import 'services/ad_service.dart';
 import 'services/firebase_service.dart';
 import 'providers/morning_notification_provider.dart';
 import 'providers/coin_provider.dart';
@@ -104,9 +105,6 @@ Future<void> main() async {
   // Firebase初期化（未設定時はgraceful fallbackでローカルのみ動作）
   await FirebaseService().init();
 
-  // AdMob初期化
-  await AdService().initialize();
-
   // 保存済みコイン残高を読み込んでから起動（未読み込みのままだと0のみで
   // 上書きされ、既存残高が消失するため必須）
   final container = ProviderContainer(
@@ -115,6 +113,10 @@ Future<void> main() async {
     ],
   );
   await container.read(coinProvider.notifier).load();
+
+  // 課金(RevenueCat)初期化と、無料期間(14日)・購読状態の読み込み
+  await EigoPurchaseService.instance.initialize();
+  await container.read(premiumProvider.notifier).load();
 
   // バグ報告・改善要望フォームの送信ハンドラを登録（Firestore `feedback` コレクションへ書き込み）
   container.read(feedbackProvider.notifier).setSubmitHandler(
@@ -225,14 +227,14 @@ class EigoKoreApp extends ConsumerWidget {
         if (settings.name == '/stage-intro') {
           final stage = settings.arguments as Stage;
           return MaterialPageRoute(
-            builder: (_) => StageIntroScreen(stage: stage),
+            builder: (_) => _PremiumGate(child: StageIntroScreen(stage: stage)),
             settings: settings,
           );
         }
         if (settings.name == '/lesson') {
           final stage = settings.arguments as Stage;
           return MaterialPageRoute(
-            builder: (_) => LessonScreen(stage: stage),
+            builder: (_) => _PremiumGate(child: LessonScreen(stage: stage)),
             settings: settings,
           );
         }
@@ -357,5 +359,17 @@ class _RootShellState extends ConsumerState<RootShell> {
         ],
       ),
     );
+  }
+}
+
+/// 無料期間(14日)が終わり、購読もしていない場合は購読画面を表示する。
+class _PremiumGate extends ConsumerWidget {
+  final Widget child;
+  const _PremiumGate({required this.child});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final premium = ref.watch(premiumProvider);
+    return premium.hasAccess ? child : const UpgradeScreen();
   }
 }
