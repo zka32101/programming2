@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_core/shared_core.dart'
-    show characterStateProvider, coinProvider, CrossPromoService;
+    show characterStateProvider, coinProvider;
+import 'package:cross_promo_kit/cross_promo_kit.dart' show CrossPromoService;
 import 'firebase_options.dart';
 import 'models/quest_model.dart';
 import 'providers/character_provider.dart';

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:shared_core/shared_core.dart' show AnalyticsDashboard, CrossPromoSection;
+import 'package:shared_core/shared_core.dart' show AnalyticsDashboard;
+import 'package:cross_promo_kit/cross_promo_kit.dart' show CrossPromoSection;
 import '../providers/profile_provider.dart';
 import '../providers/progress_provider.dart';
 import '../providers/premium_provider.dart';
