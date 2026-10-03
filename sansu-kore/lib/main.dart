@@ -53,14 +53,16 @@ Future<void> main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    // TODO: CrossPromoService がクラッシュループの原因の可能性
-    // 一時的にコメントアウトして起動テスト
-    // await CrossPromoService.init();
   } catch (e) {
     if (kDebugMode) {
       print('❌ Firebase init error: $e');
     }
   }
+
+  // Firebase 初期化に失敗しても起動を止めない（init 内でも例外は握りつぶされる）
+  try {
+    await CrossPromoService.init();
+  } catch (_) {}
 
   try {
     await SansuPurchaseService.instance.initialize();

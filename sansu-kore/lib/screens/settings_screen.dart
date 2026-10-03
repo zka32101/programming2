@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:shared_core/shared_core.dart' show AnalyticsDashboard;
+import 'package:shared_core/shared_core.dart' show AnalyticsDashboard, CrossPromoSection;
 import '../providers/profile_provider.dart';
 import '../providers/progress_provider.dart';
 import '../providers/premium_provider.dart';
@@ -208,11 +208,10 @@ class _SettingsTabContent extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // CrossPromoSection temporarily disabled - not yet in shared_core
-          // CrossPromoSection(
-          //   appKey: 'sansu-kore',
-          //   onAppSelected: (appName) {},
-          // ),
+          const CrossPromoSection(
+            currentAppId: 'com.yourwish.shougakukore.sansu',
+            currentCategory: '小学コレ',
+          ),
           const SizedBox(height: 16),
         ],
       ),
