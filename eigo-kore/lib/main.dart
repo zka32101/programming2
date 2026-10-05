@@ -50,7 +50,6 @@ import 'screens/stage_intro_screen.dart';
 import 'screens/pet_screen.dart';
 import 'screens/pet_breeding_screen.dart';
 import 'screens/teacher_mode_screen.dart';
-import 'screens/shop_screen.dart';
 import 'screens/learning_pace_screen.dart';
 import 'screens/character_collection_screen.dart';
 import 'screens/ad_settings_screen.dart';
@@ -179,7 +178,6 @@ class EigoKoreApp extends ConsumerWidget {
         '/pet': (context) => const PetScreen(),
         '/pet-breeding': (context) => const PetBreedingScreen(),
         '/teacher-mode': (context) => const TeacherModeScreen(),
-        '/shop': (context) => const ShopScreen(),
         '/learning-pace': (context) => const LearningPaceScreen(),
         '/character-collection': (context) => const CharacterCollectionScreen(),
         '/ad-settings': (context) => const AdSettingsScreen(),
