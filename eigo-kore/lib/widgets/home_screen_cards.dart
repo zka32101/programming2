@@ -69,6 +69,8 @@ class ImprovedDailyMissionCard extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.textWhite,
                             foregroundColor: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                 AppSizes.borderRadius,
