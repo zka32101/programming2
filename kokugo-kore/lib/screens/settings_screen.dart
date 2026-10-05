@@ -400,9 +400,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> with TickerProv
               ),
             ),
           ),
-          const CrossPromoSection(
+          CrossPromoSection(
             currentAppId: 'com.yourwish.shougakukore.kokugo',
             currentCategory: '小学コレ',
+            beforeOpenStore: (context) => requireParentalGate(context),
           ),
           const Divider(),
           Padding(
