@@ -541,7 +541,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           // クロスプロモーション（他アプリ紹介）
           SliverToBoxAdapter(
             child: CrossPromoSection(
-              currentAppId: 'com.example.kokugo_kore',
+              currentAppId: 'com.yourwish.shougakukore.kokugo',
               currentCategory: '小学コレ',
             ),
           ),
