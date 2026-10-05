@@ -543,6 +543,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: CrossPromoSection(
               currentAppId: 'com.yourwish.shougakukore.kokugo',
               currentCategory: '小学コレ',
+              beforeOpenStore: (context) => requireParentalGate(context),
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 32)),
