@@ -1,4 +1,3 @@
-import 'package:characters/characters.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,6 +20,7 @@ class CrossPromoSection extends StatelessWidget {
     this.currentCategory,
     this.title = '他のアプリもチェック！',
     this.maxApps = 6,
+    this.beforeOpenStore,
     @visibleForTesting this.appsOverride,
   });
 
@@ -31,6 +31,14 @@ class CrossPromoSection extends StatelessWidget {
 
   final String title;
   final int maxApps;
+
+  /// ストアを開く直前に呼ばれるゲート。`false` を返すと開かない。
+  ///
+  /// 子ども向けアプリでは外部リンクの前に保護者ゲートが必須
+  /// （App Store ガイドライン 1.3 / Google Play ファミリーポリシー）なので、
+  /// shared_core の `requireParentalGate` を渡すこと:
+  /// `beforeOpenStore: (context) => requireParentalGate(context)`
+  final Future<bool> Function(BuildContext context)? beforeOpenStore;
 
   /// テスト専用: Remote Config を経由せず表示データを直接渡す。本番コードでは使わない。
   @visibleForTesting
@@ -47,41 +55,25 @@ class CrossPromoSection extends StatelessWidget {
 
     final shown = apps.take(maxApps).toList();
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: cs.primaryContainer,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(Icons.apps_rounded, size: 18, color: cs.onPrimaryContainer),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  title,
-                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          ),
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+          child: Text(title, style: theme.textTheme.titleMedium),
         ),
         SizedBox(
-          height: 214,
+          height: 196,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: shown.length,
             separatorBuilder: (_, __) => const SizedBox(width: 12),
-            itemBuilder: (context, i) => _PromotedAppCard(app: shown[i]),
+            itemBuilder: (context, i) => _PromotedAppCard(
+              app: shown[i],
+              beforeOpenStore: beforeOpenStore,
+            ),
           ),
         ),
       ],
@@ -90,82 +82,59 @@ class CrossPromoSection extends StatelessWidget {
 }
 
 class _PromotedAppCard extends StatelessWidget {
-  const _PromotedAppCard({required this.app});
+  const _PromotedAppCard({required this.app, this.beforeOpenStore});
 
   final PromotedApp app;
+  final Future<bool> Function(BuildContext context)? beforeOpenStore;
 
-  Future<void> _open() async {
+  Future<void> _open(BuildContext context) async {
     final uri = Uri.tryParse(app.storeUrl);
     if (uri == null) return;
+    final gate = beforeOpenStore;
+    if (gate != null && !await gate(context)) return;
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
     return SizedBox(
-      width: 148,
-      child: Material(
-        color: cs.surface,
-        elevation: 1,
-        shadowColor: cs.shadow.withValues(alpha: 0.3),
-        surfaceTintColor: cs.surfaceTint,
-        borderRadius: BorderRadius.circular(20),
+      width: 130,
+      child: Card(
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: _open,
+          onTap: () => _open(context),
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: app.iconUrl.isNotEmpty
-                            ? Image.network(
-                                app.iconUrl,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => _IconFallback(app: app, theme: theme),
-                              )
-                            : _IconFallback(app: app, theme: theme),
-                      ),
-                    ),
-                    Positioned(
-                      right: 4,
-                      bottom: 4,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: cs.primary,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: cs.surface, width: 1.5),
-                        ),
-                        child: Icon(Icons.arrow_outward_rounded, size: 11, color: cs.onPrimary),
-                      ),
-                    ),
-                  ],
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: app.iconUrl.isNotEmpty
+                        ? Image.network(
+                            app.iconUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => _IconFallback(theme: theme),
+                          )
+                        : _IconFallback(theme: theme),
+                  ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Text(
                   app.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 3),
+                const SizedBox(height: 2),
                 Text(
                   app.tagline,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: cs.onSurfaceVariant,
-                    height: 1.3,
-                  ),
+                  style: theme.textTheme.bodySmall,
                 ),
               ],
             ),
@@ -176,47 +145,16 @@ class _PromotedAppCard extends StatelessWidget {
   }
 }
 
-/// アイコンURLが無い/読み込み失敗した場合のフォールバック。
-/// アプリ名の頭文字 + アプリIDから決定的に選ぶグラデーションで、
-/// 「空っぽ」ではなくそれらしいアプリアイコン風に見せる。
 class _IconFallback extends StatelessWidget {
-  const _IconFallback({required this.app, required this.theme});
+  const _IconFallback({required this.theme});
 
-  final PromotedApp app;
   final ThemeData theme;
-
-  static const _gradients = [
-    [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-    [Color(0xFFEC4899), Color(0xFFF43F5E)],
-    [Color(0xFFF59E0B), Color(0xFFEF4444)],
-    [Color(0xFF10B981), Color(0xFF22C55E)],
-    [Color(0xFF06B6D4), Color(0xFF3B82F6)],
-    [Color(0xFF8B5CF6), Color(0xFFD946EF)],
-  ];
 
   @override
   Widget build(BuildContext context) {
-    final seed = app.id.isNotEmpty ? app.id : app.name;
-    final colors = _gradients[seed.hashCode.abs() % _gradients.length];
-    final initial = app.name.isNotEmpty ? app.name.characters.first : '?';
-
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: colors,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        initial,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      color: theme.colorScheme.surfaceContainerHighest,
+      child: Icon(Icons.apps, color: theme.colorScheme.onSurfaceVariant),
     );
   }
 }

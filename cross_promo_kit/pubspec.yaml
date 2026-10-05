@@ -1,9 +1,10 @@
-﻿name: cross_promo_kit
-version: 0.1.0
+name: cross_promo_kit
+description: "Petit Works ポートフォリオ全体で使うクロスプロモーション（他アプリ紹介）共通パッケージ。firebase_remote_config と url_launcher のみに依存し、各アプリのFirebaseメジャーバージョンに依存しない。"
+version: 0.2.0
 publish_to: 'none'
 
 environment:
-  sdk: ^3.9.0
+  sdk: ^3.5.0
   flutter: ">=1.17.0"
 
 dependencies:
@@ -14,10 +15,8 @@ dependencies:
   # 両立する具体バージョンを自動選択する。
   firebase_remote_config: ">=4.0.0 <7.0.0"
   url_launcher: ">=6.0.0 <7.0.0"
-  characters: ">=1.2.0 <2.0.0"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-
