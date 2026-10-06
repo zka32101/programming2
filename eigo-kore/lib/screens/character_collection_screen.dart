@@ -210,9 +210,12 @@ class _CharacterDetailSheet extends ConsumerWidget {
         const CharacterState(isUnlocked: true);
     final coins = ref.watch(coinProvider).totalCoins;
     final primary = Theme.of(context).colorScheme.primary;
+    final mq = MediaQuery.of(context);
+    // 画面が低い端末でもボタンまで見えるよう、画像は画面高さの約28%に抑える
+    final imgSize = (mq.size.height * 0.28).clamp(140.0, 220.0);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+      padding: EdgeInsets.fromLTRB(24, 16, 24, 32 + mq.padding.bottom),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -221,8 +224,8 @@ class _CharacterDetailSheet extends ConsumerWidget {
               borderRadius: BorderRadius.circular(16),
               child: Image.asset(
                 c.imageAssetForLevel(st.level) ?? c.imageAsset!,
-                width: 220,
-                height: 220,
+                width: imgSize,
+                height: imgSize,
                 fit: BoxFit.cover,
                 alignment: Alignment.topCenter,
               ),
