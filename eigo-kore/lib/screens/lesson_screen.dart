@@ -183,11 +183,11 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
             _speakingDone = true;
             _isListening = false;
           });
-          if (s >= 60) { _score += _current.points; _correct++; }
+          if (s >= 70) { _score += _current.points; _correct++; }
           _speakingScores.add(s);
-          if (s >= 85) _confetti.play();
+          if (s >= 90) _confetti.play();
           // 弱点記録
-          _answerLog.add((id: _current.id, type: _current.type, correct: s >= 60, speakingScore: s));
+          _answerLog.add((id: _current.id, type: _current.type, correct: s >= 70, speakingScore: s));
 
           // ペット育成統合：発音スコア → ペットフィード
           _feedPetFromScore(s, text);
@@ -204,7 +204,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   /// 発音スコアをペット育成に反映
   Future<void> _feedPetFromScore(int pronouncingScore, String recognizedText) async {
     final userId = ref.read(currentUserProvider)?.id;
-    if (userId == null || pronouncingScore < 60) return;
+    if (userId == null || pronouncingScore < 70) return;
 
     try {
       // PronunciationResult を構築（0-1 スケール）
