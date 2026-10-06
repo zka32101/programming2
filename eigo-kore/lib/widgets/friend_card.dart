@@ -1,3 +1,4 @@
+import 'avatar_view.dart';
 import 'package:flutter/material.dart';
 import '../models/social_model.dart';
 import '../design_system/design_system.dart';
@@ -63,10 +64,7 @@ class FriendCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(28),
                     ),
                     child: Center(
-                      child: Text(
-                        friendProfile.avatar,
-                        style: TextStyle(fontSize: AppTypography.displaySmall.fontSize),
-                      ),
+                      child: AvatarView(friendProfile.avatar, size: 44),
                     ),
                   ),
                   AppSpacing.horizontalSpacerMd,

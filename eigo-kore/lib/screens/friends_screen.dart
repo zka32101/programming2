@@ -1,3 +1,4 @@
+import '../widgets/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/friend_request.dart';
@@ -172,10 +173,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                             shape: BoxShape.circle,
                           ),
                           child: Center(
-                            child: Text(
-                              profile.avatar,
-                              style: const TextStyle(fontSize: 32),
-                            ),
+                            child: AvatarView(profile.avatar, size: 48),
                           ),
                         ),
                         AppSpacing.horizontalSpacerMd,
@@ -275,10 +273,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
                             shape: BoxShape.circle,
                           ),
                           child: Center(
-                            child: Text(
-                              profile.avatar,
-                              style: const TextStyle(fontSize: 28),
-                            ),
+                            child: AvatarView(profile.avatar, size: 44),
                           ),
                         ),
                         AppSpacing.horizontalSpacerMd,

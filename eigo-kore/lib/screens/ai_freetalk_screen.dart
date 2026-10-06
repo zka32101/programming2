@@ -1,3 +1,4 @@
+import '../widgets/avatar_view.dart';
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -112,9 +113,11 @@ class _AiFreetalkScreenState extends ConsumerState<AiFreetalkScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        AvatarView(currentUser?.avatar ?? 'avatar_1', size: 72),
+                        AppSpacing.verticalSpacerXs,
                         Text(
-                          '${currentUser?.avatar ?? '👧'} ${currentUser?.name ?? 'フレンド'}',
-                          style: AppTypography.headlineSmall.copyWith(fontSize: 48),
+                          currentUser?.name ?? 'フレンド',
+                          style: AppTypography.headlineSmall.copyWith(fontSize: 28),
                         ),
                         AppSpacing.verticalSpacerSm,
                         Text(

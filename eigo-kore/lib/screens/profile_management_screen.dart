@@ -1,3 +1,4 @@
+import '../widgets/avatar_view.dart';
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -79,7 +80,7 @@ class _StatisticsTab extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                Text(profile.avatar, style: const TextStyle(fontSize: 64)),
+                AvatarView(profile.avatar, size: 72),
                 AppSpacing.horizontalSpacerMd,
                 Expanded(
                   child: Column(

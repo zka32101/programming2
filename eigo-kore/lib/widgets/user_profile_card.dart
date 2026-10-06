@@ -1,3 +1,4 @@
+import 'avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/user_profile.dart';
@@ -42,10 +43,7 @@ class UserProfileCard extends ConsumerWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Center(
-                    child: Text(
-                      profile.avatar,
-                      style: const TextStyle(fontSize: 48),
-                    ),
+                    child: AvatarView(profile.avatar, size: 64),
                   ),
                 ),
                 AppSpacing.horizontalSpacerMd,

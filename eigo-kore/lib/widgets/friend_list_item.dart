@@ -1,3 +1,4 @@
+import 'avatar_view.dart';
 import 'package:flutter/material.dart';
 import '../models/friend_request.dart';
 import '../design_system/design_system.dart';
@@ -39,10 +40,7 @@ class FriendListItem extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Center(
-                      child: Text(
-                        friend.avatar,
-                        style: const TextStyle(fontSize: 32),
-                      ),
+                      child: AvatarView(friend.avatar, size: 48),
                     ),
                   ),
                   AppSpacing.horizontalSpacerMd,

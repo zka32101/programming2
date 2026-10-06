@@ -1,3 +1,4 @@
+import '../widgets/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/stage_data.dart';
@@ -70,7 +71,7 @@ class HomeScreen extends ConsumerWidget {
                                       ...profiles.map((p) => Container(
                                         margin: EdgeInsets.only(bottom: AppSpacing.xs),
                                         child: ListTile(
-                                          leading: Text(p.avatar, style: TextStyle(fontSize: AppTypography.displaySmall.fontSize)),
+                                          leading: AvatarView(p.avatar, size: 40),
                                           title: Text(p.name),
                                           subtitle: Text('${p.grade}年生'),
                                           trailing: Row(
@@ -121,8 +122,15 @@ class HomeScreen extends ConsumerWidget {
                                 ),
                               );
                             },
-                            child: Text('${currentUser?.avatar ?? '👧'} ${currentUser?.name ?? 'プロフィール'}',
-                              style: AppTypography.labelLarge.copyWith(color:AppColors.textWhite, fontWeight: FontWeight.bold)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                AvatarView(currentUser?.avatar ?? 'avatar_1', size: 28),
+                                const SizedBox(width: 6),
+                                Text(currentUser?.name ?? 'プロフィール',
+                                  style: AppTypography.labelLarge.copyWith(color:AppColors.textWhite, fontWeight: FontWeight.bold)),
+                              ],
+                            ),
                           ),
                           AppSpacing.horizontalSpacerMd,
                           Expanded(
