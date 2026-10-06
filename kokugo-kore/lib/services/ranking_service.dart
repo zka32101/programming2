@@ -7,12 +7,21 @@ import '../models/ranking_model.dart';
 class RankingService {
   static const String APP_PREFIX = 'kokugo-kore';
 
-  final _db = FirebaseDatabase.instance;
+  /// [studentDataLoader] はテスト等でデータ取得元を差し替えるための任意引数。
+  /// 未指定の場合は Firebase Realtime DB から取得する。
+  RankingService({Future<List<StudentRankingData>> Function()? studentDataLoader})
+      : _studentDataLoader = studentDataLoader;
+
+  final Future<List<StudentRankingData>> Function()? _studentDataLoader;
+
+  // 遅延初期化: Firebase 未初期化環境でもコンストラクタで例外を出さず、
+  // 取得時の try/catch でフォールバックできるようにする。
+  late final FirebaseDatabase _db = FirebaseDatabase.instance;
 
   /// フィルター条件に基づいて学生ランキングデータを取得
   Future<List<StudentRankingData>> getStudentRankings(RankingFilter filter) async {
     // Fetch student data from Firebase Realtime DB
-    final students = await _fetchStudentData();
+    final students = await (_studentDataLoader ?? _fetchStudentData)();
 
     // バッジ獲得数でソート
     students.sort((a, b) => b.score.compareTo(a.score));
