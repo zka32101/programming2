@@ -1459,12 +1459,12 @@ class _VocabularyScreenState extends ConsumerState<VocabularyScreen>
                 style: const TextStyle(fontSize: 64),
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 '結果',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: kTextDark,
+                  color: context.strongText,
                 ),
               ),
               const SizedBox(height: 12),

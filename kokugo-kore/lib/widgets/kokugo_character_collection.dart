@@ -188,11 +188,11 @@ class _StatItem extends StatelessWidget {
     return Column(
       children: [
         Text(label,
-            style: const TextStyle(fontSize: 11, color: kTextMuted, height: 1.2)),
+            style: TextStyle(fontSize: 11, color: context.mutedText, height: 1.2)),
         const SizedBox(height: 2),
         Text(value,
-            style: const TextStyle(
-                fontSize: 14, fontWeight: FontWeight.bold, color: kTextDark)),
+            style: TextStyle(
+                fontSize: 14, fontWeight: FontWeight.bold, color: context.strongText)),
       ],
     );
   }
@@ -211,8 +211,8 @@ class _SectionLabel extends StatelessWidget {
           Text(icon, style: const TextStyle(fontSize: 16)),
           const SizedBox(width: 6),
           Text(text,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 14, color: kTextDark)),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 14, color: context.strongText)),
         ],
       ),
     );

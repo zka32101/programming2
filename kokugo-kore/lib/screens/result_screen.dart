@@ -425,7 +425,7 @@ class _StageInfo extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: kBgLight,
+        color: context.isDarkMode ? kBgDark2 : kBgLight,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -452,9 +452,9 @@ class _InfoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(label, style: const TextStyle(color: kTextMuted, fontSize: 11)),
+        Text(label, style: TextStyle(color: context.mutedText, fontSize: 11)),
         const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: context.strongText)),
       ],
     );
   }

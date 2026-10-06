@@ -126,8 +126,8 @@ class _WritingScreenState extends State<WritingScreen> {
               children: [
                 Text(
                   '$_correct / $total クリア',
-                  style: const TextStyle(
-                      fontSize: 13, fontWeight: FontWeight.bold, color: kTextDark),
+                  style: TextStyle(
+                      fontSize: 13, fontWeight: FontWeight.bold, color: context.strongText),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

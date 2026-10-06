@@ -100,7 +100,7 @@ class _ReadingPassageScreenState extends ConsumerState<ReadingPassageScreen> {
                   const SizedBox(height: 24),
                   Text(
                     passage.content.trim(),
-                    style: const TextStyle(fontSize: 14, height: 1.8, color: Colors.black87),
+                    style: TextStyle(fontSize: 14, height: 1.8, color: context.strongText),
                   ),
                   const SizedBox(height: 24),
                   SizedBox(
