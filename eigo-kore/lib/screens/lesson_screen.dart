@@ -173,7 +173,21 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   Future<void> _startListening() async {
     if (_isListening) return;
     setState(() { _isListening = true; _recognizedText = ''; });
-    await _speech.startListening(
+    // 聞き取れなかった・エラーのときも「聞いています」のまま固まらないようにする
+    void giveUp(String message) {
+      Future.delayed(const Duration(milliseconds: 400), () {
+        if (!mounted || !_isListening || _speakingDone) return;
+        setState(() { _isListening = false; });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      });
+    }
+    _speech.onStatus = (status) {
+      if (status == 'done' || status == 'notListening') {
+        giveUp('うまく聞き取れなかったよ。もういちど話してみよう！');
+      }
+    };
+    _speech.onError = (_) => giveUp('うまく聞き取れなかったよ。もういちど話してみよう！');
+    final started = await _speech.startListening(
       onResult: (text, isFinal) {
         setState(() { _recognizedText = text; });
         if (isFinal && text.isNotEmpty) {
@@ -194,6 +208,12 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
         }
       },
     );
+    if (!started && mounted) {
+      setState(() { _isListening = false; });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('マイクが使えないみたい。マイクの許可と音声認識を確かめてね'),
+      ));
+    }
   }
 
   Future<void> _stopListening() async {

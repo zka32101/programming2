@@ -10,11 +10,15 @@ class SpeechService {
   bool _available = false;
   bool _initialized = false;
 
+  /// 認識の状態('listening' / 'notListening' / 'done')とエラーを画面側へ伝える。
+  void Function(String status)? onStatus;
+  void Function(String error)? onError;
+
   Future<bool> init() async {
     if (_initialized) return _available;
     _available = await _speech.initialize(
-      onError: (error) {},
-      onStatus: (status) {},
+      onError: (error) => onError?.call(error.errorMsg),
+      onStatus: (status) => onStatus?.call(status),
     );
     _initialized = true;
     return _available;
@@ -23,12 +27,13 @@ class SpeechService {
   bool get isAvailable => _available;
   bool get isListening => _speech.isListening;
 
-  Future<void> startListening({
+  /// 開始できたら true。マイク権限なし・認識サービスなしなら false。
+  Future<bool> startListening({
     required void Function(String text, bool isFinal) onResult,
   }) async {
     // Initialize lazily so the mic permission prompt appears only when the
     // learner actually starts speaking.
-    if (!await init()) return;
+    if (!await init()) return false;
     await _speech.listen(
       onResult: (result) {
         onResult(result.recognizedWords, result.finalResult);
@@ -39,6 +44,7 @@ class SpeechService {
         pauseFor: const Duration(seconds: 2),
       ),
     );
+    return true;
   }
 
   Future<void> stopListening() async {
