@@ -98,14 +98,14 @@ class _CharacterLevelUpTab extends ConsumerWidget {
             children: [
               const Text('📖', style: TextStyle(fontSize: 48)),
               const SizedBox(height: 12),
-              const Text('まだキャラクターがいないよ',
+              Text('まだキャラクターがいないよ',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: kTextDark)),
+                      color: context.strongText)),
               const SizedBox(height: 8),
-              const Text('クイズをといてキャラクターをゲットしよう！',
-                  style: TextStyle(color: kTextMuted, fontSize: 13),
+              Text('クイズをといてキャラクターをゲットしよう！',
+                  style: TextStyle(color: context.mutedText, fontSize: 13),
                   textAlign: TextAlign.center),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -209,10 +209,10 @@ class _KokugoLevelUpCard extends ConsumerWidget {
             ),
             const SizedBox(height: 4),
             Text(character.name,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: kTextDark),
+                    color: context.strongText),
                 textAlign: TextAlign.center),
             const SizedBox(height: 4),
             Row(
@@ -226,7 +226,7 @@ class _KokugoLevelUpCard extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: i < state.level
                         ? Colors.amber
-                        : Colors.grey.shade300,
+                        : context.dotOffColor,
                     borderRadius: BorderRadius.circular(3),
                   ),
                 ),
@@ -238,7 +238,7 @@ class _KokugoLevelUpCard extends ConsumerWidget {
                     fontSize: 11,
                     color: state.isMaxLevel
                         ? Colors.amber.shade700
-                        : kTextMuted,
+                        : context.mutedText,
                     fontWeight: state.isMaxLevel
                         ? FontWeight.bold
                         : FontWeight.normal)),
@@ -574,14 +574,14 @@ class _AvatarTab extends ConsumerWidget {
               const SizedBox(height: 24),
             ],
           ),
-        const Text('🔒 ロック中',
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: kTextDark)),
+        Text('🔒 ロック中',
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: context.strongText)),
         const SizedBox(height: 8),
         if (locked.isEmpty)
-          const Padding(
-            padding: EdgeInsets.all(16),
+          Padding(
+            padding: const EdgeInsets.all(16),
             child: Center(
-              child: Text('すべてのアバターをゲットしました！', style: TextStyle(color: kTextMuted)),
+              child: Text('すべてのアバターをゲットしました！', style: TextStyle(color: context.mutedText)),
             ),
           )
         else

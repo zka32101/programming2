@@ -729,7 +729,7 @@ class _UsageItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: kTextDark)),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: context.strongText)),
                 const SizedBox(height: 2),
                 Text(desc,
                     style: const TextStyle(fontSize: 12, color: kTextMuted, height: 1.4)),

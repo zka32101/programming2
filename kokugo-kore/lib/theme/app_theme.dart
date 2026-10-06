@@ -27,6 +27,9 @@ const kBgDark2 = Color(0xFF1E1E1E);
 const kTextLight = Color(0xFFEFEFEF);
 const kTextLightMuted = Color(0xFFB0B0B0);
 
+/// 選択肢バッジ(A〜D)の未選択色。白カード上でコントラスト4.5以上。
+const kChoiceBadgeIdle = Color(0xFF5D6D7E);
+
 ThemeData buildAppTheme() {
   final baseTheme = ThemeData(
     useMaterial3: true,
@@ -164,4 +167,22 @@ String gradeLabel(GradeGroup g) {
     case GradeGroup.mid: return '中学年';
     case GradeGroup.high: return '高学年';
   }
+}
+
+/// テーマ（ライト/ダーク）に追従する色。
+/// ライトでは従来色(kTextDark/kTextMuted/…)と同一なので見た目は変わらない。
+extension KokugoThemeColors on BuildContext {
+  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
+
+  /// 本文・見出し（暗い面ではkTextLight）
+  Color get strongText => isDarkMode ? kTextLight : kTextDark;
+
+  /// 補助テキスト（暗い面ではkTextLightMuted）
+  Color get mutedText => isDarkMode ? kTextLightMuted : kTextMuted;
+
+  /// プログレスバーのトラック色
+  Color get trackColor => isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200;
+
+  /// 未到達レベルのドット色
+  Color get dotOffColor => isDarkMode ? Colors.grey.shade600 : Colors.grey.shade300;
 }

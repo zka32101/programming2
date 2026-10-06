@@ -177,13 +177,13 @@ class _QuestScreenState extends ConsumerState<QuestScreen>
               questionsAnswered: _currentIndex + 1,
               totalQuestions: widget.stage.questions.length,
             ),
-          const _FeaturedCharacterBanner(),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const _FeaturedCharacterBanner(),
                   _QuestionCard(question: _current),
                   const SizedBox(height: 20),
                   ...List.generate(_current.choices.length, (i) {
@@ -297,7 +297,7 @@ class _FeaturedCharacterBanner extends ConsumerWidget {
     final level = state?.level ?? 1;
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+      margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -428,6 +428,7 @@ class _ChoiceButton extends StatelessWidget {
     Color borderColor = Colors.grey.shade300;
     Color bgColor = Colors.white;
     Color textColor = kTextDark;
+    Color badgeColor = kChoiceBadgeIdle; // 白いカード上で読める濃さ（未選択時）
     Widget? trailingIcon;
 
     if (correct != null) {
@@ -435,15 +436,18 @@ class _ChoiceButton extends StatelessWidget {
         borderColor = kAccentGreen;
         bgColor = kAccentGreen.withAlpha(20);
         textColor = kAccentGreen;
+        badgeColor = kAccentGreen;
         trailingIcon = const Icon(Icons.check_circle, color: kAccentGreen);
       } else if (index == selected && index != correct) {
         borderColor = kAccentRed;
         bgColor = kAccentRed.withAlpha(15);
         textColor = kAccentRed;
+        badgeColor = kAccentRed;
         trailingIcon = const Icon(Icons.cancel, color: kAccentRed);
       }
     } else if (selected == index) {
       borderColor = kPrimaryColor;
+      badgeColor = kPrimaryDeep;
       bgColor = kPrimaryColor.withAlpha(20);
     }
 
@@ -471,7 +475,7 @@ class _ChoiceButton extends StatelessWidget {
                 child: Center(
                   child: Text(
                     String.fromCharCode(65 + index),
-                    style: TextStyle(color: borderColor, fontWeight: FontWeight.bold, fontSize: 13),
+                    style: TextStyle(color: badgeColor, fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                 ),
               ),
