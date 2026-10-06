@@ -1,3 +1,4 @@
+import '../widgets/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/user_profile_provider.dart';
@@ -43,7 +44,7 @@ class _ProfileSelectScreenState extends ConsumerState<ProfileSelectScreen> {
     await ref.read(userProfilesProvider.notifier).addProfile(
       _nameController.text,
       _selectedGrade,
-      selectedAvatar.emoji,
+      selectedAvatar.id,
     );
 
     // Get newly created profile ID
@@ -127,10 +128,7 @@ class _ProfileSelectScreenState extends ConsumerState<ProfileSelectScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  profile.avatar,
-                                  style: AppTypography.headlineSmall.copyWith(fontSize: AppTypography.displayLarge.fontSize! * 1.5),
-                                ),
+                                AvatarView(profile.avatar, size: 64),
                                 AppSpacing.verticalSpacerXs,
                                 Text(
                                   profile.name,
@@ -278,10 +276,7 @@ class _ProfileSelectScreenState extends ConsumerState<ProfileSelectScreen> {
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          avatar.emoji,
-                                          style: AppTypography.headlineSmall.copyWith(fontSize: AppTypography.displayMedium.fontSize),
-                                        ),
+                                        AvatarView(avatar.id, size: 40),
                                       ],
                                     ),
                                   ),

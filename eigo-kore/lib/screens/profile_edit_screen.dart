@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/user_profile.dart';
 import '../providers/user_profile_provider.dart';
+import '../providers/coin_provider.dart';
+import '../models/avatar_model.dart';
+import '../widgets/avatar_view.dart';
 import '../design_system/design_system.dart';
 
 class ProfileEditScreen extends ConsumerStatefulWidget {
@@ -19,6 +22,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   late TextEditingController _nameController;
   late int _selectedGrade;
   late bool _showNameInRanking;
+  late String _avatar;
+  late Set<String> _purchased;
 
   @override
   void initState() {
@@ -26,6 +31,118 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     _nameController = TextEditingController(text: widget.profile.name);
     _selectedGrade = widget.profile.grade;
     _showNameInRanking = widget.profile.showNameInRanking;
+    // 旧バージョンの絵文字アバターは、対応する動物アバターに読み替える
+    _avatar = legacyAvatarEmojiToId[widget.profile.avatar] ?? widget.profile.avatar;
+    _purchased = {...widget.profile.purchasedAvatars};
+  }
+
+  bool _owned(AvatarIcon a) => a.isDefault || _purchased.contains(a.id);
+
+  Future<void> _onAvatarTap(AvatarIcon a) async {
+    if (_owned(a)) {
+      setState(() => _avatar = a.id);
+      return;
+    }
+    final coins = ref.read(coinProvider).totalCoins;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('${a.name}を手に入れる？'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AvatarView(a.id, size: 96),
+            const SizedBox(height: 12),
+            Text('${a.price}コインを使うよ（いま $coinsコイン）'),
+            if (coins < a.price)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text('あと${a.price - coins}コイン たりないよ！',
+                    style: const TextStyle(color: Colors.red)),
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('やめる')),
+          ElevatedButton(
+            onPressed: coins < a.price ? null : () => Navigator.pop(ctx, true),
+            child: const Text('買う'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    final spent = await ref.read(coinProvider.notifier).spendCoins(a.price);
+    if (!spent || !mounted) return;
+    setState(() {
+      _purchased.add(a.id);
+      _avatar = a.id;
+    });
+    // コインを使ったので、購入は保存を待たずにすぐ記録する
+    await ref.read(userProfilesProvider.notifier).updateProfile(
+      widget.profile.copyWith(purchasedAvatars: _purchased, avatar: _avatar),
+    );
+  }
+
+  Widget _buildAvatarPicker() {
+    final coins = ref.watch(coinProvider).totalCoins;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text('アバター', style: AppTypography.labelLarge),
+            const Spacer(),
+            Text('🪙 $coins', style: AppTypography.labelLarge),
+          ],
+        ),
+        AppSpacing.verticalSpacerXs,
+        GridView.count(
+          crossAxisCount: 4,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+          children: [
+            for (final a in allAvatarIcons)
+              GestureDetector(
+                onTap: () => _onAvatarTap(a),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(AppSizes.borderRadius),
+                        border: Border.all(
+                          color: _avatar == a.id ? AppColors.primary : AppColors.bgLight,
+                          width: _avatar == a.id ? 3 : 1,
+                        ),
+                      ),
+                      child: AvatarView(a.id, size: 64, circle: false),
+                    ),
+                    if (!_owned(a))
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(AppSizes.borderRadius),
+                          color: Colors.black.withAlpha(110),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.lock, color: Colors.white, size: 18),
+                            Text('🪙 ${a.price}',
+                                style: const TextStyle(color: Colors.white, fontSize: 12)),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
   }
 
   @override
@@ -46,6 +163,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       name: _nameController.text,
       grade: _selectedGrade,
       showNameInRanking: _showNameInRanking,
+      avatar: _avatar,
+      purchasedAvatars: _purchased,
     );
 
     await ref.read(userProfilesProvider.notifier).updateProfile(updated);
@@ -74,10 +193,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             Center(
               child: Column(
                 children: [
-                  Text(
-                    widget.profile.avatar,
-                    style: TextStyle(fontSize: AppTypography.displayLarge.fontSize! * 2.25),
-                  ),
+                  AvatarView(_avatar, size: 120),
                   AppSpacing.verticalSpacerMd,
                   Text(
                     '${widget.profile.grade}年生',
@@ -86,6 +202,9 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 ],
               ),
             ),
+            AppSpacing.verticalSpacerLg,
+
+            _buildAvatarPicker(),
             AppSpacing.verticalSpacerLg,
 
             // Name Section
