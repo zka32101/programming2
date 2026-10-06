@@ -170,30 +170,60 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     });
   }
 
+  /// 認識結果を採点して、画面と学習記録に反映する（1問につき1回だけ）
+  void _finishSpeaking(String text) {
+    if (_speakingDone || text.trim().isEmpty) return;
+    final s = _speech.calculatePronunciationScore(_current.correctAnswer, text);
+    setState(() {
+      _recognizedText = text;
+      _speakingScore = s;
+      _speakingDone = true;
+      _isListening = false;
+    });
+    if (s >= 70) { _score += _current.points; _correct++; }
+    _speakingScores.add(s);
+    if (s >= 90) _confetti.play();
+    // 弱点記録
+    _answerLog.add((id: _current.id, type: _current.type, correct: s >= 70, speakingScore: s));
+
+    // ペット育成統合：発音スコア → ペットフィード
+    _feedPetFromScore(s, text);
+  }
+
   Future<void> _startListening() async {
     if (_isListening) return;
     setState(() { _isListening = true; _recognizedText = ''; });
-    await _speech.startListening(
+    // 聞き取りが終わったとき: 途中結果(最終結果が来ないことがある)があればそれを採点し、
+    // 何も聞き取れていなければメッセージを出して「聞いています」のまま固まらないようにする
+    void onEnded() {
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (!mounted || !_isListening || _speakingDone) return;
+        if (_recognizedText.trim().isNotEmpty) {
+          _finishSpeaking(_recognizedText);
+          return;
+        }
+        setState(() { _isListening = false; });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('うまく聞き取れなかったよ。もういちど話してみよう！')),
+        );
+      });
+    }
+    _speech.onStatus = (status) {
+      if (status == 'done' || status == 'notListening') onEnded();
+    };
+    _speech.onError = (_) => onEnded();
+    final started = await _speech.startListening(
       onResult: (text, isFinal) {
         setState(() { _recognizedText = text; });
-        if (isFinal && text.isNotEmpty) {
-          final s = _speech.calculatePronunciationScore(_current.correctAnswer, text);
-          setState(() {
-            _speakingScore = s;
-            _speakingDone = true;
-            _isListening = false;
-          });
-          if (s >= 60) { _score += _current.points; _correct++; }
-          _speakingScores.add(s);
-          if (s >= 85) _confetti.play();
-          // 弱点記録
-          _answerLog.add((id: _current.id, type: _current.type, correct: s >= 60, speakingScore: s));
-
-          // ペット育成統合：発音スコア → ペットフィード
-          _feedPetFromScore(s, text);
-        }
+        if (isFinal) _finishSpeaking(text);
       },
     );
+    if (!started && mounted) {
+      setState(() { _isListening = false; });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('マイクが使えないみたい。マイクの許可と音声認識を確かめてね'),
+      ));
+    }
   }
 
   Future<void> _stopListening() async {
@@ -204,7 +234,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   /// 発音スコアをペット育成に反映
   Future<void> _feedPetFromScore(int pronouncingScore, String recognizedText) async {
     final userId = ref.read(currentUserProvider)?.id;
-    if (userId == null || pronouncingScore < 60) return;
+    if (userId == null || pronouncingScore < 70) return;
 
     try {
       // PronunciationResult を構築（0-1 スケール）
