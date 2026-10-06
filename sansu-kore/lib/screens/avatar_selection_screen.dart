@@ -46,7 +46,9 @@ class _AvatarSelectionScreenState
         itemCount: allAvatars.length,
         itemBuilder: (context, i) {
           final avatar = allAvatars[i];
-          final isUnlocked = avatarState.isUnlocked(avatar.id);
+          // 使用中のアバターは（旧仕様で選んだ有料枠でも）所持扱いにして維持する
+          final isUnlocked =
+              avatarState.isUnlocked(avatar.id) || avatar.id == selected.id;
           if (!isUnlocked) {
             return LockedAvatarWidget(
               avatar: avatar,
