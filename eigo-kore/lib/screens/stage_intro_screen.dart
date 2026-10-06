@@ -43,6 +43,31 @@ class _StageIntroScreenState extends State<StageIntroScreen> {
         backgroundColor: AppColors.primary,
         title: Text('${widget.stage.emoji} ${widget.stage.titleJa}'),
       ),
+      // スタートボタンは画面下に固定（システムバーに隠れないよう SafeArea 内に置く）
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.play_arrow, size: 28),
+              label: const Text(
+                'レッスンスタート！',
+                style: AppTypography.headlineSmall,
+              ),
+              onPressed: _startLesson,
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
+                backgroundColor: AppColors.accentGreen,
+                foregroundColor: AppColors.textWhite,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSizes.borderRadiusLarge),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         padding: AppSpacing.allPaddingLg,
         child: Column(
@@ -74,26 +99,6 @@ class _StageIntroScreenState extends State<StageIntroScreen> {
             _ContentBreakdownCard(stage: widget.stage),
             AppSpacing.verticalSpacerXxl,
 
-            // スタートボタン
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.play_arrow, size: 28),
-                label: const Text(
-                  'レッスンスタート！',
-                  style: AppTypography.headlineSmall,
-                ),
-                onPressed: _startLesson,
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
-                  backgroundColor: AppColors.accentGreen,
-                  foregroundColor: AppColors.textWhite,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppSizes.borderRadiusLarge),
-                  ),
-                ),
-              ),
-            ),
             AppSpacing.verticalSpacerXxl,
           ],
         ),
