@@ -226,12 +226,12 @@ packages:
     source: hosted
     version: "0.3.5+5"
   cross_promo_kit:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: "../cross_promo_kit"
       relative: true
     source: path
-    version: "0.2.0"
+    version: "0.1.0"
   crypto:
     dependency: transitive
     description:
