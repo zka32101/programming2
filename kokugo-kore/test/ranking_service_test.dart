@@ -2,12 +2,43 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:kokugo_kore/models/ranking_model.dart';
 import 'package:kokugo_kore/services/ranking_service.dart';
 
+List<StudentRankingData> _sample() => [
+      StudentRankingData(
+        studentId: 's1',
+        studentName: '田中 太郎',
+        score: 15,
+        rank: 1,
+        startedAt: DateTime(2026, 1, 15),
+        birthYear: 2021,
+        acquiredAt: DateTime(2026, 8, 20),
+      ),
+      StudentRankingData(
+        studentId: 's2',
+        studentName: '山田 花子',
+        score: 13,
+        rank: 2,
+        startedAt: DateTime(2026, 2, 10),
+        birthYear: 2021,
+        acquiredAt: DateTime(2026, 8, 18),
+      ),
+      StudentRankingData(
+        studentId: 's3',
+        studentName: '佐藤 次郎',
+        score: 12,
+        rank: 3,
+        startedAt: DateTime(2026, 1, 5),
+        birthYear: 2019,
+        acquiredAt: DateTime(2026, 8, 15),
+      ),
+    ];
+
 void main() {
   group('RankingService Tests', () {
     late RankingService rankingService;
 
     setUp(() {
-      rankingService = RankingService();
+      // Firebase 非依存にするため、取得元を固定データに差し替える
+      rankingService = RankingService(studentDataLoader: () async => _sample());
     });
 
     test('getStudentRankings returns list of students sorted by score', () async {
@@ -122,6 +153,15 @@ void main() {
       for (int i = 0; i < grades.length - 1; i++) {
         expect(grades[i] <= grades[i + 1], true);
       }
+    });
+
+    test('falls back to sample data when Firebase is unavailable', () async {
+      // 取得元を差し替えない場合、テスト環境では Firebase 未初期化 → フォールバック
+      final service = RankingService();
+      final rankings = await service
+          .getStudentRankings(RankingFilter(groupBy: RankingGroupBy.all));
+
+      expect(rankings, isNotEmpty);
     });
   });
 }
