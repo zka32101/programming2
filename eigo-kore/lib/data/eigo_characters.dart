@@ -12,6 +12,12 @@ const List<BaseCharacter> kEigoCharacters = [
 
   BaseCharacter(
     id: 'char_001',
+    imageAsset: 'assets/characters/char_001_base.jpg',
+    levelImages: {
+      2: 'assets/characters/char_001_lv2.jpg',
+      3: 'assets/characters/char_001_lv3.jpg',
+      5: 'assets/characters/char_001_lvmax.jpg',
+    },
     name: 'エイコ先生',
     emoji: '👨‍🏫',
     tier: 1,
@@ -36,6 +42,12 @@ const List<BaseCharacter> kEigoCharacters = [
 
   BaseCharacter(
     id: 'char_003',
+    imageAsset: 'assets/characters/char_003_base.jpg',
+    levelImages: {
+      2: 'assets/characters/char_003_lv2.jpg',
+      3: 'assets/characters/char_003_lv3.jpg',
+      5: 'assets/characters/char_003_lvmax.jpg',
+    },
     name: 'トム',
     emoji: '🦸‍♂️',
     tier: 1,
@@ -62,6 +74,12 @@ const List<BaseCharacter> kEigoCharacters = [
 
   BaseCharacter(
     id: 'char_002',
+    imageAsset: 'assets/characters/char_002_base.jpg',
+    levelImages: {
+      2: 'assets/characters/char_002_lv2.jpg',
+      3: 'assets/characters/char_002_lv3.jpg',
+      5: 'assets/characters/char_002_lvmax.jpg',
+    },
     name: 'ルナ',
     emoji: '🧚‍♀️',
     tier: 2,
@@ -86,6 +104,12 @@ const List<BaseCharacter> kEigoCharacters = [
 
   BaseCharacter(
     id: 'char_006',
+    imageAsset: 'assets/characters/char_006_base.jpg',
+    levelImages: {
+      2: 'assets/characters/char_006_lv2.jpg',
+      3: 'assets/characters/char_006_lv3.jpg',
+      5: 'assets/characters/char_006_lvmax.jpg',
+    },
     name: 'ウィズ',
     emoji: '🔬',
     tier: 2,
@@ -112,6 +136,12 @@ const List<BaseCharacter> kEigoCharacters = [
 
   BaseCharacter(
     id: 'char_005',
+    imageAsset: 'assets/characters/char_005_base.jpg',
+    levelImages: {
+      2: 'assets/characters/char_005_lv2.jpg',
+      3: 'assets/characters/char_005_lv3.jpg',
+      5: 'assets/characters/char_005_lvmax.jpg',
+    },
     name: 'サリー',
     emoji: '👑',
     tier: 3,
@@ -136,6 +166,12 @@ const List<BaseCharacter> kEigoCharacters = [
 
   BaseCharacter(
     id: 'char_008',
+    imageAsset: 'assets/characters/char_008_base.jpg',
+    levelImages: {
+      2: 'assets/characters/char_008_lv2.jpg',
+      3: 'assets/characters/char_008_lv3.jpg',
+      5: 'assets/characters/char_008_lvmax.jpg',
+    },
     name: 'アリス',
     emoji: '🎩',
     tier: 3,
@@ -162,6 +198,12 @@ const List<BaseCharacter> kEigoCharacters = [
 
   BaseCharacter(
     id: 'char_004',
+    imageAsset: 'assets/characters/char_004_base.jpg',
+    levelImages: {
+      2: 'assets/characters/char_004_lv2.jpg',
+      3: 'assets/characters/char_004_lv3.jpg',
+      5: 'assets/characters/char_004_lvmax.jpg',
+    },
     name: 'ハーマイオニー',
     emoji: '🧙‍♀️',
     tier: 4,
@@ -186,6 +228,12 @@ const List<BaseCharacter> kEigoCharacters = [
 
   BaseCharacter(
     id: 'char_007',
+    imageAsset: 'assets/characters/char_007_base.jpg',
+    levelImages: {
+      2: 'assets/characters/char_007_lv2.jpg',
+      3: 'assets/characters/char_007_lv3.jpg',
+      5: 'assets/characters/char_007_lvmax.jpg',
+    },
     name: 'ゼウス',
     emoji: '⚡',
     tier: 4,
