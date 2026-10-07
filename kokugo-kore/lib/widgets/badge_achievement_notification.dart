@@ -6,6 +6,7 @@ import 'package:shared_core/models/badge_model.dart';
 
 import '../theme/app_theme.dart';
 import '../models/badge_set_bonus_model.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 class BadgeAchievementNotification extends StatefulWidget {
   final List<BadgeModel>? badges;
@@ -374,7 +375,7 @@ class _BadgeAchievementNotificationState
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(badge.emoji, style: const TextStyle(fontSize: 20)),
+          UkalabEmoji(badge.emoji, size: 20),
           const SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -446,10 +447,7 @@ class _BadgeAchievementNotificationState
               ],
             ),
             child: Center(
-              child: Text(
-                emoji,
-                style: const TextStyle(fontSize: 48),
-              ),
+              child: UkalabEmoji(emoji, size: 48),
             ),
           ),
         ),
@@ -496,10 +494,7 @@ class _BadgeAchievementNotificationState
             // セットアイコンと名前
             Column(
               children: [
-                Text(
-                  setBonus.emoji,
-                  style: const TextStyle(fontSize: 56),
-                ),
+                UkalabEmoji(setBonus.emoji, size: 56),
                 const SizedBox(height: 16),
                 Text(
                   setBonus.title,

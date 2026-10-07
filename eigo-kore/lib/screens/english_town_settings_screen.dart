@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/english_town_polish_provider.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// English-Only Town Settings Screen
 ///
@@ -122,7 +123,7 @@ class EnglishTownSettingsScreen extends ConsumerWidget {
       ),
       child: Row(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 28)),
+          UkalabEmoji(icon, size: 28),
           SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(

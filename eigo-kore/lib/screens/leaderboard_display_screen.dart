@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/leaderboard_model.dart';
 import '../providers/leaderboard_provider.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// Display leaderboard rankings
 class LeaderboardDisplayScreen extends ConsumerWidget {
@@ -157,10 +158,7 @@ class _LeaderboardEntryCard extends StatelessWidget {
                 ),
                 child: Center(
                   child: medal != null
-                      ? Text(
-                          medal,
-                          style: const TextStyle(fontSize: 24),
-                        )
+                      ? UkalabEmoji(medal, size: 24)
                       : Text(
                           '${index + 1}',
                           style: Theme.of(context)

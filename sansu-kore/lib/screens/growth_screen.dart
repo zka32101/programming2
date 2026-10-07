@@ -4,6 +4,7 @@ import '../providers/growth_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/adaptive_provider.dart';
 import '../theme/app_theme.dart';
+import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 
 class GrowthScreen extends ConsumerStatefulWidget {
   const GrowthScreen({super.key});
@@ -118,7 +119,7 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(icon, style: const TextStyle(fontSize: 32)),
+        UkalabEmoji(icon, size: 32),
         const SizedBox(width: 12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,7 +234,7 @@ class _GrowthStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(icon, style: const TextStyle(fontSize: 20)),
+        UkalabEmoji(icon, size: 20),
         const SizedBox(height: 4),
         Text(label,
             style:
@@ -570,7 +571,7 @@ class _AdaptiveAnalysisCard extends ConsumerWidget {
                 children: [
                   Row(
                     children: [
-                      Text(emoji, style: const TextStyle(fontSize: 16)),
+                      UkalabEmoji(emoji, size: 16),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(label,

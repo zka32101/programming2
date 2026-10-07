@@ -4,6 +4,7 @@ import '../models/challenge_model.dart';
 import '../providers/challenge_provider.dart';
 import '../design_system/design_system.dart';
 import 'challenge_completion_screen.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// チャレンジ詳細画面
 class ChallengeDetailScreen extends ConsumerStatefulWidget {
@@ -499,7 +500,7 @@ class _PrizeCard extends StatelessWidget {
         padding: AppSpacing.allPaddingMd,
         child: Row(
           children: [
-            Text(icon, style: const TextStyle(fontSize: 28)),
+            UkalabEmoji(icon, size: 28),
             AppSpacing.horizontalSpacerMd,
             Expanded(
               child: Column(

@@ -5,6 +5,7 @@ import 'package:shared_core/shared_core.dart' hide kTextDark, kTextMuted;
 
 import '../data/kokugo_characters.dart';
 import '../theme/app_theme.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 class KokugoCharacterCollectionPage extends ConsumerStatefulWidget {
   final List<BaseCharacter> characters;
@@ -208,7 +209,7 @@ class _SectionLabel extends StatelessWidget {
       padding: const EdgeInsets.only(left: 4),
       child: Row(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 16)),
+          UkalabEmoji(icon, size: 16),
           const SizedBox(width: 6),
           Text(text,
               style: TextStyle(
@@ -262,8 +263,7 @@ class _CharacterCard extends StatelessWidget {
                 else
                   Padding(
                     padding: const EdgeInsets.all(4),
-                    child: Text(character.emoji,
-                        style: const TextStyle(fontSize: 34)),
+                    child: UkalabEmoji(character.emoji, size: 34),
                   ),
                 if (state.hasSparkle)
                   const Text('✨', style: TextStyle(fontSize: 10)),
@@ -366,8 +366,7 @@ class _CharacterDetailSheet extends StatelessWidget {
                       child: Image.asset(displayImage, fit: BoxFit.contain),
                     )
                   else
-                    Text(character.emoji,
-                        style: const TextStyle(fontSize: 52)),
+                    UkalabEmoji(character.emoji, size: 52),
                   const SizedBox(height: 8),
                   Text(character.name,
                       style: const TextStyle(
@@ -654,8 +653,7 @@ class _LockedCard extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Center(
-                  child: Text(character.emoji,
-                      style: const TextStyle(fontSize: 52))),
+                  child: UkalabEmoji(character.emoji, size: 52)),
               const SizedBox(height: 8),
               Center(
                 child: Text(character.name,

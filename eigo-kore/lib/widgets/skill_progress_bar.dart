@@ -1,5 +1,6 @@
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class SkillProgressBar extends StatelessWidget {
   final String icon;
@@ -21,7 +22,7 @@ class SkillProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(icon, style: const TextStyle(fontSize: 16)),
+        UkalabEmoji(icon, size: 16),
         const SizedBox(width: 8),
         SizedBox(
           width: 72,

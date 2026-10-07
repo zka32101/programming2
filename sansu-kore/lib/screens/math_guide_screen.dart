@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 
 class MathGuideScreen extends StatelessWidget {
   const MathGuideScreen({super.key});
@@ -155,7 +156,7 @@ class _GradeSection extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 32)),
+              UkalabEmoji(emoji, size: 32),
               const SizedBox(width: 12),
               Text(
                 title,

@@ -4,6 +4,7 @@ import '../models/plush_toy_model.dart';
 import '../providers/plush_toy_provider.dart';
 import '../providers/user_profile_provider.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class PlushToyScreen extends ConsumerStatefulWidget {
   const PlushToyScreen({Key? key}) : super(key: key);
@@ -1012,10 +1013,7 @@ class _CharacterDisplayCard extends StatelessWidget {
               ],
             ),
             child: Center(
-              child: Text(
-                emoji,
-                style: const TextStyle(fontSize: 80),
-              ),
+              child: UkalabEmoji(emoji, size: 80),
             ),
           ),
           AppSpacing.verticalSpacerMd,
@@ -1127,7 +1125,7 @@ class _CharacterSelectionDialogState extends State<_CharacterSelectionDialog> {
                     padding: AppSpacing.allPaddingMd,
                     child: Row(
                       children: [
-                        Text(emoji, style: const TextStyle(fontSize: 32)),
+                        UkalabEmoji(emoji, size: 32),
                         AppSpacing.horizontalSpacerMd,
                         Expanded(
                           child: Column(

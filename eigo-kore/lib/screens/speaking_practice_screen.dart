@@ -11,6 +11,7 @@ import '../providers/speaking_history_provider.dart';
 import '../services/speech_service.dart';
 import '../services/tts_service.dart';
 import '../widgets/speaking_score_ring.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// スピーキング集中練習モード
 /// 選択したステージのスピーキング問題のみを繰り返し練習できる
@@ -211,7 +212,7 @@ class _SpeakingPracticeScreenState extends ConsumerState<SpeakingPracticeScreen>
                     child: Center(
                       child: isLocked
                           ? const Icon(Icons.lock, color: AppColors.textMuted)
-                          : Text(stage.emoji, style: const TextStyle(fontSize: 24)),
+                          : UkalabEmoji(stage.emoji, size: 24),
                     ),
                   ),
                   title: Text(

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 import '../models/user_profile.dart';
 import '../providers/user_profile_provider.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class ProfileManagementScreen extends ConsumerWidget {
   const ProfileManagementScreen({super.key});
@@ -437,7 +438,7 @@ class _StatCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(icon, style: const TextStyle(fontSize: 24)),
+          UkalabEmoji(icon, size: 24),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

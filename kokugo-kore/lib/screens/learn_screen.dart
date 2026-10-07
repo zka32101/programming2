@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 class LearnScreen extends StatelessWidget {
   const LearnScreen({super.key});
@@ -53,7 +54,7 @@ class _LearnExpansionTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ExpansionTile(
-        leading: Text(emoji, style: const TextStyle(fontSize: 22)),
+        leading: UkalabEmoji(emoji, size: 22),
         title: Text(
           title,
           style: const TextStyle(

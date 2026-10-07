@@ -4,6 +4,7 @@ import 'package:shared_core/models/badge_model.dart';
 import '../models/badge_set_bonus_model.dart';
 
 import '../theme/app_theme.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 /// バッジ詳細情報ダイアログ
 class BadgeDetailDialog extends StatelessWidget {
@@ -51,10 +52,7 @@ class BadgeDetailDialog extends StatelessWidget {
               child: Column(
                 children: [
                   // バッジアイコン
-                  Text(
-                    badge.emoji,
-                    style: const TextStyle(fontSize: 56),
-                  ),
+                  UkalabEmoji(badge.emoji, size: 56),
                   const SizedBox(height: 16),
 
                   // バッジ名
@@ -266,10 +264,7 @@ class BadgeDetailDialog extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        set.emoji,
-                        style: const TextStyle(fontSize: 18),
-                      ),
+                      UkalabEmoji(set.emoji, size: 18),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(

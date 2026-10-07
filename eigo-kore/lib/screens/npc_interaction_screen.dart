@@ -4,6 +4,7 @@ import 'package:eigo_kore/providers/npc_provider.dart';
 import 'package:eigo_kore/providers/npc_relationship_provider.dart';
 import 'package:eigo_kore/screens/npc_dialogue_screen.dart';
 import 'package:eigo_kore/widgets/npc_character_display_widget.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// NPC Interaction Screen
 /// Shows list of NPCs available for dialogue interactions
@@ -171,7 +172,7 @@ class NPCInteractionScreen extends ConsumerWidget {
     };
 
     final emoji = moodEmojis[mood] ?? '😐';
-    return Text(emoji, style: const TextStyle(fontSize: 32));
+    return UkalabEmoji(emoji, size: 32);
   }
 
   /// Build availability badge

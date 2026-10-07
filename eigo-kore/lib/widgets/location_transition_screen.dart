@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eigo_kore/models/english_town_model.dart';
 import 'package:eigo_kore/design_system/design_system.dart';
 import 'package:eigo_kore/services/town_animation_service.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// ロケーション遷移画面
 /// ロケーション間を移動する際のアニメーション遷移を管理
@@ -149,10 +150,7 @@ class _LocationTransitionScreenState
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            location.emoji,
-            style: const TextStyle(fontSize: 80),
-          ),
+          UkalabEmoji(location.emoji, size: 80),
           SizedBox(height: AppSpacing.spacingLg),
           Text(
             location.name,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/achievement.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// Widget for displaying an achievement
 class AchievementItem extends StatelessWidget {
@@ -39,10 +40,7 @@ class AchievementItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
-                  child: Text(
-                    achievement.icon,
-                    style: const TextStyle(fontSize: 32),
-                  ),
+                  child: UkalabEmoji(achievement.icon, size: 32),
                 ),
               ),
               AppSpacing.horizontalSpacerMd,
@@ -166,10 +164,7 @@ class BadgeItem extends StatelessWidget {
                   : null,
             ),
             child: Center(
-              child: Text(
-                badge.icon,
-                style: const TextStyle(fontSize: 40),
-              ),
+              child: UkalabEmoji(badge.icon, size: 40),
             ),
           ),
           AppSpacing.verticalSpacerSm,

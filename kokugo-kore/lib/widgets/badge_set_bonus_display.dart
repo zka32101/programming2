@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/badge_set_bonus_model.dart';
 import '../providers/badge_provider.dart';
 import '../theme/app_theme.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 /// バッジセットボーナス表示ウィジェット
 class BadgeSetBonusDisplay extends ConsumerWidget {
@@ -156,10 +157,7 @@ class BadgeSetBonusDisplay extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            Text(
-              set.emoji,
-              style: const TextStyle(fontSize: 18),
-            ),
+            UkalabEmoji(set.emoji, size: 18),
             const SizedBox(width: 8),
             Expanded(
               child: Column(
@@ -209,10 +207,7 @@ class BadgeSetBonusDisplay extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Text(
-                  set.emoji,
-                  style: const TextStyle(fontSize: 18),
-                ),
+                UkalabEmoji(set.emoji, size: 18),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(

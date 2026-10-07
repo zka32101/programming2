@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/level_provider.dart';
 import '../providers/speaking_history_provider.dart';
 import '../widgets/xp_bar.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class StudyCalendarScreen extends ConsumerWidget {
   const StudyCalendarScreen({super.key});
@@ -283,7 +284,7 @@ class _WeekStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     children: [
-      Text(icon, style: const TextStyle(fontSize: 22)),
+      UkalabEmoji(icon, size: 22),
       Text(value, style: AppTypography.labelLarge.copyWith(color: color)),
       Text(label, style: AppTypography.bodySmall.copyWith(color: AppColors.textMuted, fontSize: 11)),
     ],

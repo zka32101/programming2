@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eigo_kore/models/english_town_model.dart';
 import 'package:eigo_kore/design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// ロケーション詳細カード
 class LocationCardWidget extends StatelessWidget {
@@ -63,10 +64,7 @@ class LocationCardWidget extends StatelessWidget {
   Widget _buildHeader() {
     return Row(
       children: [
-        Text(
-          location.emoji,
-          style: const TextStyle(fontSize: 40),
-        ),
+        UkalabEmoji(location.emoji, size: 40),
         SizedBox(width: AppSpacing.spacingMd),
         Expanded(
           child: Column(
@@ -203,7 +201,7 @@ class LocationCardWidget extends StatelessWidget {
   }) {
     return Column(
       children: [
-        Text(icon, style: const TextStyle(fontSize: 20)),
+        UkalabEmoji(icon, size: 20),
         SizedBox(height: AppSpacing.spacingXs),
         Text(
           label,

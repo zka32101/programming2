@@ -6,6 +6,7 @@ import '../providers/user_profile_provider.dart';
 import '../design_system/design_system.dart';
 import '../widgets/guild_card.dart';
 import '../widgets/guild_member_item.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// Screen for managing guilds
 class GuildsScreen extends ConsumerStatefulWidget {
@@ -292,10 +293,7 @@ class _GuildDetailsTab extends ConsumerWidget {
                 padding: AppSpacing.allPaddingMd,
                 child: Column(
                   children: [
-                    Text(
-                      guild.icon,
-                      style: const TextStyle(fontSize: 64),
-                    ),
+                    UkalabEmoji(guild.icon, size: 64),
                     AppSpacing.verticalSpacerMd,
                     Text(
                       guild.name,

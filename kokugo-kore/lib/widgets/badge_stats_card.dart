@@ -5,6 +5,7 @@ import '../providers/badge_provider.dart';
 
 import '../models/badge_progress_model.dart';
 import '../theme/app_theme.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 class BadgeStatsCard extends ConsumerWidget {
   final VoidCallback? onTap;
@@ -150,10 +151,7 @@ class BadgeStatsCard extends ConsumerWidget {
   }) {
     return Column(
       children: [
-        Text(
-          icon,
-          style: const TextStyle(fontSize: 24),
-        ),
+        UkalabEmoji(icon, size: 24),
         const SizedBox(height: 4),
         Text(
           value,

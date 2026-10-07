@@ -10,6 +10,7 @@ import '../widgets/progress_chart_widget.dart';
 import '../widgets/accuracy_trend_widget.dart';
 import '../widgets/kanji_mastery_list_widget.dart';
 import '../widgets/pace_recommendation_card.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 class ParentDashboardScreen extends ConsumerStatefulWidget {
   const ParentDashboardScreen({super.key});
@@ -394,7 +395,7 @@ class _ParentDashboardScreenState extends ConsumerState<ParentDashboardScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 36)),
+              UkalabEmoji(emoji, size: 36),
               const SizedBox(height: 8),
               Text(
                 label,

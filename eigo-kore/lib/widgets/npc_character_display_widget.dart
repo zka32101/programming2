@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eigo_kore/models/npc_extended_model.dart';
 import 'package:eigo_kore/providers/npc_provider.dart';
 import 'package:eigo_kore/providers/npc_relationship_provider.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// NPC キャラクター表示ウィジェット
 /// NPC の性格、気分、親密度などを表示
@@ -150,10 +151,7 @@ class NPCCharacterDisplayWidget extends ConsumerWidget {
         ? traitEmojis[npc.personality.traits.first] ?? '😊'
         : '😊';
 
-    return Text(
-      emoji,
-      style: const TextStyle(fontSize: 40),
-    );
+    return UkalabEmoji(emoji, size: 40);
   }
 
   /// 気分表示
@@ -181,10 +179,7 @@ class NPCCharacterDisplayWidget extends ConsumerWidget {
 
     return Row(
       children: [
-        Text(
-          emoji,
-          style: const TextStyle(fontSize: 24),
-        ),
+        UkalabEmoji(emoji, size: 24),
         const SizedBox(width: 12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -400,10 +395,7 @@ class CompactNPCCharacterWidget extends ConsumerWidget {
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              emoji,
-              style: const TextStyle(fontSize: 32),
-            ),
+            UkalabEmoji(emoji, size: 32),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

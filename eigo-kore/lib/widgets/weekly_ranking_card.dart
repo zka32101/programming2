@@ -1,5 +1,6 @@
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class DailyScore {
   final String date; // "Mon" など
@@ -64,7 +65,7 @@ class WeeklyRankingCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Row(
                       children: [
-                        Text(medal, style: const TextStyle(fontSize: 16)),
+                        UkalabEmoji(medal, size: 16),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(

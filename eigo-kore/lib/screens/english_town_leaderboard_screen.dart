@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/english_town_firebase_provider.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// English-Only Town Global Leaderboard Screen
 ///
@@ -194,10 +195,7 @@ class EnglishTownLeaderboardScreen extends ConsumerWidget {
             width: 50,
             child: Column(
               children: [
-                Text(
-                  medal,
-                  style: const TextStyle(fontSize: 28),
-                ),
+                UkalabEmoji(medal, size: 28),
                 Text(
                   '#$rank',
                   style: AppTypography.labelSmall.copyWith(
@@ -262,7 +260,7 @@ class EnglishTownLeaderboardScreen extends ConsumerWidget {
   Widget _buildStat(String emoji, String value) {
     return Row(
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 14)),
+        UkalabEmoji(emoji, size: 14),
         SizedBox(width: 4),
         Text(
           value,

@@ -4,6 +4,7 @@ import '../models/notification_model.dart';
 import '../providers/notification_provider.dart';
 import '../providers/user_profile_provider.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class NotificationSettingsScreen extends ConsumerWidget {
   const NotificationSettingsScreen({Key? key}) : super(key: key);
@@ -310,7 +311,7 @@ class _ToggleSetting extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                Text(emoji, style: const TextStyle(fontSize: 24)),
+                UkalabEmoji(emoji, size: 24),
                 AppSpacing.horizontalSpacerMd,
                 Text(label),
               ],

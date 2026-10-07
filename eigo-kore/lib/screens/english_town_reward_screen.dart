@@ -8,6 +8,7 @@ import '../providers/english_town_polish_provider.dart';
 import '../providers/english_town_notification_provider.dart';
 import '../design_system/design_system.dart';
 import '../widgets/animated_reward_card.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// English-Only Town Reward Screen
 ///
@@ -240,7 +241,7 @@ class EnglishTownRewardScreen extends ConsumerWidget {
       ),
       child: Column(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 36)),
+          UkalabEmoji(emoji, size: 36),
           SizedBox(height: AppSpacing.sm),
           Text(
             label,

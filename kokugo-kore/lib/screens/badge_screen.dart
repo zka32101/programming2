@@ -9,6 +9,7 @@ import '../theme/app_theme.dart';
 import '../widgets/badge_widget.dart';
 import '../widgets/badge_collection_challenges.dart';
 import '../widgets/badge_set_bonus_display.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 enum BadgeFilterType {
   all('すべて'),
@@ -206,7 +207,7 @@ class _BadgeScreenState extends ConsumerState<BadgeScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(earned.badge.emoji, style: const TextStyle(fontSize: 56)),
+            UkalabEmoji(earned.badge.emoji, size: 56),
             const SizedBox(height: 12),
             Text(earned.badge.title,
                 style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
@@ -280,7 +281,7 @@ class _BadgeScreenState extends ConsumerState<BadgeScreen> {
                 0.2126, 0.7152, 0.0722, 0, 0,
                 0, 0, 0, 0.4, 0,
               ]),
-              child: Text(badge.emoji, style: const TextStyle(fontSize: 56)),
+              child: UkalabEmoji(badge.emoji, size: 56),
             ),
             const SizedBox(height: 12),
             Text(badge.title,

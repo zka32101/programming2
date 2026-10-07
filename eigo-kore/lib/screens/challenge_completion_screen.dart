@@ -5,6 +5,7 @@ import '../models/daily_challenge_model.dart';
 import '../providers/challenge_provider.dart';
 import '../providers/user_profile_provider.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// チャレンジ完了画面
 class ChallengeCompletionScreen extends ConsumerStatefulWidget {
@@ -386,7 +387,7 @@ class _Rewardstat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(icon, style: const TextStyle(fontSize: 32)),
+        UkalabEmoji(icon, size: 32),
         AppSpacing.verticalSpacerSm,
         Text(
           label,

@@ -5,6 +5,7 @@ import '../design_system/design_system.dart';
 import '../providers/pet_provider.dart';
 import '../providers/user_profile_provider.dart';
 import 'pet_interaction_screen.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// ペットステータス画面
 class PetStatusScreen extends ConsumerWidget {
@@ -169,10 +170,7 @@ class _PetMainCard extends StatelessWidget {
           child: Column(
             children: [
               // ペット絵文字
-              Text(
-                pet.emoji,
-                style: const TextStyle(fontSize: 100),
-              ),
+              UkalabEmoji(pet.emoji, size: 100),
               AppSpacing.verticalSpacerMd,
 
               // 名前と情報

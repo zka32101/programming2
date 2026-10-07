@@ -38,6 +38,7 @@ import '../widgets/daily_bonus_dialog.dart';
 import '../widgets/daily_mission_card.dart';
 import '../widgets/timer_chip_widget.dart';
 import '../widgets/badge_progress_tracker.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 AppShopItem? _findCommonShopItem(String? id) {
   if (id == null) return null;
@@ -645,7 +646,7 @@ class _StatCard extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 24)),
+              UkalabEmoji(emoji, size: 24),
               const SizedBox(height: 4),
               Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color)),
               Text(label, style: Theme.of(context).textTheme.bodySmall),
@@ -706,7 +707,7 @@ class _RecentCharactersSection extends ConsumerWidget {
                                 height: 36,
                                 child: Image.asset(c.imageAsset!, fit: BoxFit.contain),
                               )
-                            : Text(c.emoji, style: const TextStyle(fontSize: 28)),
+                            : UkalabEmoji(c.emoji, size: 28),
                         const SizedBox(height: 4),
                         Text(c.name,
                             style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold),

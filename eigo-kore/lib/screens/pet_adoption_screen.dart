@@ -4,6 +4,7 @@ import '../models/pet_model.dart';
 import '../design_system/design_system.dart';
 import '../providers/user_profile_provider.dart';
 import '../providers/pet_provider.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// ペット選択・採用画面
 class PetAdoptionScreen extends ConsumerWidget {
@@ -200,10 +201,7 @@ class _PetAdoptionCard extends StatelessWidget {
             Row(
               children: [
                 // 絵文字
-                Text(
-                  emoji,
-                  style: const TextStyle(fontSize: 48),
-                ),
+                UkalabEmoji(emoji, size: 48),
                 AppSpacing.horizontalSpacerMd,
                 // 名前と説明
                 Expanded(
@@ -303,10 +301,7 @@ class _NicknameDialogState extends State<_NicknameDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            widget.emoji,
-            style: const TextStyle(fontSize: 48),
-          ),
+          UkalabEmoji(widget.emoji, size: 48),
           AppSpacing.verticalSpacerMd,
           TextField(
             controller: _controller,

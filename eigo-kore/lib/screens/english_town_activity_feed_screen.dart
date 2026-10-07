@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/english_town_activity_feed_provider.dart';
 import '../services/english_town_activity_feed_service.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// Activity feed screen showing recent player activities
 class EnglishTownActivityFeedScreen extends ConsumerWidget {
@@ -116,7 +117,7 @@ class EnglishTownActivityFeedScreen extends ConsumerWidget {
   Widget _buildSummaryItem(String emoji, int count, String label) {
     return Column(
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 24)),
+        UkalabEmoji(emoji, size: 24),
         SizedBox(height: AppSpacing.xs),
         Text(
           count.toString(),
@@ -162,10 +163,7 @@ class EnglishTownActivityFeedScreen extends ConsumerWidget {
               shape: BoxShape.circle,
             ),
             child: Center(
-              child: Text(
-                activity.emoji,
-                style: const TextStyle(fontSize: 24),
-              ),
+              child: UkalabEmoji(activity.emoji, size: 24),
             ),
           ),
           title: Text(

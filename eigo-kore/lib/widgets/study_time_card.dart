@@ -1,6 +1,7 @@
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import '../providers/study_time_provider.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class StudyTimeCard extends StatelessWidget {
   final StudyTimeState studyTime;
@@ -32,7 +33,7 @@ class StudyTimeCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 28)),
+          UkalabEmoji(emoji, size: 28),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

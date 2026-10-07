@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eigo_kore/models/npc_location_model.dart';
 import 'package:eigo_kore/providers/town_npc_location_provider.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// タウンマップNPC表示ウィジェット
 class TownMapNPCWidget extends ConsumerStatefulWidget {
@@ -228,10 +229,7 @@ class NPCMapMarker extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            npc.emoji,
-            style: const TextStyle(fontSize: 24),
-          ),
+          UkalabEmoji(npc.emoji, size: 24),
           const SizedBox(height: 4),
           Text(
             npc.name,
@@ -317,7 +315,7 @@ class NPCStatusPanel extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(npc.emoji, style: const TextStyle(fontSize: 28)),
+                    UkalabEmoji(npc.emoji, size: 28),
                     const SizedBox(width: 8),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

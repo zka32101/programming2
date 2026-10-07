@@ -5,6 +5,7 @@ import '../providers/message_provider.dart';
 import '../providers/user_profile_provider.dart';
 import '../design_system/design_system.dart';
 import 'chat_screen.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class ConversationListScreen extends ConsumerStatefulWidget {
   const ConversationListScreen({Key? key}) : super(key: key);
@@ -171,10 +172,7 @@ class _ConversationTile extends ConsumerWidget {
                 CircleAvatar(
                   radius: 24,
                   backgroundColor: AppColors.surfaceVariant,
-                  child: Text(
-                    conversation.displayIcon,
-                    style: const TextStyle(fontSize: 28),
-                  ),
+                  child: UkalabEmoji(conversation.displayIcon, size: 28),
                 ),
                 if (conversation.type == ConversationType.direct)
                   Positioned(

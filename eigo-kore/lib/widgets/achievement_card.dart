@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/achievement_model.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class AchievementCard extends ConsumerWidget {
   final Achievement achievement;
@@ -50,10 +51,7 @@ class AchievementCard extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Center(
-                      child: Text(
-                        achievement.icon,
-                        style: const TextStyle(fontSize: 48),
-                      ),
+                      child: UkalabEmoji(achievement.icon, size: 48),
                     ),
                   ),
                   Container(
@@ -202,7 +200,7 @@ class _RewardBadge extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(icon, style: const TextStyle(fontSize: 16)),
+        UkalabEmoji(icon, size: 16),
         const SizedBox(height: 2),
         Text(
           value.toString(),

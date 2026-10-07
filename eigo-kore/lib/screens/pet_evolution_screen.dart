@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/pet_model.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// ペット進化画面
 class PetEvolutionScreen extends ConsumerStatefulWidget {
@@ -159,10 +160,7 @@ class _EvolutionComparison extends StatelessWidget {
               style: Theme.of(context).textTheme.labelLarge,
             ),
             AppSpacing.verticalSpacerSm,
-            Text(
-              currentPet.emoji,
-              style: const TextStyle(fontSize: 80),
-            ),
+            UkalabEmoji(currentPet.emoji, size: 80),
             AppSpacing.verticalSpacerSm,
             Text(
               currentPet.evolutionStageName,
@@ -192,10 +190,7 @@ class _EvolutionComparison extends StatelessWidget {
                         ),
                   ),
                   AppSpacing.verticalSpacerSm,
-                  Text(
-                    evolvedPet.emoji,
-                    style: const TextStyle(fontSize: 80),
-                  ),
+                  UkalabEmoji(evolvedPet.emoji, size: 80),
                   AppSpacing.verticalSpacerSm,
                   Text(
                     evolvedPet.evolutionStageName,
