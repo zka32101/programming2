@@ -63,6 +63,7 @@ flutter:
 
   assets:
     - assets/icons_common/
+    - assets/badges/
     - assets/legal/
     - assets/characters/
     - assets/character_levels/
