@@ -6,6 +6,7 @@ import '../models/badge_set_bonus_model.dart';
 import '../providers/badge_provider.dart';
 import '../theme/app_theme.dart';
 import 'badge_detail_dialog.dart';
+import 'badge_emblem.dart';
 
 /// バッジフィルタータイプ
 enum BadgeFilterType {
@@ -349,13 +350,12 @@ class _BadgeEncyclopediaState extends ConsumerState<BadgeEncyclopedia> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // バッジアイコン
-                Text(
-                  badge.emoji,
-                  style: TextStyle(
-                    fontSize: 36,
-                    color: isAcquired
-                        ? Colors.black87
-                        : Colors.black.withAlpha(120),
+                Opacity(
+                  opacity: isAcquired ? 1.0 : 0.45,
+                  child: BadgeEmblem(
+                    badgeId: badge.id,
+                    fallbackEmoji: badge.emoji,
+                    size: 44,
                   ),
                 ),
                 const SizedBox(height: 6),

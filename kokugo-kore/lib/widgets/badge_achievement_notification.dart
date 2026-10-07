@@ -7,6 +7,7 @@ import 'package:shared_core/models/badge_model.dart';
 import '../theme/app_theme.dart';
 import '../models/badge_set_bonus_model.dart';
 import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
+import 'package:kokugo_kore/widgets/badge_emblem.dart';
 
 class BadgeAchievementNotification extends StatefulWidget {
   final List<BadgeModel>? badges;
@@ -238,7 +239,7 @@ class _BadgeAchievementNotificationState
             // バッジアイコンと名前
             Column(
               children: [
-                _buildBadgeIcon(badge.emoji),
+                _buildBadgeIcon(badge.id, badge.emoji),
                 const SizedBox(height: 12),
                 Text(
                   badge.title,
@@ -375,7 +376,7 @@ class _BadgeAchievementNotificationState
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          UkalabEmoji(badge.emoji, size: 20),
+          BadgeEmblem(badgeId: badge.id, fallbackEmoji: badge.emoji, size: 26),
           const SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -402,7 +403,7 @@ class _BadgeAchievementNotificationState
     );
   }
 
-  Widget _buildBadgeIcon(String emoji) {
+  Widget _buildBadgeIcon(String badgeId, String emoji) {
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -447,7 +448,7 @@ class _BadgeAchievementNotificationState
               ],
             ),
             child: Center(
-              child: UkalabEmoji(emoji, size: 48),
+              child: BadgeEmblem(badgeId: badgeId, fallbackEmoji: emoji, size: 56),
             ),
           ),
         ),
