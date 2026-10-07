@@ -35,16 +35,14 @@ class QuizQuestion {
   ///
   /// 返り値: ランダム化された新しい QuizQuestion インスタンス
   QuizQuestion randomizeChoices() {
-    // 選択肢の元の順序を保持（correctIndexの位置を追跡するため）
-    final originalChoices = [...choices];
-    final correctAnswer = originalChoices[correctIndex];
-
-    // 選択肢をシャッフル
-    final shuffledChoices = [...originalChoices];
-    _shuffle(shuffledChoices);
-
-    // 新しい correctIndex を計算
-    final newCorrectIndex = shuffledChoices.indexOf(correctAnswer);
+    if (choices.length < 2 || correctIndex < 0 || correctIndex >= choices.length) {
+      return this;
+    }
+    // インデックスの並べ替えで正解位置を追跡する(同じ文言の選択肢があっても正しく付け替わる)
+    final order = List<int>.generate(choices.length, (i) => i);
+    _shuffle(order);
+    final shuffledChoices = [for (final i in order) choices[i]];
+    final newCorrectIndex = order.indexOf(correctIndex);
 
     // ⚠️ wrongHints マッピング修正: シャッフル後の新しいインデックスで再マップ
     Map<String, String>? remappedWrongHints;
