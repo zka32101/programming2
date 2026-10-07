@@ -10,8 +10,9 @@ class LearnScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('わかる'),
-        backgroundColor: const Color(0xFF3498DB),
-        automaticallyImplyLeading: false,
+        backgroundColor: kPrimaryColor,
+        iconTheme: const IconThemeData(color: Colors.white),
+        foregroundColor: Colors.white,
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),

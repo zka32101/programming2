@@ -204,7 +204,7 @@ class StudyMenuScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 1.4,
+          childAspectRatio: 1.2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
         ),
@@ -225,14 +225,15 @@ class StudyMenuScreen extends StatelessWidget {
   }
 }
 
-class _StudyCard extends StatelessWidget {
+class _StudyCard extends ConsumerWidget {
   final _StudyItem item;
   final VoidCallback onTap;
 
   const _StudyCard({required this.item, required this.onTap});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final premium = ref.watch(premiumProvider);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -250,7 +251,7 @@ class _StudyCard extends StatelessWidget {
             ),
           ],
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -269,11 +270,11 @@ class _StudyCard extends StatelessWidget {
                   Text(
                     item.title,
                     style: const TextStyle(
-                      fontSize: 14,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: kTextDark,
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 3),
@@ -286,7 +287,7 @@ class _StudyCard extends StatelessWidget {
                 ],
               ),
             ),
-            if (item.isPremium) ...[
+            if (premium.showsPremiumLock(item.isPremium)) ...[
               const SizedBox(width: 8),
               Tooltip(
                 message: 'プレミアム機能',

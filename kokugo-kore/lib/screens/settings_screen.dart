@@ -27,13 +27,20 @@ import '../providers/ranking_privacy_provider.dart';
 import '../providers/vocab_mastery_provider.dart';
 import '../providers/profile_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/constants.dart';
 import '../widgets/app_intro_dialog.dart';
 import 'detailed_analytics_screen.dart';
 import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
-const _appVersion = '1.4.0';
+const _appVersion = AppConstants.appVersion;
 
 const _changelog = <String, List<String>>{
+  '1.5.1': [
+    'かく練習の採点を、お手本の字の形との一致で判定するように変更',
+    'プロフィール追加で、無料の4種類のアイコンを選べるように修正',
+    '無料トライアル中は、すべてのステージ・学習メニューが遊べるように修正',
+    'まなぶ画面の項目名を省略せず表示、画面の表示崩れを修正',
+  ],
   '1.4.0': [
     'アプリ名を「小学コレ！国語」に変更',
     '読解力強化トレーニングを実際の記事・クイズと接続',

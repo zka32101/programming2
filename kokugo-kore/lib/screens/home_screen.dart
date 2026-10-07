@@ -20,6 +20,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../providers/profile_provider.dart';
 import '../providers/purchased_items_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/constants.dart';
 import 'package:shared_core/shared_core.dart'
     show
         characterStateProvider,
@@ -98,7 +99,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _checkForUpdate() async {
-    const currentVersion = '1.4.0';
+    const currentVersion = AppConstants.appVersion;
     final prefs = await SharedPreferences.getInstance();
     final lastSeen = prefs.getString('last_seen_version');
     if (lastSeen != currentVersion) {
@@ -108,13 +109,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         context: context,
         builder: (ctx) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Row(
+          title: Row(
             children: [
               Text('🎉', style: TextStyle(fontSize: 28)),
               SizedBox(width: 8),
               Flexible(
-                child: Text('v1.4.0 にアップデート！',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                child: Text('v$currentVersion にアップデート！',
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ),
             ],
           ),
@@ -126,16 +127,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Text('✨ 新機能',
                     style: TextStyle(fontWeight: FontWeight.bold, color: kPrimaryColor)),
                 SizedBox(height: 6),
-                Text('• 読解力強化トレーニングを追加'),
-                Text('• アバターアイコンを一新'),
-                Text('• 書き順アニメーション表示を追加'),
+                Text('• かく練習の採点をお手本の字の形で判定'),
+                Text('• 無料トライアル中はすべてのステージが遊べます'),
                 SizedBox(height: 12),
                 Text('🔧 改善',
                     style: TextStyle(fontWeight: FontWeight.bold, color: kPrimaryColor)),
                 SizedBox(height: 6),
-                Text('• アプリ内課金の価格表示・エラー表示を改善'),
-                Text('• キャラクターのレベル別イラスト表示に対応'),
-                Text('• アプリ名を「小学コレ！国語」に変更'),
+                Text('• プロフィールで無料アイコン4種が選べない不具合を修正'),
+                Text('• まなぶ画面の項目名を省略せず表示'),
               ],
             ),
           ),
@@ -265,8 +264,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
               ),
-              titlePadding: const EdgeInsets.only(left: 56, bottom: 14, right: 16),
-              title: Column(
+            ),
+            titleSpacing: 12,
+            title: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -302,7 +302,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                 ],
               ),
-            ),
             actions: [
               // デイリーミッションボタン（Phase 4.5）
               IconButton(
