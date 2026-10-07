@@ -38,7 +38,10 @@ class StageSelectScreen extends ConsumerWidget {
                 crossAxisCount: crossAxisCount,
                 mainAxisSpacing: AppSpacing.lg,
                 crossAxisSpacing: AppSpacing.lg,
-                childAspectRatio: isMobile ? 0.85 : 0.9,
+                // カード内の要素合計が高さを超えないよう縦長に。端末の文字拡大にも追従。
+                childAspectRatio: (isMobile ? 0.72 : 0.85) /
+                    (MediaQuery.textScalerOf(context).scale(16) / 16)
+                        .clamp(1.0, 1.6),
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -112,12 +115,16 @@ class _StageStatsBar extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'ステージ進捗',
-                  style: AppTypography.headlineSmall.copyWith(
-                    color: AppColors.textPrimary,
+                Flexible(
+                  child: Text(
+                    'ステージ進捗',
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.headlineSmall.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 Text(
                   '$clearedStages/$totalStages (${percentage}%)',
                   style: AppTypography.labelLarge.copyWith(
