@@ -8,7 +8,7 @@ import '../theme/sizes.dart';
 import '../theme/typography.dart';
 import '../design_system/app_colors.dart';
 import '../widgets/educational_illustrations.dart';
-import 'package:eigo_kore/widgets/ukalab_emoji.dart';
+import 'package:eigo_kore/widgets/badge_emblem.dart';
 
 class BadgeScreen extends ConsumerWidget {
   const BadgeScreen({super.key});
@@ -133,7 +133,7 @@ class _BadgeCard extends StatelessWidget {
                 ),
                 child: Center(
                   child: isEarned
-                      ? UkalabEmoji(badge.emoji, size: 36)
+                      ? BadgeEmblem(badgeId: badge.id, fallbackEmoji: badge.emoji, size: 45)
                       : ColorFiltered(
                           colorFilter: const ColorFilter.matrix([
                             0.2126, 0.7152, 0.0722, 0, 0,
@@ -141,7 +141,7 @@ class _BadgeCard extends StatelessWidget {
                             0.2126, 0.7152, 0.0722, 0, 0,
                             0, 0, 0, 0.4, 0,
                           ]),
-                          child: UkalabEmoji(badge.emoji, size: 32),
+                          child: BadgeEmblem(badgeId: badge.id, fallbackEmoji: badge.emoji, size: 40),
                         ),
                 ),
               ),
