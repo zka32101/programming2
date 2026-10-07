@@ -3,6 +3,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/question.dart';
+import '../utils/shuffle_choices.dart';
 import '../providers/level_provider.dart';
 import '../providers/settings_provider.dart';
 import '../providers/weakness_provider.dart';
@@ -46,9 +47,9 @@ class _TestPrepScreenState extends ConsumerState<TestPrepScreen> {
     final weakness = ref.read(weaknessProvider);
     final weakQ = weakness.weakQuestionsAcrossAllStages;
     if (weakQ.isEmpty) {
-      setState(() { _questions = weakQ; _started = true; });
+      setState(() { _questions = weakQ.map((q) => withShuffledChoices(q)).toList(); _started = true; });
     } else {
-      setState(() { _questions = weakQ.take(15).toList(); _started = true; });
+      setState(() { _questions = weakQ.take(15).map((q) => withShuffledChoices(q)).toList(); _started = true; });
     }
     if (_questions.isNotEmpty && _questions[0].type == QuestionType.listening) {
       _autoPlay();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/question.dart';
 import '../models/stage.dart';
+import '../utils/shuffle_choices.dart';
 import '../providers/badge_provider.dart';
 import '../providers/coin_provider.dart';
 import '../providers/level_provider.dart';
@@ -46,8 +47,12 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   bool _speakingDone = false;
   final _startTime = DateTime.now();
 
-  Question get _current => widget.stage.questions[_qIndex];
-  bool get _isLastQ => _qIndex >= widget.stage.questions.length - 1;
+  // 元データは正解が選択肢の前方に偏っているため、レッスン開始時に選択肢をシャッフルする
+  late final List<Question> _questions =
+      widget.stage.questions.map((q) => withShuffledChoices(q)).toList();
+
+  Question get _current => _questions[_qIndex];
+  bool get _isLastQ => _qIndex >= _questions.length - 1;
 
   @override
   void initState() {
@@ -92,7 +97,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     final coinsEarned = await progress.completeStage(widget.stage.id, _score, speakAvg);
     await ref.read(coinProvider.notifier).addCoins(coinsEarned);
 
-    final speakingQs = widget.stage.questions.where((q) => q.type == QuestionType.speaking).toList();
+    final speakingQs = _questions.where((q) => q.type == QuestionType.speaking).toList();
     final wordCount = speakingQs.where((q) => q.difficulty == DifficultyLevel.beginner).length;
     final phraseCount = speakingQs.where((q) => q.difficulty == DifficultyLevel.intermediate).length;
     final convCount = speakingQs.where((q) => q.difficulty == DifficultyLevel.advanced).length;
@@ -115,8 +120,8 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
       avgScore: speakAvg,
     );
 
-    final maxScore = widget.stage.questions.fold(0, (sum, q) => sum + q.points);
-    final listeningQs = widget.stage.questions.where((q) => q.type == QuestionType.listening).toList();
+    final maxScore = _questions.fold(0, (sum, q) => sum + q.points);
+    final listeningQs = _questions.where((q) => q.type == QuestionType.listening).toList();
     final listeningCorrect = listeningQs.isEmpty ? 0.0 : _correct / listeningQs.length;
 
     final badges = ref.read(badgeProvider.notifier);
@@ -130,7 +135,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
 
     // XP 付与
     final isFirstClear = !ref.read(progressProvider).clearedStages.contains(widget.stage.id);
-    final xpGained = LevelNotifier.xpForLesson(correct: _correct, total: widget.stage.questions.length, isFirstClear: isFirstClear);
+    final xpGained = LevelNotifier.xpForLesson(correct: _correct, total: _questions.length, isFirstClear: isFirstClear);
     final xpFromBadges = newBadges.length * LevelNotifier.xpForBadge();
     final xpFromSpeaking = LevelNotifier.xpForSpeaking(_speakingScores.length);
     final totalXp = xpGained + xpFromBadges + xpFromSpeaking;
@@ -144,7 +149,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
         'stage': widget.stage,
         'score': _score,
         'correct': _correct,
-        'total': widget.stage.questions.length,
+        'total': _questions.length,
         'speakingAvg': speakAvg.round(),
         'listeningAccuracy': (listeningCorrect * 100).round(),
         'duration': DateTime.now().difference(_startTime),
@@ -280,7 +285,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final questions = widget.stage.questions;
+    final questions = _questions;
     final progress = (_qIndex + 1) / questions.length;
 
     return Scaffold(

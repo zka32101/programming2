@@ -4,6 +4,8 @@ import '../models/video_model.dart';
 import '../providers/video_provider.dart';
 import '../providers/user_profile_provider.dart';
 import '../design_system/design_system.dart';
+import 'dart:math' show Random;
+import '../utils/shuffle_choices.dart';
 
 /// ビデオクイズ画面
 class VideoQuizScreen extends ConsumerStatefulWidget {
@@ -196,7 +198,8 @@ class _QuestionCard extends StatelessWidget {
 
             // 選択肢
             Column(
-              children: question.options
+              // 配信データの並びのままだと正解位置が偏るため、問題IDで固定した並びにシャッフルする
+              children: shuffledChoices(question.options, Random(question.id.hashCode))
                   .asMap()
                   .entries
                   .map((entry) {
