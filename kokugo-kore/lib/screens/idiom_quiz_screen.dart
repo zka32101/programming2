@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/premium_provider.dart';
 
 import '../theme/app_theme.dart';
+import '../utils/shuffle_choices.dart';
 import 'proverb_quiz_screen.dart' show QuizChoiceButton;
 
 class IdiomQuestion {
@@ -449,14 +450,14 @@ class _RuntimeQ {
   });
 
   static _RuntimeQ from(IdiomQuestion q) {
-    final correct = q.choices[q.correctIndex];
-    final shuffled = List.of(q.choices)..shuffle(math.Random());
+    final order = shuffledOrder(q.choices);
+    final shuffled = [for (final i in order) q.choices[i]];
     return _RuntimeQ(
       idiom: q.idiom,
       reading: q.reading,
       question: q.question,
       choices: shuffled,
-      correctIndex: shuffled.indexOf(correct),
+      correctIndex: order.indexOf(q.correctIndex),
       explanation: q.explanation,
     );
   }
