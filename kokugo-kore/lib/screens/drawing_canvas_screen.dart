@@ -1,12 +1,13 @@
 // lib/screens/drawing_canvas_screen.dart
 // Full-screen handwriting canvas with strict auto-scoring
 
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/drawing_settings_provider.dart';
 
+import '../services/handwriting_shape_judge.dart';
+import '../services/handwriting_raster_reference.dart';
 import '../theme/app_theme.dart';
 import '../widgets/stroke_order_view.dart';
 
@@ -68,69 +69,42 @@ class _DrawingCanvasScreenState extends ConsumerState<DrawingCanvasScreen> {
     }
   }
 
-  // Strict scoring:
-  //  - Stroke count (1-5 strokes ideal): max 25 pts
-  //  - Centering (bbox center close to canvas center): max 40 pts (strict)
-  //  - Size quality (20-60% canvas coverage is ideal): max 35 pts (narrow range)
+  // 見本の字形との一致度で採点する（書き順データがあれば各画、無ければ文字を描画した
+  // ラスタから作った点群）。位置・大きさは正規化し、形だけを比べる。
+  List<List<Offset>>? _reference;
+  bool _referenceIsRaster = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final vec = HandwritingShapeJudge.referenceStrokes(widget.character);
+    if (vec != null) {
+      _reference = vec;
+    } else {
+      _buildRasterReference();
+    }
+  }
+
+  Future<void> _buildRasterReference() async {
+    try {
+      final pts = await rasterReferencePoints(widget.character);
+      if (!mounted || pts == null) return;
+      _reference = [for (final p in pts) [p]];
+      _referenceIsRaster = true;
+    } catch (_) {
+      // 見本なし → 低得点固定
+    }
+  }
+
   int _calculateScore() {
     if (_strokes.isEmpty) return 0;
-    final pts = _strokes.expand((s) => s).toList();
-    if (pts.isEmpty) return 0;
-
-    double minX = pts.first.dx, maxX = pts.first.dx;
-    double minY = pts.first.dy, maxY = pts.first.dy;
-    for (final p in pts) {
-      minX = min(minX, p.dx); maxX = max(maxX, p.dx);
-      minY = min(minY, p.dy); maxY = max(maxY, p.dy);
-    }
-
-    final bbW = maxX - minX;
-    final bbH = maxY - minY;
-    final bbCx = (minX + maxX) / 2;
-    final bbCy = (minY + maxY) / 2;
-
-    // 1. Stroke count score – 1-5 strokes ideal
-    final sc = _strokes.length;
-    final int strokeScore;
-    if (sc == 0) {
-      strokeScore = 0;
-    } else if (sc == 1) {
-      strokeScore = 12;
-    } else if (sc <= 5) {
-      strokeScore = 25;
-    } else if (sc <= 8) {
-      strokeScore = (25 - (sc - 5) * 5).clamp(5, 25);
-    } else {
-      strokeScore = 5;
-    }
-
-    // 2. Centering score – strict: must be within 20% of center
-    final dxRatio = ((bbCx - _canvasW / 2) / _canvasW).abs();
-    final dyRatio = ((bbCy - _canvasH / 2) / _canvasH).abs();
-    final centerDist = (dxRatio + dyRatio) / 2; // 0=perfect
-    final centerScore = (40 * (1 - centerDist * 4.0)).clamp(0.0, 40.0).round();
-
-    // 3. Size quality – narrower ideal range (20%-55% of canvas)
-    final wRatio = bbW / _canvasW;
-    final hRatio = bbH / _canvasH;
-    final sizeRatio = (wRatio + hRatio) / 2;
-    final int sizeScore;
-    if (sizeRatio < 0.08) {
-      // Too tiny – very low score
-      sizeScore = (sizeRatio * 100).round().clamp(0, 10);
-    } else if (sizeRatio < 0.20) {
-      // Small – linear ramp
-      sizeScore = (10 + (sizeRatio - 0.08) * 200).round().clamp(10, 35);
-    } else if (sizeRatio <= 0.55) {
-      // Ideal zone – peak at 0.37
-      final dist = (sizeRatio - 0.37).abs();
-      sizeScore = (35 - dist * 80).clamp(10.0, 35.0).round();
-    } else {
-      // Too large
-      sizeScore = (35 - (sizeRatio - 0.55) * 70).clamp(5.0, 35.0).round();
-    }
-
-    return (strokeScore + centerScore + sizeScore).clamp(0, 100);
+    return HandwritingShapeJudge.score(
+      userStrokes: _strokes,
+      referenceStrokes: _reference,
+      canvasW: _canvasW,
+      canvasH: _canvasH,
+      strokeCountKnown: !_referenceIsRaster,
+    );
   }
 
   void _submit() {
