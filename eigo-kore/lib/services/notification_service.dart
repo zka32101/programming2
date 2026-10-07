@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_all.dart' as tzdata;
+import 'package:timezone/timezone.dart' as tz;
 import '../models/notification_model.dart';
 import 'logger_service.dart';
 
@@ -57,14 +59,30 @@ class NotificationService {
     try {
       await init();
       await _localNotifications.cancel(_dailyReminderId);
-      // 具体的な tz スケジューリングはアプリ全体の初期化フローに合わせて
-      // main.dart 側で tz データベースを初期化済みであることを前提とする。
-      // ここでは即時通知ベースのプレースホルダーとして日々のリマインダーを
-      // ローカル通知の定期チェックに委ねる（zonedSchedule は tz 依存のため
-      // 呼び出し側の初期化状況に合わせて拡張可能）。
-      LoggerService.error(
-        'scheduleDailyReminder configured for $hour:$minute',
-        tag: 'NotificationService',
+      // tz.local は初期化しないと使えない。日本向けアプリなので東京に固定
+      tzdata.initializeTimeZones();
+      tz.setLocalLocation(tz.getLocation('Asia/Tokyo'));
+      final now = tz.TZDateTime.now(tz.local);
+      var when =
+          tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+      if (when.isBefore(now)) when = when.add(const Duration(days: 1));
+      await _localNotifications.zonedSchedule(
+        _dailyReminderId,
+        '英語コレ！',
+        '今日の英語レッスンの時間だよ！',
+        when,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'daily_reminder_channel',
+            '毎日のリマインダー',
+            channelDescription: '毎日の学習をお知らせします',
+            importance: Importance.defaultImportance,
+          ),
+        ),
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
       );
     } catch (e) {
       LoggerService.error('Failed to schedule daily reminder', exception: e);

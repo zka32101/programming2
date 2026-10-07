@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 import '../data/morning_phrase_data.dart';
 
@@ -12,8 +13,12 @@ class MorningNotificationService {
   static const int _notificationId = 1;
 
   Future<void> initialize() async {
+    // tz.local は初期化しないと使えない。日本向けアプリなので東京に固定
+    tzdata.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Tokyo'));
+
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     const DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
@@ -86,7 +91,7 @@ class MorningNotificationService {
             presentSound: true,
           ),
         ),
-        androidScheduleMode: AndroidScheduleMode.exact,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.time,

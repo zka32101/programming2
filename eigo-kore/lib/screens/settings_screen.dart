@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/progress_provider.dart';
@@ -46,9 +47,12 @@ class SettingsScreen extends ConsumerWidget {
           _NotificationCard(settings: settings, ref: ref),
           _MorningEnglishCard(morningNotification: morningNotification, ref: ref),
 
-          AppSpacing.verticalSpacerMd,
-          _SectionHeader('AI キー設定'),
-          _ApiKeysCard(apiKeys: apiKeys, ref: ref),
+          // API キー入力は開発者向け。製品版では出さない
+          if (!kReleaseMode) ...[
+            AppSpacing.verticalSpacerMd,
+            _SectionHeader('AI キー設定'),
+            _ApiKeysCard(apiKeys: apiKeys, ref: ref),
+          ],
 
           AppSpacing.verticalSpacerMd,
           _SectionHeader('アカウント'),
@@ -107,12 +111,12 @@ class SettingsScreen extends ConsumerWidget {
             icon: Icons.info,
             color: AppColors.textMuted,
             label: 'アプリについて',
-            subtitle: 'バージョン 1.1.0',
+            subtitle: 'バージョン 3.1.1',
             onTap: () => showAboutDialog(
               context: context,
               applicationName: '英語コレ！',
-              applicationVersion: '1.1.0',
-              applicationLegalese: '© 2026 ',
+              applicationVersion: '3.1.1',
+              applicationLegalese: '© 2026 Petit Works Apps',
             ),
           ),
 
