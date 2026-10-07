@@ -6,7 +6,9 @@ import '../providers/settings_provider.dart';
 import '../providers/ai_api_key_provider.dart';
 import '../providers/morning_notification_provider.dart';
 import '../services/notification_service.dart';
+import 'package:cross_promo_kit/cross_promo_kit.dart' show CrossPromoSection;
 import '../design_system/design_system.dart';
+import '../widgets/parental_gate.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -114,6 +116,14 @@ class SettingsScreen extends ConsumerWidget {
               applicationVersion: '1.1.0',
               applicationLegalese: '© 2026 ',
             ),
+          ),
+
+          AppSpacing.verticalSpacerMd,
+          // 他アプリの紹介。ストアを開く前に保護者ゲート（子ども向けのため必須）
+          CrossPromoSection(
+            currentAppId: 'com.yourwish.shougakukore.eigo',
+            currentCategory: '小学コレ',
+            beforeOpenStore: (context) => requireParentalGate(context),
           ),
 
           AppSpacing.verticalSpacerXxl,
