@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/reading_passages_data.dart';
 import '../models/reading_passage_model.dart';
 import '../theme/app_theme.dart';
+import '../utils/shuffle_choices.dart';
 
 class SummaryTrainingScreen extends ConsumerStatefulWidget {
   final String passageId;
@@ -31,15 +32,23 @@ class _SummaryTrainingScreenState extends ConsumerState<SummaryTrainingScreen>
   int? _selectedStructureAnswer;
   bool _structureAnswered = false;
 
-  late final SummaryQuestionSet? _summarySet = summaryFor(widget.passageId);
-  late final List<ExpressionQuestion> _expressionQuestions = expressionQuestionsFor(widget.passageId);
+  late final SummaryQuestionSet? _summarySet = _shuffledSummary(summaryFor(widget.passageId));
+  late final List<ExpressionQuestion> _expressionQuestions = [
+    for (final q in expressionQuestionsFor(widget.passageId))
+      q.copyWith(meaningOptions: shuffledChoices(q.meaningOptions)),
+  ];
   late final TextStructureAnalysis? _structure = structureFor(widget.passageId);
   late final ComprehensionQuestion? _structureQuestion = _findStructureQuestion(widget.passageId);
 
   static ComprehensionQuestion? _findStructureQuestion(String passageId) {
     final matches = comprehensionQuestionsFor(passageId).where((q) => q.questionType == 'structure');
-    return matches.isEmpty ? null : matches.first;
+    if (matches.isEmpty) return null;
+    final q = matches.first;
+    return q.copyWith(choices: shuffledChoices(q.choices));
   }
+
+  static SummaryQuestionSet? _shuffledSummary(SummaryQuestionSet? s) =>
+      s?.copyWith(summaryOptions: shuffledChoices(s.summaryOptions));
 
   @override
   void initState() {

@@ -43,8 +43,8 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
             spacing: 8,
             runSpacing: 8,
             children: allAvatars.map((avatar) {
-              final avatarUnlock = ref.read(avatarUnlockProvider);
-              final isUnlocked = avatarUnlock[avatar.id] ?? false;
+                            final isUnlocked =
+                          ref.read(avatarUnlockProvider.notifier).isAvatarUnlocked(avatar.id);
             return GestureDetector(
               onTap: isUnlocked
                   ? () async {
@@ -53,7 +53,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                     }
                   : () => ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('ショップで購入するとつかえます！'),
+                          content: Text('コレショップでコインと交換するとつかえます！'),
                           duration: Duration(seconds: 1),
                         ),
                       ),
@@ -133,19 +133,19 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                     spacing: 8,
                     runSpacing: 8,
                     children: allAvatars.map((avatar) {
-                      final avatarUnlock = ref.read(avatarUnlockProvider);
-                      final isUnlocked = avatarUnlock[avatar.id] ?? false;
+                                            final isUnlocked =
+                          ref.read(avatarUnlockProvider.notifier).isAvatarUnlocked(avatar.id);
                       final selected = _selectedAvatarId == avatar.id;
                       return GestureDetector(
                         onTap: isUnlocked
                             ? () => setDialogState(() => _selectedAvatarId = avatar.id)
                             : () => ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('ショップで購入するとつかえます！'),
+                                    content: Text('コレショップでコインと交換するとつかえます！'),
                                     duration: Duration(seconds: 1),
                                   ),
                                 ),
-                        child: Stack(
+                        child: Column(mainAxisSize: MainAxisSize.min, children: [Stack(
                           children: [
                             Container(
                               width: 44,
@@ -173,6 +173,12 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                               ),
                           ],
                         ),
+                          if (!isUnlocked)
+                            Text('${avatar.coinCost ?? 0}コイン',
+                                style: const TextStyle(fontSize: 9, color: Colors.grey))
+                          else
+                            const SizedBox(height: 11),
+                        ]),
                       );
                     }).toList(),
                   );

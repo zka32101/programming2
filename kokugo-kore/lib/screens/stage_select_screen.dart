@@ -92,7 +92,9 @@ class _StageSelectScreenState extends ConsumerState<StageSelectScreen> {
                           .toList();
                       final idx = sameGroup.indexOf(stage);
                       final isLocked = idx > 0 &&
-                          !progress.isCleared(sameGroup[idx - 1].grade, sameGroup[idx - 1].stageNumber);
+                          premium.isStageOrderLocked(
+                              previousCleared: progress.isCleared(
+                                  sameGroup[idx - 1].grade, sameGroup[idx - 1].stageNumber));
                       final isPremiumLocked =
                           !premium.isPremium && !premium.isTrialActive &&
                           stage.stageNumber > kFreeStageLimit;

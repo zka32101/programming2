@@ -17,7 +17,9 @@ class AppConstants {
 
   // App info
   static const String appName = '国語コレ！';
-  static const String appVersion = '1.4.0';
+  /// pubspec.yaml の version（+ビルド番号の前）と一致させること。
+  /// test/app_version_test.dart が不一致を検出する。
+  static const String appVersion = '1.5.1';
 
   // Firebase collections
   static const String usersCollection = 'users';

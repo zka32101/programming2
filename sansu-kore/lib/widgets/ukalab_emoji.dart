@@ -35,6 +35,21 @@ class UkalabEmoji extends StatelessWidget {
     '📊': 'chart',
     '📅': 'calendar',
     '🎓': 'gradcap',
+    '💡': 'bulb',
+    '🪙': 'coin',
+    '❌': 'batsu',
+    '❤': 'heart',
+    '🚀': 'rocket',
+    '💪': 'muscle',
+    '🌱': 'sprout',
+    '📌': 'pin',
+    '📋': 'clipboard',
+    '⏱': 'timer',
+    '🔒': 'lock',
+    '🤖': 'robot',
+    '💬': 'chat',
+    '🎁': 'gift',
+    '🎮': 'gamepad',
   };
 
   /// 画像名を返す。置き換え対象でなければ null。

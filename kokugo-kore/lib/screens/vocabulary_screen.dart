@@ -6,6 +6,7 @@ import '../providers/vocab_mastery_provider.dart';
 
 import '../providers/premium_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/shuffle_choices.dart';
 
 class VocabQuestion {
   final String word;
@@ -1134,12 +1135,12 @@ class _RuntimeVQ {
   });
 
   static _RuntimeVQ from(VocabQuestion q) {
-    final correct = q.choices[q.correctIndex];
-    final shuffled = List.of(q.choices)..shuffle(math.Random());
+    final order = shuffledOrder(q.choices);
+    final shuffled = [for (final i in order) q.choices[i]];
     return _RuntimeVQ(
       original: q,
       shuffledChoices: shuffled,
-      shuffledCorrectIndex: shuffled.indexOf(correct),
+      shuffledCorrectIndex: order.indexOf(q.correctIndex),
     );
   }
 }

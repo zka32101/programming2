@@ -5,6 +5,7 @@ import '../data/reading_passages_data.dart';
 import '../models/reading_passage_model.dart';
 import '../providers/coin_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/shuffle_choices.dart';
 import 'summary_training_screen.dart';
 
 class ComprehensionQuizScreen extends ConsumerStatefulWidget {
@@ -38,7 +39,7 @@ class _ComprehensionQuizScreenState extends ConsumerState<ComprehensionQuizScree
   bool _rewarded = false;
 
   late final List<ComprehensionQuestion> _quiz =
-      comprehensionQuestionsFor(widget.passageId);
+      [for (final q in comprehensionQuestionsFor(widget.passageId)) q.copyWith(choices: shuffledChoices(q.choices))];
 
   @override
   Widget build(BuildContext context) {

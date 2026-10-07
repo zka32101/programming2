@@ -45,6 +45,16 @@ class PremiumState {
     this.isLoading = true,
   });
 
+  /// 無料トライアル中またはプレミアム中は、すべてのコンテンツ・ステージが遊べる。
+  bool get hasFullAccess => isPremium || isTrialActive;
+
+  /// ステージ順のロック（直前のステージ未クリア）。トライアル中・プレミアム中は適用しない。
+  bool isStageOrderLocked({required bool previousCleared}) =>
+      !hasFullAccess && !previousCleared;
+
+  /// 「プレミアム機能」の鍵アイコンを出すか（トライアル中・プレミアム中は出さない）。
+  bool showsPremiumLock(bool itemIsPremium) => itemIsPremium && !hasFullAccess;
+
   bool canAccessStage(int stageNumber) =>
       isPremium || isTrialActive || stageNumber <= kFreeStageLimit;
 
