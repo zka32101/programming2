@@ -33,6 +33,7 @@ int _score(String ch, List<List<Offset>> user) => HandwritingShapeJudge.score(
     canvasH: _h);
 
 void main() {
+  deviceTests();
   test('correct strokes pass (kana/kanji, with jitter)', () {
     for (final ch in ['あ', 'い', 'ア', 'き', '山', '校']) {
       final ref = HandwritingShapeJudge.referenceStrokes(ch)!;
@@ -100,5 +101,42 @@ void main() {
         userStrokes: u, referenceStrokes: ref, canvasW: _w, canvasH: _h, strokeCountKnown: false);
     expect(sc(good), greaterThanOrEqualTo(90));
     expect(sc(bad), lessThan(40));
+  });
+}
+
+// Regression: sparse touch input measured on a 1080x2400 device (canvas ~ x120..950, y575..1390).
+List<List<Offset>> _device(List<List<List<double>>> raw) => [
+      for (final s in raw)
+        [for (final p in s) Offset((p[0] - 120) / 830 * 280, (p[1] - 575) / 815 * 280)]
+    ];
+
+void deviceTests() {
+  final iStrokes = _device([
+    [[400, 700], [392, 800], [385, 900], [382, 1000], [395, 1100], [430, 1180], [500, 1190], [580, 1150]],
+    [[620, 820], [650, 920], [680, 1020], [700, 1100]],
+  ]);
+  test('device sparse い passes', () {
+    final s = _score('い', iStrokes);
+    // ignore: avoid_print
+    print('device い=$s');
+    expect(s, greaterThanOrEqualTo(80));
+  });
+  test('sparse (6 points/stroke) correct glyphs pass', () {
+    for (final ch in ['あ', 'い', 'ア', '山']) {
+      final ref = _scaled(HandwritingShapeJudge.referenceStrokes(ch)!);
+      final sparse = [
+        for (final s in ref)
+          [for (var i = 0; i < 6; i++) s[(i * (s.length - 1) / 5).round()]]
+      ];
+      expect(_score(ch, sparse), greaterThanOrEqualTo(80), reason: ch);
+    }
+  });
+  test('device asterisk fails on い', () {
+    final a = _device([
+      [[300, 700], [700, 1200]],
+      [[700, 700], [300, 1200]],
+      [[500, 650], [500, 1250]],
+    ]);
+    expect(_score('い', a), lessThan(40));
   });
 }

@@ -81,7 +81,18 @@ class HandwritingShapeJudge {
     // 書き漏れ(r→u)と余計な線(u→r)。悪い方も効かせる。
     final miss = _meanNearest(r, u), extra = _meanNearest(u, r);
     final dist = ((miss + extra) / 2) * 0.5 + max(miss, extra) * 0.5;
-    final shape = (100 * (1 - pow(dist / _tolerance, 1.5))).clamp(0.0, 100.0);
+
+    var d = dist;
+    var tol = _tolerance;
+    if (strokeCountKnown) {
+      // 画ごとの照合（弧長で等間隔に取り直して、対応する点どうしを比べる）。
+      final nu = _normalize(user), nr = _normalize(referenceStrokes);
+      d = 0.5 * _strokeWise(nu, nr) + 0.5 * dist * 2.0;
+      tol = _strokeTolerance;
+    }
+    final shape = strokeCountKnown
+        ? 100 / (1 + exp((d - 0.23) / 0.025))
+        : (100 * (1 - pow(d / tol, 1.5))).clamp(0.0, 100.0);
 
     var penalty = 0.0;
     if (strokeCountKnown) {
@@ -89,6 +100,62 @@ class HandwritingShapeJudge {
       penalty = diff * 12.0;
     }
     return (shape - penalty).clamp(0.0, 100.0).round();
+  }
+
+  static const double _strokeTolerance = 0.45;
+
+  static List<Offset> _arc(List<Offset> s, int n) {
+    if (s.length == 1) return List.filled(n, s.first);
+    final cum = <double>[0];
+    for (var i = 1; i < s.length; i++) {
+      cum.add(cum.last + (s[i] - s[i - 1]).distance);
+    }
+    final total = max(cum.last, 1e-9);
+    final out = <Offset>[];
+    var j = 0;
+    for (var k = 0; k < n; k++) {
+      final t = total * k / (n - 1);
+      while (j < s.length - 2 && cum[j + 1] < t) {
+        j++;
+      }
+      final seg = max(cum[j + 1] - cum[j], 1e-9);
+      out.add(Offset.lerp(s[j], s[j + 1], ((t - cum[j]) / seg).clamp(0.0, 1.0))!);
+    }
+    return out;
+  }
+
+  /// 各画どうしの平均距離。ユーザーの画ごとに、最も近い見本の画（順序・向き違いは少し減点）と比べ、
+  /// 見本の画が使われなかった分も不足として加える。
+  static double _strokeWise(List<List<Offset>> user, List<List<Offset>> ref) {
+    const n = 24;
+    final us = [for (final s in user) _arc(s, n)];
+    final rs = [for (final s in ref) _arc(s, n)];
+    double dist(List<Offset> a, List<Offset> b) {
+      var f = 0.0, r = 0.0;
+      for (var i = 0; i < n; i++) {
+        f += (a[i] - b[i]).distance;
+        r += (a[i] - b[n - 1 - i]).distance;
+      }
+      return min(f / n, r / n + 0.06);
+    }
+
+    var total = 0.0;
+    final used = <int>{};
+    for (var i = 0; i < us.length; i++) {
+      var best = double.infinity, bi = -1;
+      for (var j = 0; j < rs.length; j++) {
+        var d = dist(us[i], rs[j]);
+        if (j != i) d += 0.04; // 順番違いは軽く減点
+        if (d < best) {
+          best = d;
+          bi = j;
+        }
+      }
+      used.add(bi);
+      total += best;
+    }
+    final missing = rs.length - used.length;
+    return (total + missing * 0.4) / max(us.length, rs.length);
   }
 
   static double _meanNearest(List<Offset> from, List<Offset> to) {
@@ -115,12 +182,15 @@ class HandwritingShapeJudge {
       minY = min(minY, p.dy);
       maxY = max(maxY, p.dy);
     }
-    final side = max(max(maxX - minX, maxY - minY), 1e-6);
-    final ox = (1 - (maxX - minX) / side) / 2;
-    final oy = (1 - (maxY - minY) / side) / 2;
+    // 縦横それぞれを 0..1 に伸縮（外接四角どうしを揃える）。極端に細長い線は
+    // 片方の軸だけ伸びすぎないよう、短辺は長辺の 35% を下限にする。
+    final w = maxX - minX, h = maxY - minY;
+    final longSide = max(max(w, h), 1e-6);
+    final sw = max(w, longSide * 0.35), sh = max(h, longSide * 0.35);
+    final ox = (sw - w) / 2, oy = (sh - h) / 2;
     return [
       for (final s in strokes)
-        [for (final p in s) Offset((p.dx - minX) / side + ox, (p.dy - minY) / side + oy)],
+        [for (final p in s) Offset((p.dx - minX + ox) / sw, (p.dy - minY + oy) / sh)],
     ];
   }
 
