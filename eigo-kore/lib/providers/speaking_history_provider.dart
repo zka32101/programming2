@@ -78,8 +78,12 @@ class SpeakingHistoryState {
 
 class SpeakingHistoryNotifier extends StateNotifier<SpeakingHistoryState> {
   SpeakingHistoryNotifier() : super(const SpeakingHistoryState()) {
-    _load();
+    _ready = _load();
   }
+
+  // 読み込みが終わる前に addRecord すると、あとから読み込み結果で上書きされて
+  // 記録が消える(カレンダーに反映されない)ため、必ず読み込み完了を待つ
+  late final Future<void> _ready;
 
   static const _key = 'speaking_history';
 
@@ -146,6 +150,7 @@ class SpeakingHistoryNotifier extends StateNotifier<SpeakingHistoryState> {
     required int conversationCount,
     required double avgScore,
   }) async {
+    await _ready;
     final today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     final existing = state.records.where((r) =>
       r.date.year == today.year && r.date.month == today.month && r.date.day == today.day
@@ -174,10 +179,10 @@ class SpeakingHistoryNotifier extends StateNotifier<SpeakingHistoryState> {
       )];
     }
 
-    // 30日分のみ保持
+    // 約13か月分を保持（月カレンダーで前の月も見られるように）
     updated.sort((a, b) => a.date.compareTo(b.date));
-    if (updated.length > 30) {
-      updated = updated.sublist(updated.length - 30);
+    if (updated.length > 400) {
+      updated = updated.sublist(updated.length - 400);
     }
 
     state = SpeakingHistoryState(records: updated);

@@ -32,10 +32,6 @@ class SettingsScreen extends ConsumerWidget {
           _PlanBadgeCard(premium: premium),
           AppSpacing.verticalSpacerMd,
 
-          // 子どもの名前
-          _ChildNameCard(settings: settings, ref: ref),
-          AppSpacing.verticalSpacerMd,
-
           _SectionHeader('学習設定'),
           _SoundToggle(settings: settings, ref: ref),
           _TTSSpeedCard(settings: settings, ref: ref),
@@ -194,55 +190,6 @@ class _PlanBadgeCard extends StatelessWidget {
 
 // ─── Child Name ───────────────────────────────────────────
 
-class _ChildNameCard extends StatelessWidget {
-  final AppSettings settings;
-  final WidgetRef ref;
-  const _ChildNameCard({required this.settings, required this.ref});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: const Icon(Icons.child_care, color: AppColors.primary),
-        title: const Text('子どもの名前'),
-        subtitle: Text(
-          settings.childName.isEmpty ? '未設定（タップして設定）' : settings.childName,
-          style: TextStyle(color: settings.childName.isEmpty ? AppColors.textMuted : AppColors.textPrimary),
-        ),
-        trailing: const Icon(Icons.edit, color: AppColors.textMuted, size: 18),
-        onTap: () => _showNameDialog(context),
-      ),
-    );
-  }
-
-  void _showNameDialog(BuildContext context) {
-    final ctrl = TextEditingController(text: settings.childName);
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('子どもの名前を設定'),
-        content: TextField(
-          controller: ctrl,
-          decoration: const InputDecoration(
-            hintText: '例: たろう',
-            border: OutlineInputBorder(),
-          ),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('キャンセル')),
-          ElevatedButton(
-            onPressed: () {
-              ref.read(settingsProvider.notifier).setChildName(ctrl.text.trim());
-              Navigator.pop(ctx);
-            },
-            child: const Text('保存'),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 // ─── Sound Toggle ───────────────────────────────────────────
 
