@@ -5,6 +5,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import '../data/stage_data.dart';
 import '../providers/pronunciation_provider.dart';
 import '../models/stage.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class PronunciationCheckScreen extends ConsumerStatefulWidget {
   final Stage stage;
@@ -195,10 +196,7 @@ class _PronunciationCheckScreenState
                               'あなたの発音: ${result.userPronunciation}',
                               style: AppTypography.bodySmall,
                             ),
-                            Text(
-                              result.feedbackEmoji,
-                              style: const TextStyle(fontSize: 24),
-                            ),
+                            UkalabEmoji(result.feedbackEmoji, size: 24),
                           ],
                         ),
                         AppSpacing.verticalSpacerXs,

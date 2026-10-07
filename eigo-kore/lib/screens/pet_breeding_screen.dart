@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/pet_model.dart';
 import '../providers/pet_provider.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class PetBreedingScreen extends ConsumerStatefulWidget {
   const PetBreedingScreen({super.key});
@@ -151,10 +152,7 @@ class _PetBreedingScreenState extends ConsumerState<PetBreedingScreen> with Sing
           // ペットアニメーション表示
           ScaleTransition(
             scale: Tween<double>(begin: 1.0, end: 1.1).animate(_petAnimationController),
-            child: Text(
-              pet.emoji,
-              style: const TextStyle(fontSize: 96),
-            ),
+            child: UkalabEmoji(pet.emoji, size: 96),
           ),
           AppSpacing.verticalSpacerMd,
           Text(
@@ -423,7 +421,7 @@ class _PetCreationDialogState extends State<_PetCreationDialog> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(emoji, style: const TextStyle(fontSize: 32)),
+                        UkalabEmoji(emoji, size: 32),
                         Text(name, style: AppTypography.labelSmall),
                       ],
                     ),

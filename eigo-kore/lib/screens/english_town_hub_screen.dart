@@ -13,6 +13,7 @@ import 'english_town_leaderboard_realtime_screen.dart';
 import 'english_town_notifications_screen.dart';
 import 'english_town_activity_feed_screen.dart';
 import '../widgets/notification_bell_widget.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// English-Only Town Hub Screen
 ///
@@ -269,10 +270,7 @@ class _EnglishTownHubScreenState extends ConsumerState<EnglishTownHubScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                location.emoji,
-                style: const TextStyle(fontSize: 48),
-              ),
+              UkalabEmoji(location.emoji, size: 48),
               SizedBox(height: AppSpacing.sm),
               Text(
                 location.name,
@@ -374,7 +372,7 @@ class _EnglishTownHubScreenState extends ConsumerState<EnglishTownHubScreen>
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Text(npc.emoji, style: const TextStyle(fontSize: 24)),
+                child: UkalabEmoji(npc.emoji, size: 24),
               ),
             ),
             title: Text(npc.name, style: AppTypography.titleSmall),

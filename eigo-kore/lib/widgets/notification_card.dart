@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/notification_model.dart';
 import '../models/notification_model.dart' as notif_model;
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class NotificationCard extends StatelessWidget {
   final notif_model.Notification notification;
@@ -38,10 +39,7 @@ class NotificationCard extends StatelessWidget {
                   color: _getPriorityColor().withOpacity(0.2),
                 ),
                 child: Center(
-                  child: Text(
-                    notification.typeEmoji,
-                    style: const TextStyle(fontSize: 28),
-                  ),
+                  child: UkalabEmoji(notification.typeEmoji, size: 28),
                 ),
               ),
               AppSpacing.horizontalSpacerMd,

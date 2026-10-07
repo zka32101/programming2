@@ -6,6 +6,7 @@ import '../models/badge_challenge_model.dart';
 import '../models/badge_progress_model.dart';
 import '../providers/badge_provider.dart';
 import '../theme/app_theme.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 /// バッジコレクションチャレンジ表示ウィジェット
 class BadgeCollectionChallenges extends ConsumerWidget {
@@ -363,7 +364,7 @@ class BadgeCollectionStats extends ConsumerWidget {
   }) {
     return Column(
       children: [
-        Text(icon, style: const TextStyle(fontSize: 18)),
+        UkalabEmoji(icon, size: 18),
         const SizedBox(height: 4),
         Text(
           value,

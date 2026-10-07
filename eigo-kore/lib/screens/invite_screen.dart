@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/coin_provider.dart';
 import '../providers/progress_provider.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class InviteScreen extends ConsumerStatefulWidget {
   const InviteScreen({super.key});
@@ -282,7 +283,7 @@ class _BenefitRow extends StatelessWidget {
     padding: EdgeInsets.only(top: AppSpacing.xs),
     child: Row(
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 18)),
+        UkalabEmoji(emoji, size: 18),
         AppSpacing.horizontalSpacerXs,
         Text(text, style: AppTypography.bodySmall.copyWith(color: AppColors.textPrimary)),
       ],

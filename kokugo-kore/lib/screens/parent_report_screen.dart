@@ -9,6 +9,7 @@ import '../models/quest_model.dart';
 import '../providers/progress_provider.dart';
 import '../providers/profile_provider.dart';
 import '../theme/app_theme.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 class ParentReportScreen extends ConsumerWidget {
   const ParentReportScreen({super.key});
@@ -210,7 +211,7 @@ class _GridCell extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 22)),
+          UkalabEmoji(emoji, size: 22),
           const SizedBox(width: 8),
           Expanded(
             child: Column(

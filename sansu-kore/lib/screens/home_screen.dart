@@ -18,6 +18,7 @@ import '../screens/daily_bonus_screen.dart';
 import '../screens/math_guide_screen.dart';
 import '../theme/app_theme.dart';
 import '../utils/grade_utils.dart';
+import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 
 AppShopItem? _findShopItem(List<AppShopItem> items, String? id) {
   if (id == null) return null;
@@ -306,7 +307,7 @@ class _StatCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 22)),
+            UkalabEmoji(emoji, size: 22),
             const SizedBox(height: 4),
             Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color)),
             Text(label, style: const TextStyle(fontSize: 10, color: kTextMuted)),
@@ -518,7 +519,7 @@ class _RecentBadgesSection extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Text(e.badge.emoji, style: const TextStyle(fontSize: 24)),
+                      UkalabEmoji(e.badge.emoji, size: 24),
                       const SizedBox(height: 4),
                       Text(
                         e.badge.title,

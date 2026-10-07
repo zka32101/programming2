@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/purchase_model.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -223,7 +224,7 @@ class _RewardBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(icon, style: const TextStyle(fontSize: 14)),
+          UkalabEmoji(icon, size: 14),
           const SizedBox(width: 4),
           Text(
             label,

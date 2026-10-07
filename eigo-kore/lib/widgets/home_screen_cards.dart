@@ -2,6 +2,7 @@ import '../design_system/design_system.dart';
 import '../theme/component_styles.dart';
 import 'package:flutter/material.dart';
 import '../models/stage.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// ホーム画面用の改善されたカードコンポーネント
 /// 新しいデザイン設計トークンを使用
@@ -128,7 +129,7 @@ class ImprovedStatCard extends StatelessWidget {
           padding: AppSpacing.allPaddingMd,
           child: Column(
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 28)),
+              UkalabEmoji(emoji, size: 28),
               AppSpacing.verticalSpacerSm,
               Text(
                 value,

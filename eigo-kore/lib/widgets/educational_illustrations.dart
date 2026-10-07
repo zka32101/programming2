@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// Custom SVG-based illustrations for educational content
 /// All illustrations are created specifically and are commercially usable
@@ -501,7 +502,7 @@ class LearningMethodCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 32)),
+          UkalabEmoji(emoji, size: 32),
           const SizedBox(height: 8),
           Text(
             title,

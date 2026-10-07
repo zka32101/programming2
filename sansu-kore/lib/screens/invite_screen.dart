@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import '../providers/profile_provider.dart';
 import '../theme/app_theme.dart';
+import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 
 class InviteScreen extends ConsumerStatefulWidget {
   const InviteScreen({super.key});
@@ -336,7 +337,7 @@ class _BonusCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 28)),
+          UkalabEmoji(icon, size: 28),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

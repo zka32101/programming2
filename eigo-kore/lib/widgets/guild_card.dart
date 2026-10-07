@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/guild.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// Widget for displaying a guild card
 class GuildCard extends StatelessWidget {
@@ -32,10 +33,7 @@ class GuildCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    guild.icon,
-                    style: const TextStyle(fontSize: 40),
-                  ),
+                  UkalabEmoji(guild.icon, size: 40),
                   _TierBadge(tier: guild.tier),
                 ],
               ),

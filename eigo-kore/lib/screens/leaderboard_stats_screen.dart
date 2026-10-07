@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/leaderboard_model.dart';
 import '../providers/leaderboard_provider.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// Display leaderboard statistics and analytics
 class LeaderboardStatsScreen extends ConsumerWidget {
@@ -178,7 +179,7 @@ class _TopPerformerCard extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            Text(medal, style: const TextStyle(fontSize: 24)),
+            UkalabEmoji(medal, size: 24),
             const SizedBox(width: 12),
             Expanded(
               child: Column(

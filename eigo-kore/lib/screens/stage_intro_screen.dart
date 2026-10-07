@@ -4,6 +4,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import '../data/stage_intro_data.dart';
 import '../models/stage.dart';
 import '../widgets/educational_illustrations.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class StageIntroScreen extends StatefulWidget {
   final Stage stage;
@@ -224,7 +225,7 @@ class _VocabChip extends StatelessWidget {
                     border: Border.all(color: const Color(0xFFE3F2FD), width: 1),
                   ),
                   child: Center(
-                    child: Text(vocab.emoji, style: const TextStyle(fontSize: 24)),
+                    child: UkalabEmoji(vocab.emoji, size: 24),
                   ),
                 ),
               ),

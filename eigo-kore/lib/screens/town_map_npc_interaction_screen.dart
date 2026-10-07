@@ -5,6 +5,7 @@ import 'package:eigo_kore/models/english_town_model.dart';
 import 'package:eigo_kore/providers/town_npc_location_provider.dart';
 import 'package:eigo_kore/widgets/town_map_npc_widget.dart';
 import 'package:eigo_kore/screens/npc_dialogue_screen.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// タウンマップNPC相互作用スクリーン
 class TownMapNPCInteractionScreen extends ConsumerStatefulWidget {
@@ -276,10 +277,7 @@ class NPCListItem extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
-        leading: Text(
-          npc.emoji,
-          style: const TextStyle(fontSize: 24),
-        ),
+        leading: UkalabEmoji(npc.emoji, size: 24),
         title: Text(npc.name),
         subtitle: Text(npc.profession),
         trailing: const Icon(Icons.arrow_forward),
@@ -352,10 +350,7 @@ class NPCDialogueModalScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      npcLocation.emoji,
-                      style: const TextStyle(fontSize: 64),
-                    ),
+                    UkalabEmoji(npcLocation.emoji, size: 64),
                     const SizedBox(height: 16),
                     Text(
                       npcLocation.name,

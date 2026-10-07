@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/premium_provider.dart';
 import '../theme/app_theme.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 class PremiumGate extends ConsumerWidget {
   final String featureName;
@@ -62,7 +63,7 @@ class PremiumLockedScreen extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Center(
-                  child: Text(featureEmoji, style: const TextStyle(fontSize: 40)),
+                  child: UkalabEmoji(featureEmoji, size: 40),
                 ),
               ),
               const SizedBox(height: 8),

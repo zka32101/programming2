@@ -1,6 +1,7 @@
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import '../providers/level_provider.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// XP バーウィジェット（compact/full 両対応）
 class XpBar extends StatelessWidget {
@@ -67,7 +68,7 @@ class _FullXpBar extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(level.rankEmoji, style: const TextStyle(fontSize: 22)),
+                    UkalabEmoji(level.rankEmoji, size: 22),
                     const SizedBox(width: 8),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +151,7 @@ class LevelUpOverlay extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(rankEmoji, style: const TextStyle(fontSize: 64)),
+                  UkalabEmoji(rankEmoji, size: 64),
                   const SizedBox(height: 12),
                   const Text(
                     'レベルアップ！',

@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 Future<void> showAppIntroDialog(BuildContext context) {
   return showDialog(
@@ -97,7 +98,7 @@ class _IntroFeature extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 20)),
+        UkalabEmoji(emoji, size: 20),
         const SizedBox(width: 12),
         Expanded(
           child: Column(

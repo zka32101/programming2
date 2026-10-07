@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/camera_scan_model.dart';
 import '../providers/camera_scan_provider.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class CameraScanScreen extends ConsumerWidget {
   const CameraScanScreen({super.key});
@@ -210,7 +211,7 @@ class _CameraSelectItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 40)),
+            UkalabEmoji(emoji, size: 40),
             AppSpacing.verticalSpacerSm,
             Text(label, style: AppTypography.labelSmall),
           ],
@@ -730,7 +731,7 @@ class _CategoryChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(category.icon, style: const TextStyle(fontSize: 20)),
+            UkalabEmoji(category.icon, size: 20),
             AppSpacing.horizontalSpacerSm,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -772,7 +773,7 @@ class _CategoryItemsSheet extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(category.icon, style: const TextStyle(fontSize: 28)),
+              UkalabEmoji(category.icon, size: 28),
               AppSpacing.horizontalSpacerMd,
               Expanded(
                 child: Text(

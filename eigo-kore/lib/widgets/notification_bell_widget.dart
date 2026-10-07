@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/english_town_notification_provider.dart';
 import '../services/english_town_notification_service.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// Notification bell widget for app bar
 class NotificationBell extends ConsumerWidget {
@@ -112,10 +113,7 @@ class NotificationItemWidget extends ConsumerWidget {
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Text(
-                  emoji,
-                  style: const TextStyle(fontSize: 24),
-                ),
+                child: UkalabEmoji(emoji, size: 24),
               ),
             ),
             title: Text(

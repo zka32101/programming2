@@ -13,6 +13,7 @@ import '../screens/avatar_selection_screen.dart';
 import '../screens/customization_screen.dart';
 import '../theme/app_theme.dart';
 import '../utils/grade_utils.dart';
+import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -271,7 +272,7 @@ class _SettingCard extends StatelessWidget {
                   backgroundImage: AssetImage(leadingImage!),
                 )
               else
-                Text(emoji, style: const TextStyle(fontSize: 24)),
+                UkalabEmoji(emoji, size: 24),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(

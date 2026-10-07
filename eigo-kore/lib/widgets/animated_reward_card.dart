@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/english_town_advanced.dart';
 import '../services/english_town_animation_service.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// Animated reward card widget for XP and coin display
 class AnimatedRewardCard extends StatefulWidget {
@@ -100,10 +101,7 @@ class _AnimatedRewardCardState extends State<AnimatedRewardCard>
         ),
         child: Column(
           children: [
-            Text(
-              widget.emoji,
-              style: const TextStyle(fontSize: 36),
-            ),
+            UkalabEmoji(widget.emoji, size: 36),
             SizedBox(height: AppSpacing.sm),
             Text(
               widget.label,

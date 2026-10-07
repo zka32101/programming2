@@ -5,6 +5,7 @@ import '../models/english_town_model.dart';
 import '../providers/english_town_provider.dart';
 import '../theme/app_theme.dart';
 import '../design_system/app_colors.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class EnglishTownScreen extends ConsumerStatefulWidget {
   const EnglishTownScreen({super.key});
@@ -240,7 +241,7 @@ class _EnglishTownScreenState extends ConsumerState<EnglishTownScreen>
             ),
             const SizedBox(height: 8),
             ...npcs.map((npc) => ListTile(
-              leading: Text(npc.emoji, style: const TextStyle(fontSize: 24)),
+              leading: UkalabEmoji(npc.emoji, size: 24),
               title: Text(npc.name),
               subtitle: Text(npc.profession),
               onTap: () {
@@ -291,7 +292,7 @@ class _EnglishTownScreenState extends ConsumerState<EnglishTownScreen>
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
           child: ListTile(
-            leading: Text(npc.emoji, style: const TextStyle(fontSize: 32)),
+            leading: UkalabEmoji(npc.emoji, size: 32),
             title: Text(npc.name),
             subtitle: Text(npc.profession),
             trailing: Text(
@@ -315,7 +316,7 @@ class _EnglishTownScreenState extends ConsumerState<EnglishTownScreen>
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Text(npc.emoji, style: const TextStyle(fontSize: 32)),
+            UkalabEmoji(npc.emoji, size: 32),
             const SizedBox(width: 8),
             Expanded(child: Text(npc.name)),
           ],
@@ -421,7 +422,7 @@ class _EnglishTownScreenState extends ConsumerState<EnglishTownScreen>
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
           child: ListTile(
-            leading: Text(npc.emoji, style: const TextStyle(fontSize: 24)),
+            leading: UkalabEmoji(npc.emoji, size: 24),
             title: Text('${npc.name} - ${conv.responseScore}点'),
             subtitle: Text(
               DateFormat('yyyy/MM/dd HH:mm').format(conv.conversationAt),
@@ -543,7 +544,7 @@ class _EnglishTownScreenState extends ConsumerState<EnglishTownScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 32)),
+            UkalabEmoji(emoji, size: 32),
             const SizedBox(height: 8),
             Text(value, style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 4),

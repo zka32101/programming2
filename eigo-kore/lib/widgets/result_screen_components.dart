@@ -7,6 +7,7 @@ import '../theme/sizes.dart';
 import '../theme/spacing.dart';
 import '../theme/typography.dart';
 import '../design_system/app_colors.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// 結果画面用の改善されたコンポーネント
 
@@ -44,7 +45,7 @@ class ImprovedResultHeader extends StatelessWidget {
         padding: AppSpacing.allPaddingLg,
         child: Column(
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 64)),
+            UkalabEmoji(emoji, size: 64),
             AppSpacing.verticalSpacerMd,
             Text(
               message,
@@ -195,7 +196,7 @@ class ImprovedSkillResultCard extends StatelessWidget {
         padding: AppSpacing.allPaddingMd,
         child: Column(
           children: [
-            Text(icon, style: const TextStyle(fontSize: 24)),
+            UkalabEmoji(icon, size: 24),
             AppSpacing.verticalSpacerSm,
             Text(
               value,
@@ -253,10 +254,7 @@ class ImprovedNewBadgesCard extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      b.emoji,
-                      style: const TextStyle(fontSize: 40),
-                    ),
+                    UkalabEmoji(b.emoji, size: 40),
                     AppSpacing.verticalSpacerSm,
                     Text(
                       b.title,

@@ -29,6 +29,7 @@ import '../providers/profile_provider.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_intro_dialog.dart';
 import 'detailed_analytics_screen.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 const _appVersion = '1.4.0';
 
@@ -722,7 +723,7 @@ class _UsageItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 18)),
+          UkalabEmoji(emoji, size: 18),
           const SizedBox(width: 8),
           Expanded(
             child: Column(

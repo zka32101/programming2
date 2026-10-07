@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/pet_model.dart';
 import '../design_system/design_system.dart';
 import '../providers/pet_provider.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// ペットケア・インタラクション画面
 class PetInteractionScreen extends ConsumerStatefulWidget {
@@ -236,10 +237,7 @@ class _PetDisplayArea extends StatelessWidget {
           child: Column(
             children: [
               // 絵文字
-              Text(
-                pet.emoji,
-                style: const TextStyle(fontSize: 120),
-              ),
+              UkalabEmoji(pet.emoji, size: 120),
               AppSpacing.verticalSpacerMd,
               // 名前
               Text(
@@ -335,7 +333,7 @@ class _StatusRow extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(icon, style: const TextStyle(fontSize: 24)),
+            UkalabEmoji(icon, size: 24),
             AppSpacing.horizontalSpacerMd,
             Text(label),
           ],
@@ -379,7 +377,7 @@ class _StatusProgressRow extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(icon, style: const TextStyle(fontSize: 20)),
+                UkalabEmoji(icon, size: 20),
                 AppSpacing.horizontalSpacerMd,
                 Text(label),
               ],
@@ -455,10 +453,7 @@ class _InteractionActionCardState extends State<_InteractionActionCard> {
               padding: AppSpacing.allPaddingMd,
               child: Row(
                 children: [
-                  Text(
-                    widget.icon,
-                    style: const TextStyle(fontSize: 48),
-                  ),
+                  UkalabEmoji(widget.icon, size: 48),
                   AppSpacing.horizontalSpacerMd,
                   Expanded(
                     child: Column(

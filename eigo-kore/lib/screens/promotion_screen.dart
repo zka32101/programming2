@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/promotion_model.dart';
 import '../providers/promotion_provider.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class PromotionScreen extends ConsumerStatefulWidget {
   const PromotionScreen({super.key});
@@ -570,7 +571,7 @@ class _StatCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(icon, style: const TextStyle(fontSize: 24)),
+          UkalabEmoji(icon, size: 24),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -8,6 +8,7 @@ import '../providers/purchased_items_provider.dart';
 import '../providers/avatar_unlock_provider.dart';
 import '../theme/app_theme.dart';
 import 'character_unlock_dialog.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 bool _isEquippable(AppShopItem item) => item.kind != ShopItemKind.emoji;
 
@@ -201,8 +202,7 @@ class _KokugoLevelUpCard extends ConsumerWidget {
                 else
                   Padding(
                       padding: const EdgeInsets.all(4),
-                      child: Text(character.emoji,
-                          style: const TextStyle(fontSize: 40))),
+                      child: UkalabEmoji(character.emoji, size: 40)),
                 if (state.hasSparkle)
                   const Text('✨', style: TextStyle(fontSize: 12)),
               ],
@@ -379,7 +379,7 @@ class _ExchangeTab extends ConsumerWidget {
                         height: 28,
                         child: SvgPicture.asset(item.assetPath!, fit: BoxFit.contain),
                       )
-                    : Text(item.emoji, style: const TextStyle(fontSize: 28)),
+                    : UkalabEmoji(item.emoji, size: 28),
                 title: Text(item.name),
                 subtitle: Text(item.description, maxLines: 1, overflow: TextOverflow.ellipsis),
                 trailing: owned
@@ -490,7 +490,7 @@ class _SeasonalTab extends ConsumerWidget {
         else
           ...items.map((item) {
             return ListTile(
-              leading: Text(item.emoji, style: const TextStyle(fontSize: 28)),
+              leading: UkalabEmoji(item.emoji, size: 28),
               title: Text(item.name),
               subtitle: Text(item.description, maxLines: 1, overflow: TextOverflow.ellipsis),
             );

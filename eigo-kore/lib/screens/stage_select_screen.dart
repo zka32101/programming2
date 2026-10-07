@@ -4,6 +4,7 @@ import '../data/stage_data.dart';
 import '../models/stage.dart';
 import '../providers/progress_provider.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// 改善されたステージ選択画面
 /// GridView を使用した 2 列/3 列レスポンシブレイアウト
@@ -223,10 +224,7 @@ class _ImprovedStageCardState extends State<ImprovedStageCard> {
                   child: Center(
                     child: widget.isLocked
                         ? const Icon(Icons.lock, color: AppColors.textMuted, size: 20)
-                        : Text(
-                            widget.stage.emoji,
-                            style: const TextStyle(fontSize: 28),
-                          ),
+                        : UkalabEmoji(widget.stage.emoji, size: 28),
                   ),
                 ),
 

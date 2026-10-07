@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_core/shared_core.dart' hide kTextMuted;
 
 import '../theme/app_theme.dart';
+import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 Future<void> showCharacterUnlockDialog(
   BuildContext context,
@@ -53,8 +54,7 @@ Future<void> showCharacterUnlockDialog(
                 child: character.imageAsset != null
                     ? Image.asset(character.imageAsset!, fit: BoxFit.contain)
                     : Center(
-                        child: Text(character.emoji,
-                            style: const TextStyle(fontSize: 56)),
+                        child: UkalabEmoji(character.emoji, size: 56),
                       ),
               ),
             ),

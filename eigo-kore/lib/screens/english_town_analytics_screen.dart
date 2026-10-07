@@ -6,6 +6,7 @@ import '../providers/english_town_provider.dart';
 import '../providers/english_town_rewards_provider.dart';
 import '../providers/english_town_polish_provider.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 /// Engagement Analytics Screen
 ///
@@ -209,7 +210,7 @@ class EnglishTownAnalyticsScreen extends ConsumerWidget {
       ),
       child: Column(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 24)),
+          UkalabEmoji(icon, size: 24),
           SizedBox(height: AppSpacing.xs),
           Text(
             label,
@@ -445,10 +446,7 @@ class EnglishTownAnalyticsScreen extends ConsumerWidget {
           SizedBox(height: AppSpacing.md),
           Row(
             children: [
-              Text(
-                recommendedNPC.emoji,
-                style: const TextStyle(fontSize: 48),
-              ),
+              UkalabEmoji(recommendedNPC.emoji, size: 48),
               SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/analytics_model.dart';
 import '../providers/user_profile_provider.dart';
 import '../design_system/design_system.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class AnalyticsScreen extends ConsumerWidget {
   const AnalyticsScreen({super.key});
@@ -454,7 +455,7 @@ class _StatCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(icon, style: const TextStyle(fontSize: 24)),
+          UkalabEmoji(icon, size: 24),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

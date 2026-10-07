@@ -8,6 +8,7 @@ import '../providers/progress_provider.dart';
 import '../providers/speaking_history_provider.dart';
 import '../providers/weakness_provider.dart';
 import '../widgets/xp_bar.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class WeeklyReportScreen extends ConsumerWidget {
   const WeeklyReportScreen({super.key});
@@ -139,7 +140,7 @@ class _SummaryCell extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 4),
         child: Column(
           children: [
-            Text(icon, style: const TextStyle(fontSize: 22)),
+            UkalabEmoji(icon, size: 22),
             AppSpacing.verticalSpacerXs,
             Text(value, style: AppTypography.labelLarge.copyWith(fontWeight: FontWeight.bold, color: color)),
             Text(label, style: AppTypography.bodySmall.copyWith(color: AppColors.textMuted, fontSize: 11)),
@@ -376,7 +377,7 @@ class _ImprovementCard extends StatelessWidget {
         padding: AppSpacing.allPaddingMd,
         child: Row(
           children: [
-            Text(icon, style: const TextStyle(fontSize: 36)),
+            UkalabEmoji(icon, size: 36),
             AppSpacing.horizontalSpacerXs,
             Expanded(
               child: Column(

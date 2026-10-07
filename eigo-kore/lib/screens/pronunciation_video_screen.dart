@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/pronunciation_video_model.dart';
 import '../providers/pronunciation_video_provider.dart';
+import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
 class PronunciationVideoScreen extends ConsumerStatefulWidget {
   const PronunciationVideoScreen({super.key});
@@ -469,10 +470,7 @@ class _ComparisonVideoCardState extends ConsumerState<_ComparisonVideoCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        emoji,
-                        style: const TextStyle(fontSize: 28),
-                      ),
+                      UkalabEmoji(emoji, size: 28),
                       AppSpacing.verticalSpacerXs,
                       Text(
                         levelText,
@@ -955,10 +953,7 @@ class _MilestonesSection extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Text(
-                    milestone.icon,
-                    style: const TextStyle(fontSize: 32),
-                  ),
+                  UkalabEmoji(milestone.icon, size: 32),
                   AppSpacing.horizontalSpacerMd,
                   Expanded(
                     child: Column(

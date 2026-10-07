@@ -13,6 +13,7 @@ import '../providers/adaptive_provider.dart';
 import '../services/notification_service.dart';
 import '../theme/app_theme.dart';
 import '../utils/grade_utils.dart';
+import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 
 class ResultScreen extends ConsumerStatefulWidget {
   final QuestResult result;
@@ -263,7 +264,7 @@ class _ScoreDisplay extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 64)),
+          UkalabEmoji(emoji, size: 64),
           const SizedBox(height: 12),
           Text(message, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: kTextDark)),
           const SizedBox(height: 20),
@@ -383,7 +384,7 @@ class _NewBadgesSection extends StatelessWidget {
             children: badges.map((b) => Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(b.emoji, style: const TextStyle(fontSize: 36)),
+                UkalabEmoji(b.emoji, size: 36),
                 const SizedBox(height: 4),
                 Text(b.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
               ],
