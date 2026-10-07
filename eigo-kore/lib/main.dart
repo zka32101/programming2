@@ -147,6 +147,25 @@ class EigoKoreApp extends ConsumerWidget {
       theme: buildAppTheme(),
       darkTheme: buildDarkAppTheme(),
       debugShowCheckedModeBanner: false,
+      // Android 15+ のエッジ・ツー・エッジで、下のナビゲーションバーに隠れる
+      // （スコアバー等が見切れる）のを全画面でまとめて防ぐ
+      builder: (context, child) {
+        final mq = MediaQuery.of(context);
+        final bottom =
+            (mq.viewPadding.bottom - mq.viewInsets.bottom).clamp(0.0, double.infinity);
+        return ColoredBox(
+          color: Theme.of(context).colorScheme.surface,
+          child: MediaQuery(
+            data: mq.removePadding(removeBottom: true).copyWith(
+                  viewPadding: mq.viewPadding.copyWith(bottom: 0),
+                ),
+            child: Padding(
+              padding: EdgeInsets.only(bottom: bottom),
+              child: child,
+            ),
+          ),
+        );
+      },
       initialRoute: '/',
       routes: {
         '/': (context) => hasProfiles ? const RootShell() : const ProfileSelectScreen(),

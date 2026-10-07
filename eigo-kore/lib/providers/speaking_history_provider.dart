@@ -86,16 +86,48 @@ class SpeakingHistoryNotifier extends StateNotifier<SpeakingHistoryState> {
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_key);
-    if (raw == null) { _initDemoData(); return; }
+    if (raw == null) {
+      await prefs.setBool('speaking_history_demo_purged_v1', true);
+      _initDemoData();
+      return;
+    }
     try {
       final list = (jsonDecode(raw) as List)
           .map((e) => DailySpeakingRecord.fromJson(e as Map<String, dynamic>))
           .toList();
+      // 旧バージョンが初回起動時に作っていた架空の記録を一度だけ取り除く
+      const flag = 'speaking_history_demo_purged_v1';
+      if (prefs.getBool(flag) != true) {
+        final demo = _demoPattern();
+        final cleaned = list
+            .where((r) => !demo.any((d) =>
+                d.wordCount == r.wordCount &&
+                d.phraseCount == r.phraseCount &&
+                d.conversationCount == r.conversationCount &&
+                d.avgScore == r.avgScore))
+            .toList();
+        await prefs.setBool(flag, true);
+        state = SpeakingHistoryState(records: cleaned);
+        if (cleaned.length != list.length) await _save();
+        return;
+      }
       state = SpeakingHistoryState(records: list);
     } catch (_) {
       _initDemoData();
     }
   }
+
+  // 旧バージョンの架空記録（値の組）。移行時の判定にだけ使う
+  List<DailySpeakingRecord> _demoPattern() => List.generate(14, (i) {
+        final baseScore = 62.0 + i * 2.0 + (i % 3 == 0 ? -3 : 2);
+        return DailySpeakingRecord(
+          date: DateTime.now(),
+          wordCount: 5 + (i % 4) * 2,
+          phraseCount: 3 + (i % 3),
+          conversationCount: i > 6 ? 1 + (i % 2) : 0,
+          avgScore: baseScore.clamp(50, 95).toDouble(),
+        );
+      });
 
   // 初回起動時は記録なし（実際に練習した分だけが親ダッシュボードに出る）
   void _initDemoData() {
