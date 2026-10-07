@@ -1,7 +1,13 @@
 ﻿import '../models/quest_model.dart';
+import '../utils/shuffle_choices.dart';
 
 // 学年別・ステージ別クイズデータ
 List<Stage> getStagesForGrade(int grade) {
+  // 元データは正解位置が偏っているため、取得のたびに選択肢をシャッフルして正解を付け替える
+  return withShuffledStages(_stagesForGrade(grade));
+}
+
+List<Stage> _stagesForGrade(int grade) {
   switch (grade) {
     case 1: return _grade1Stages;
     case 2: return _grade2Stages;
