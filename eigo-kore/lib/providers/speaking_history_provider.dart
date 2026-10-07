@@ -97,22 +97,9 @@ class SpeakingHistoryNotifier extends StateNotifier<SpeakingHistoryState> {
     }
   }
 
-  // デモデータ（初回起動時）
+  // 初回起動時は記録なし（実際に練習した分だけが親ダッシュボードに出る）
   void _initDemoData() {
-    final now = DateTime.now();
-    final demo = List.generate(14, (i) {
-      final date = now.subtract(Duration(days: 13 - i));
-      final baseScore = 62.0 + i * 2.0 + (i % 3 == 0 ? -3 : 2);
-      return DailySpeakingRecord(
-        date: date,
-        wordCount: 5 + (i % 4) * 2,
-        phraseCount: 3 + (i % 3),
-        conversationCount: i > 6 ? 1 + (i % 2) : 0,
-        avgScore: baseScore.clamp(50, 95),
-      );
-    });
-    state = SpeakingHistoryState(records: demo);
-    _save();
+    state = const SpeakingHistoryState(records: []);
   }
 
   Future<void> _save() async {
