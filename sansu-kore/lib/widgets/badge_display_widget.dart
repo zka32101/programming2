@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_core/shared_core.dart';
-import 'package:sansu_kore/widgets/ukalab_emoji.dart';
+import 'package:sansu_kore/widgets/badge_emblem.dart';
 
 /// バッジ表示用の再利用可能ウィジェット集
 
@@ -144,7 +144,7 @@ class _BadgeCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          UkalabEmoji(badge.emoji, size: 32),
+          BadgeEmblem(badgeId: badge.id, fallbackEmoji: badge.emoji, size: 40),
           SizedBox(height: 6),
           Text(
             badge.title,
@@ -264,7 +264,7 @@ class BadgeCollectionView extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              UkalabEmoji(badge.emoji, size: 64),
+              BadgeEmblem(badgeId: badge.id, fallbackEmoji: badge.emoji, size: 80),
               SizedBox(height: 12),
               Text(
                 badge.title,
@@ -355,7 +355,7 @@ class _BadgeCollectionCard extends StatelessWidget {
             Center(
               child: Opacity(
                 opacity: isEarned ? 1.0 : 0.5,
-                child: UkalabEmoji(badge.emoji, size: 32),
+                child: BadgeEmblem(badgeId: badge.id, fallbackEmoji: badge.emoji, size: 40),
               ),
             ),
 
@@ -431,7 +431,7 @@ class BadgeProgressBar extends StatelessWidget {
       child: Row(
         children: [
           // バッジアイコン
-          UkalabEmoji(badge.emoji, size: 24),
+          BadgeEmblem(badgeId: badge.id, fallbackEmoji: badge.emoji, size: 30),
           SizedBox(width: 12),
 
           // 詳細
