@@ -1,4 +1,5 @@
 import '../widgets/avatar_view.dart';
+import 'package:eigo_kore/widgets/badge_emblem.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/stage_data.dart';
@@ -516,7 +517,7 @@ class _RecentBadges extends StatelessWidget {
                 spacing: 8,
                 children: recent.map((b) => Column(
                   children: [
-                    Text(b.badge.emoji, style: TextStyle(fontSize: AppTypography.displayMedium.fontSize)),
+                    BadgeEmblem(badgeId: b.badge.id, fallbackEmoji: b.badge.emoji, size: 36),
                     Text(b.badge.title, style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
                   ],
                 )).toList(),
