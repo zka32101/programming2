@@ -19,6 +19,7 @@ import '../screens/math_guide_screen.dart';
 import '../theme/app_theme.dart';
 import '../utils/grade_utils.dart';
 import 'package:sansu_kore/widgets/ukalab_emoji.dart';
+import 'package:sansu_kore/widgets/badge_emblem.dart';
 
 AppShopItem? _findShopItem(List<AppShopItem> items, String? id) {
   if (id == null) return null;
@@ -519,7 +520,7 @@ class _RecentBadgesSection extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      UkalabEmoji(e.badge.emoji, size: 24),
+                      BadgeEmblem(badgeId: e.badge.id, fallbackEmoji: e.badge.emoji, size: 30),
                       const SizedBox(height: 4),
                       Text(
                         e.badge.title,

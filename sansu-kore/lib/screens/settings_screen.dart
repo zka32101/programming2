@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_core/shared_core.dart' show AnalyticsDashboard, ParentalGateService;
 import 'package:cross_promo_kit/cross_promo_kit.dart' show CrossPromoSection;
 import '../providers/profile_provider.dart';
@@ -200,15 +199,6 @@ class _SettingsTabContent extends ConsumerWidget {
             onTap: () => Navigator.of(context).pushNamed('/privacy'),
           ),
           const SizedBox(height: 8),
-          _SettingCard(
-            emoji: '📱',
-            title: '他のアプリを見る',
-            subtitle: '小学コレ！シリーズの他の教科アプリを紹介します',
-            onTap: () => launchUrl(
-              Uri.parse('https://sites.google.com/view/yourwishapps'),
-              mode: LaunchMode.externalApplication,
-            ),
-          ),
           const SizedBox(height: 16),
           CrossPromoSection(
             currentAppId: 'com.yourwish.shougakukore.sansu',

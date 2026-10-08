@@ -3,6 +3,7 @@ import 'package:shared_core/models/badge_model.dart';
 
 import '../theme/app_theme.dart';
 import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
+import 'package:kokugo_kore/widgets/badge_emblem.dart';
 
 class BadgeWidget extends StatelessWidget {
   final EarnedBadge earnedBadge;
@@ -109,6 +110,14 @@ class _BadgeIconImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (BadgeEmblem.emblemOf(badgeId) != null) {
+      return SizedBox(
+        width: 64,
+        height: 64,
+        child: BadgeEmblem(badgeId: badgeId, fallbackEmoji: fallbackEmoji, size: 64),
+      );
+    }
+
     final imagePath = 'packages/shared_core/assets/badge_icons/badge_$badgeId.jpg';
 
     return SizedBox(
