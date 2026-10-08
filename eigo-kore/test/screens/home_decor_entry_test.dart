@@ -30,7 +30,7 @@ void main() {
     // テスト用フォントでヘッダーが数px溢れる既存の描画警告は本テストの対象外。
     tester.takeException();
 
-    final btn = find.text('👕 きせかえ\nショップ');
+    final btn = find.text('👕 きせかえショップ');
     await tester.scrollUntilVisible(btn, 200,
         scrollable: find.byType(Scrollable).first);
     expect(btn, findsOneWidget);
