@@ -51,7 +51,7 @@ class DetailedAnalyticsScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withAlpha(25),
+        color: Color.alphaBlend(color.withAlpha(25), Colors.white), // 背景の絵が透けないよう不透明に
         border: Border.all(color: color.withAlpha(100)),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -98,7 +98,7 @@ class DetailedAnalyticsScreen extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: kAccentTeal.withAlpha(25),
+        color: Color.alphaBlend(kAccentTeal.withAlpha(25), Colors.white),
         border: Border.all(color: kAccentTeal.withAlpha(100)),
         borderRadius: BorderRadius.circular(8),
       ),

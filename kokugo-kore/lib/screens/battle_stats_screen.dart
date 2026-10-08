@@ -77,7 +77,7 @@ class BattleStatsScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withAlpha(25),
+        color: Color.alphaBlend(color.withAlpha(25), Colors.white), // 背景の絵が透けないよう不透明に
         border: Border.all(color: color.withAlpha(100)),
         borderRadius: BorderRadius.circular(12),
       ),
