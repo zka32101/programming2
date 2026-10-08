@@ -41,7 +41,7 @@ void main() {
       expect(File(i.asset).existsSync(), true, reason: i.asset);
       expect(File(i.thumb).existsSync(), true, reason: i.thumb);
     }
-    expect(kDecorItems.length, 22);
+    expect(kDecorItems.length, 23);
     expect(ids.contains('bg_eigo'), true);
   });
 

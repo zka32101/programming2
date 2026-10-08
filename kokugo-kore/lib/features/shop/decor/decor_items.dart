@@ -63,6 +63,7 @@ const List<DecorItem> kDecorItems = [
   DecorItem(id: 'dc_frame_ribbon', name: 'リボンフレーム', description: 'かわいいリボンのふち', kind: DecorKind.frame, coinCost: 250),
   DecorItem(id: 'dc_frame_star', name: 'スターフレーム', description: 'キラキラ星のふち', kind: DecorKind.frame, coinCost: 250),
   DecorItem(id: 'dc_frame_party', name: 'お祝いフレーム', description: '風船とはたのふち', kind: DecorKind.frame, coinCost: 250),
+  DecorItem(id: 'dc_frame_kokugo', name: 'こくごのフレーム', description: 'げんこう用紙とえんぴつのかざり', kind: DecorKind.frame, coinCost: 250),
   // ── フレーム（季節） ──
   DecorItem(id: 'dc_frame_entrance', name: '入学式フレーム', description: '桜とランドセルのふち', kind: DecorKind.frame, coinCost: 200, season: 'spring'),
   DecorItem(id: 'dc_frame_book', name: '読書フレーム', description: '本と紅葉のふち', kind: DecorKind.frame, coinCost: 200, season: 'autumn'),
