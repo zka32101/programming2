@@ -73,7 +73,13 @@ class _ProfileSelectScreenState extends ConsumerState<ProfileSelectScreen> {
             // Header
             Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: AppSpacing.lg, horizontal: AppSpacing.md),
+              // ステータスバーの高さぶん上を空ける(時計・電池と見出しが重ならないように)
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppSpacing.lg + MediaQuery.of(context).padding.top,
+                AppSpacing.md,
+                AppSpacing.lg,
+              ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [const Color(0xFF378ADD), const Color(0xFF1E5BA8)],
