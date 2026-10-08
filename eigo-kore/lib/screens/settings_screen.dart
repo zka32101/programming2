@@ -1,3 +1,4 @@
+import 'package:eigo_kore/features/shop/decor/decor_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/progress_provider.dart';
@@ -434,9 +435,19 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: AppSpacing.xs, left: AppSpacing.xs, top: AppSpacing.xs),
-      child: Text(
-        title,
-        style: AppTypography.labelMedium.copyWith(color: AppColors.textMuted),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          decoration: BoxDecoration(
+            color: DecorScope.chipBg(context),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            title,
+            style: AppTypography.labelMedium.copyWith(color: AppColors.textMuted),
+          ),
+        ),
       ),
     );
   }
