@@ -25,15 +25,15 @@ class BrandedSplashBody extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(26),
+                      borderRadius: BorderRadius.circular(40),
                       child: Image.asset(
                         kSplashAppIconAsset,
-                        width: 112,
-                        height: 112,
+                        width: 168,
+                        height: 168,
                         fit: BoxFit.cover,
                       ),
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 20),
                     const SizedBox(
                       width: 24,
                       height: 24,
@@ -46,10 +46,10 @@ class BrandedSplashBody extends StatelessWidget {
                 ),
               ),
             ),
-            Image.asset(kSplashSeriesLogoAsset, width: 180, fit: BoxFit.contain),
+            Image.asset(kSplashSeriesLogoAsset, width: 260, fit: BoxFit.contain),
+            const SizedBox(height: 16),
+            Image.asset(kSplashOrgLogoAsset, height: 84, fit: BoxFit.contain),
             const SizedBox(height: 20),
-            Image.asset(kSplashOrgLogoAsset, width: 52, height: 52, fit: BoxFit.contain),
-            const SizedBox(height: 24),
           ],
         ),
       ),
