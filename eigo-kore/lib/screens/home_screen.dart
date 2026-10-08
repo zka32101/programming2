@@ -324,7 +324,7 @@ class _QuickActions extends StatelessWidget {
               AppSpacing.horizontalSpacerXs,
               _QuickBtn('🎭 キャラ\n図鑑', AppColors.accentPink, '/character-collection'),
               AppSpacing.horizontalSpacerXs,
-              const Expanded(child: SizedBox.shrink()),
+              _QuickBtn('👕 きせかえ\nショップ', AppColors.accentPurple, '/decor-shop'),
             ],
           ),
         ],
