@@ -119,7 +119,9 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                           width: _avatar == a.id ? 3 : 1,
                         ),
                       ),
-                      child: AvatarView(a.id, size: 64, circle: false),
+                      child: FittedBox(
+                        child: AvatarView(a.id, size: 64, circle: false),
+                      ),
                     ),
                     if (!_owned(a))
                       Container(
@@ -127,13 +129,16 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                           borderRadius: BorderRadius.circular(AppSizes.borderRadius),
                           color: Colors.black.withAlpha(110),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.lock, color: Colors.white, size: 18),
-                            Text('🪙 ${a.price}',
-                                style: const TextStyle(color: Colors.white, fontSize: 12)),
-                          ],
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.lock, color: Colors.white, size: 18),
+                              Text('🪙 ${a.price}',
+                                  style: const TextStyle(color: Colors.white, fontSize: 12)),
+                            ],
+                          ),
                         ),
                       ),
                   ],

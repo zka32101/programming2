@@ -163,12 +163,13 @@ class _PlanBadgeCard extends StatelessWidget {
                 children: [
                   Text(
                     '現在のプラン: ${_planLabel(premium)}',
-                    style: AppTypography.labelLarge,
+                    // カードは明色背景のため、暗いテーマでも読める濃色を明示
+                    style: AppTypography.labelLarge.copyWith(color: AppColors.textPrimary),
                   ),
                   if (isFree)
                     Text(
                       premium.isTrialActive ? '無料期間 のこり${premium.trialDaysLeft}日' : '無料期間は終了しました',
-                      style: AppTypography.bodySmall.copyWith(color: AppColors.accentOrange),
+                      style: AppTypography.bodySmall.copyWith(color: const Color(0xFFB45309)),
                     ),
                 ],
               ),
