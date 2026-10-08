@@ -1,16 +1,12 @@
+import 'package:eigo_kore/widgets/branded_splash.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sansu_kore/screens/splash_screen.dart';
 
 void main() {
-  testWidgets('スプラッシュにアプリ画像・シリーズロゴ・組織ロゴが出て背景は白', (tester) async {
-    TestWidgetsFlutterBinding.ensureInitialized();
+  testWidgets('起動画面: アプリ画像・シリーズロゴ・組織ロゴが出て背景は白', (tester) async {
     await tester.pumpWidget(
-      const ProviderScope(child: MaterialApp(home: SplashScreen())),
+      const MaterialApp(home: Scaffold(body: BrandedSplashBody())),
     );
-    await tester.pump(const Duration(milliseconds: 1300));
-
     final paths = tester
         .widgetList<Image>(find.byType(Image))
         .map((i) => (i.image as AssetImage).assetName)
@@ -18,8 +14,8 @@ void main() {
     expect(paths, contains('assets/branding/app_icon.png'));
     expect(paths, contains('assets/branding/series_logo.png'));
     expect(paths, contains('assets/branding/yourwish_logo.png'));
-    expect(tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
-        const Color(0xFFFFFFFF));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    final box = tester.widget<ColoredBox>(find.descendant(of: find.byType(BrandedSplashBody), matching: find.byType(ColoredBox)).first);
+    expect(box.color, const Color(0xFFFFFFFF));
   });
 }
