@@ -36,7 +36,7 @@ void main() {
       expect(File(i.asset).existsSync(), true, reason: i.asset);
       expect(File(i.thumb).existsSync(), true, reason: i.thumb);
     }
-    expect(kDecorItems.length, 18);
+    expect(kDecorItems.length, 22);
   });
 
   test('算数の既存の商品(テーマ色・背景・称号)とIDが重ならない', () {
