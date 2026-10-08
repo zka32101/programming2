@@ -81,6 +81,9 @@ const _seasonalItemsArchive = <String, List<AppShopItem>>{
 
 /// 小学コレ！算数版ショップ。
 /// レイアウト・購入ロジックはすべて [CoinShopPage] に委譲する。
+/// 「きせかえ」FAB(高さ56)+下余白16+余裕16。交換所リスト末尾にこの高さの余白を足す。
+const double kShopFabClearance = 56 + 16 + 16;
+
 class ShopScreen extends StatelessWidget {
   const ShopScreen({super.key});
 
@@ -92,6 +95,8 @@ class ShopScreen extends StatelessWidget {
           characters: kSansuCharacters,
           exchangeItems: [...kCustomizationShopItems, ...decorExchangeItems()],
           seasonalItems: decorSeasonalItems(),
+          // 右下の「きせかえ」ボタン(高さ56)に最下段の「購入」が隠れないよう余白を足す
+          listBottomPadding: kShopFabClearance,
         ),
         // 買った背景・フレーム・エフェクトをえらんでつける画面へ
         Positioned(

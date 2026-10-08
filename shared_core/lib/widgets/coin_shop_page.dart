@@ -35,11 +35,16 @@ class CoinShopPage extends StatelessWidget {
   final List<AppShopItem> exchangeItems;
   final Map<String, List<AppShopItem>> seasonalItems;
 
+  /// 交換所・期間限定リストの最下段の余白。画面に重ねるボタン(FAB)で
+  /// 最下段の「購入」が隠れないよう、呼び出し側がFAB高+16px以上を渡す。
+  final double listBottomPadding;
+
   const CoinShopPage({
     super.key,
     required this.characters,
     required this.exchangeItems,
     required this.seasonalItems,
+    this.listBottomPadding = 16,
   });
 
   @override
@@ -70,8 +75,8 @@ class CoinShopPage extends StatelessWidget {
         body: TabBarView(
           children: [
             _CharacterLevelUpTab(characters: characters),
-            _ExchangeTab(items: exchangeItems),
-            _SeasonalTab(seasonalItems: seasonalItems),
+            _ExchangeTab(items: exchangeItems, bottomPadding: listBottomPadding),
+            _SeasonalTab(seasonalItems: seasonalItems, bottomPadding: listBottomPadding),
           ],
         ),
       ),
@@ -375,8 +380,9 @@ class _LevelUpCard extends ConsumerWidget {
 
 class _ExchangeTab extends ConsumerWidget {
   final List<AppShopItem> items;
+  final double bottomPadding;
 
-  const _ExchangeTab({required this.items});
+  const _ExchangeTab({required this.items, this.bottomPadding = 16});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -389,7 +395,7 @@ class _ExchangeTab extends ConsumerWidget {
     }
 
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.fromLTRB(16, 16, 16, bottomPadding),
       children: [
         Container(
           padding: const EdgeInsets.all(12),
@@ -449,8 +455,9 @@ class _ExchangeTab extends ConsumerWidget {
 
 class _SeasonalTab extends ConsumerWidget {
   final Map<String, List<AppShopItem>> seasonalItems;
+  final double bottomPadding;
 
-  const _SeasonalTab({required this.seasonalItems});
+  const _SeasonalTab({required this.seasonalItems, this.bottomPadding = 16});
 
   static const _seasonLabel = {
     'spring': '🌸 春の限定アイテム',
@@ -474,7 +481,7 @@ class _SeasonalTab extends ConsumerWidget {
     final coins = ref.watch(coinProvider).totalCoins;
 
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.fromLTRB(16, 16, 16, bottomPadding),
       children: [
         Container(
           padding: const EdgeInsets.all(16),
