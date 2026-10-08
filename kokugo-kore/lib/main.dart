@@ -96,6 +96,7 @@ import 'screens/yojijukugo_quiz_screen.dart';
 import 'screens/synonym_antonym_quiz_screen.dart';
 import 'services/kokugo_purchase_service.dart';
 import 'widgets/premium_gate.dart';
+import 'features/shop/decor/decor_scope.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -298,6 +299,7 @@ class KokugoKoreApp extends ConsumerWidget {
       darkTheme: buildDarkAppTheme(),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
+      builder: (context, child) => DecorBackdrop(child: child ?? const SizedBox.shrink()),
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),

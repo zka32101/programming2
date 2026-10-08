@@ -8,6 +8,7 @@ import '../providers/profile_provider.dart';
 import '../providers/profile_avatar_provider.dart';
 import '../providers/avatar_unlock_provider.dart';
 import '../theme/app_theme.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class ProfileSelectionScreen extends ConsumerStatefulWidget {
   const ProfileSelectionScreen({super.key});
@@ -267,9 +268,12 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                 return Card(
                   margin: const EdgeInsets.only(bottom: 12),
                   child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: kPrimaryColor.withAlpha(30),
-                      child: AvatarImage(avatar: avatarModel, size: 40),
+                    leading: DecorFrame(
+                      size: 40,
+                      child: CircleAvatar(
+                        backgroundColor: kPrimaryColor.withAlpha(30),
+                        child: AvatarImage(avatar: avatarModel, size: 40),
+                      ),
                     ),
                     title: Text(profile.name),
                     subtitle: Text('${profile.grade}年生'),

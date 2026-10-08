@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/kana_data.dart';
 import '../theme/app_theme.dart';
 import '../providers/premium_provider.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class _StudyItem {
   final String emoji;
@@ -190,7 +191,7 @@ class StudyMenuScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      backgroundColor: kBgLight,
+      backgroundColor: DecorScope.pageBg(context, kBgLight),
       body: Column(
         children: [
           Expanded(

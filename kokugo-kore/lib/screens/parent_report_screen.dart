@@ -11,6 +11,7 @@ import '../providers/profile_provider.dart';
 import '../theme/app_theme.dart';
 import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_scope.dart';
 class ParentReportScreen extends ConsumerWidget {
   const ParentReportScreen({super.key});
 
@@ -32,7 +33,7 @@ class ParentReportScreen extends ConsumerWidget {
         .toList();
 
     return Scaffold(
-      backgroundColor: kBgLight,
+      backgroundColor: DecorScope.pageBg(context, kBgLight),
       appBar: AppBar(
         title: const Text('保護者向けレポート'),
         backgroundColor: const Color(0xFF2C3E50),
