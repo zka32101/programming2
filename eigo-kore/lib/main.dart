@@ -52,6 +52,7 @@ import 'screens/pet_breeding_screen.dart';
 import 'screens/teacher_mode_screen.dart';
 import 'screens/learning_pace_screen.dart';
 import 'screens/character_collection_screen.dart';
+import 'features/shop/decor/decor_shop_screen.dart';
 import 'screens/ad_settings_screen.dart';
 import 'screens/profile_management_screen.dart';
 import 'screens/leaderboard_screen.dart';
@@ -181,6 +182,7 @@ class EigoKoreApp extends ConsumerWidget {
         '/teacher-mode': (context) => const TeacherModeScreen(),
         '/learning-pace': (context) => const LearningPaceScreen(),
         '/character-collection': (context) => const CharacterCollectionScreen(),
+        '/decor-shop': (context) => const DecorShopScreen(),
         '/ad-settings': (context) => const AdSettingsScreen(),
         '/profile-management': (context) => const ProfileManagementScreen(),
         '/leaderboard': (context) => const LeaderboardScreen(),
