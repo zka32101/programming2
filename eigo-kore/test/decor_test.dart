@@ -6,6 +6,7 @@ import 'package:eigo_kore/features/shop/decor/decor_provider.dart';
 import 'package:eigo_kore/features/shop/decor/decor_screen.dart';
 import 'package:eigo_kore/features/shop/decor/decor_scope.dart';
 import 'package:eigo_kore/features/shop/decor/decor_shop_screen.dart';
+import 'package:eigo_kore/widgets/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -167,6 +168,28 @@ void main() {
     await tester.pump();
     expect(find.byType(Image), findsOneWidget);
     expect(find.text('こんにちは'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('AvatarView: decorated のときだけ、装着中のフレームを重ねる(小さすぎるときは出さない)', (tester) async {
+    final frame = kDecorItems.firstWhere((i) => i.id.startsWith('frame_'));
+    final c = (await tester.runAsync(() => _container(owned: {frame.id})))!;
+    await tester.runAsync(() => c.read(decorProvider.notifier).equip(frame));
+    Widget app(Widget w) => UncontrolledProviderScope(
+          container: c,
+          child: MaterialApp(builder: (context, child) => DecorBackdrop(child: child!), home: Scaffold(body: Center(child: w))),
+        );
+    bool hasFrame() => find.byWidgetPredicate((w) => w is Image && w.image is AssetImage && (w.image as AssetImage).assetName == frame.asset).evaluate().isNotEmpty;
+
+    await tester.pumpWidget(app(const AvatarView('avatar_1', size: 72, decorated: true)));
+    await tester.pump();
+    expect(hasFrame(), true);
+    await tester.pumpWidget(app(const AvatarView('avatar_1', size: 72)));
+    await tester.pump();
+    expect(hasFrame(), false);
+    await tester.pumpWidget(app(const AvatarView('avatar_1', size: 20, decorated: true)));
+    await tester.pump();
+    expect(hasFrame(), false);
     expect(tester.takeException(), isNull);
   });
 }

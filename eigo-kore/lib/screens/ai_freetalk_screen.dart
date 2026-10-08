@@ -113,7 +113,7 @@ class _AiFreetalkScreenState extends ConsumerState<AiFreetalkScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AvatarView(currentUser?.avatar ?? 'avatar_1', size: 72),
+                        AvatarView(currentUser?.avatar ?? 'avatar_1', size: 72, decorated: true),
                         AppSpacing.verticalSpacerXs,
                         Text(
                           currentUser?.name ?? 'フレンド',
