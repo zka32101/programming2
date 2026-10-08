@@ -40,7 +40,7 @@ void main() {
       expect(File(i.asset).existsSync(), true, reason: i.asset);
       expect(File(i.thumb).existsSync(), true, reason: i.thumb);
     }
-    expect(kDecorItems.length, 22);
+    expect(kDecorItems.length, 23);
   });
 
   test('国語の既存の背景テーマIDと重ならない', () {
