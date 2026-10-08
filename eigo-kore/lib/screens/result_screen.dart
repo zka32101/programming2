@@ -8,6 +8,7 @@ import '../models/stage.dart';
 import '../providers/level_provider.dart';
 import '../widgets/xp_bar.dart';
 import '../widgets/result_screen_components.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class ResultScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> args;
@@ -75,7 +76,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     final level = ref.watch(levelProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         automaticallyImplyLeading: false,

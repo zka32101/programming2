@@ -9,6 +9,7 @@ import '../theme/sizes.dart';
 import '../theme/typography.dart';
 import '../design_system/app_colors.dart';
 import '../widgets/educational_illustrations.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class VocabularyScreen extends ConsumerStatefulWidget {
   const VocabularyScreen({super.key});
@@ -62,7 +63,7 @@ class _VocabularyScreenState extends ConsumerState<VocabularyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         title: const Text('📖 単語カード'),

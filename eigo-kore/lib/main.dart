@@ -87,6 +87,7 @@ import 'services/firebase_service.dart';
 import 'providers/morning_notification_provider.dart';
 import 'providers/coin_provider.dart';
 import 'providers/user_profile_provider.dart';
+import 'features/shop/decor/decor_scope.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -146,6 +147,7 @@ class EigoKoreApp extends ConsumerWidget {
       theme: buildAppTheme(),
       darkTheme: buildDarkAppTheme(),
       debugShowCheckedModeBanner: false,
+      builder: (context, child) => DecorBackdrop(child: child ?? const SizedBox.shrink()),
       initialRoute: '/',
       routes: {
         '/': (context) => hasProfiles ? const RootShell() : const ProfileSelectScreen(),

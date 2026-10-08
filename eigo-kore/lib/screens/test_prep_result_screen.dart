@@ -5,6 +5,7 @@ import '../theme/spacing.dart';
 import '../theme/sizes.dart';
 import '../theme/typography.dart';
 import '../design_system/app_colors.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class TestPrepResultScreen extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -51,7 +52,7 @@ class _TestPrepResultScreenState extends State<TestPrepResultScreen> {
     final color = isPassed ? AppColors.accentGreen : AppColors.accentOrange;
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         backgroundColor: AppColors.error,
         automaticallyImplyLeading: false,
