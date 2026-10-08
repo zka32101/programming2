@@ -9,7 +9,9 @@ import 'package:sansu_kore/features/shop/decor/decor_items.dart';
 import 'package:sansu_kore/features/shop/decor/decor_provider.dart';
 import 'package:sansu_kore/features/shop/decor/decor_screen.dart';
 import 'package:sansu_kore/features/shop/decor/decor_scope.dart';
-import 'package:shared_core/shared_core.dart' show inventoryProvider;
+import 'package:sansu_kore/providers/character_provider.dart';
+import 'package:sansu_kore/screens/shop_screen.dart';
+import 'package:shared_core/shared_core.dart' show characterStateProvider, inventoryProvider;
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 所持品(shared_inventory)と保存済みのきせかえを SharedPreferences に入れて、読み込み済みのコンテナを返す。
@@ -168,5 +170,58 @@ void main() {
       home: DecorScope(hasBackground: false, frameAsset: 'assets/shop/frame_star.webp', child: DecorFrame(size: 28, child: SizedBox())),
     ));
     expect(find.byType(Image), findsOneWidget);
+  });
+
+  testWidgets('波エフェクト: 画面高の12%以下・半透明で、タップを通し、下の内容を隠さない', (tester) async {
+    tester.view.physicalSize = const Size(400, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    final c = (await tester.runAsync(() => _container(owned: {'effect_waves'})))!;
+    await tester.runAsync(() => c.read(decorProvider.notifier).equip(decorItemById('effect_waves')!));
+    var taps = 0;
+    await tester.pumpWidget(UncontrolledProviderScope(
+      container: c,
+      child: MaterialApp(
+        builder: (context, child) => DecorBackdrop(child: child!),
+        home: Scaffold(
+          body: Align(
+            alignment: Alignment.bottomCenter,
+            child: TextButton(onPressed: () => taps++, child: const Text('した')),
+          ),
+        ),
+      ),
+    ));
+    await tester.pump();
+    await tester.pump();
+    final fx = find.byKey(const ValueKey('decor_waves_opacity'));
+    expect(fx, findsOneWidget);
+    expect(tester.widget<Opacity>(fx).opacity, lessThanOrEqualTo(0.6));
+    expect(tester.getSize(find.ancestor(of: fx, matching: find.byType(SizedBox)).first).height, lessThanOrEqualTo(800 * 0.12 + 0.01));
+    await tester.tap(find.text('した'));
+    expect(taps, 1);
+  });
+
+  testWidgets('ショップ交換所: 最下段の購入ボタンが「きせかえ」ボタンの上までスクロールできる', (tester) async {
+    tester.view.physicalSize = const Size(400, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    SharedPreferences.setMockInitialValues({});
+    await tester.pumpWidget(ProviderScope(
+      overrides: [characterStateProvider.overrideWith(CharacterNotifier.new)],
+      child: const MaterialApp(home: Scaffold(body: ShopScreen())),
+    ));
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.tap(find.text('交換所'));
+    await tester.pumpAndSettle();
+    final sc = tester.state<ScrollableState>(find.byType(Scrollable).last);
+    for (var i = 0; i < 5; i++) {
+      sc.position.jumpTo(sc.position.maxScrollExtent);
+      await tester.pumpAndSettle();
+    }
+    await tester.pumpAndSettle();
+    final fabTop = tester.getTopLeft(find.byType(FloatingActionButton)).dy;
+    final lastBottom = tester.getBottomLeft(find.byType(ElevatedButton).last).dy;
+    expect(lastBottom, lessThanOrEqualTo(fabTop), reason: '最下段のボタンがFABに隠れる');
+    expect(kShopFabClearance, greaterThanOrEqualTo(56 + 16));
   });
 }

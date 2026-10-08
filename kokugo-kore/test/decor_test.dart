@@ -198,4 +198,33 @@ void main() {
     ));
     expect(find.byType(Image), findsOneWidget);
   });
+
+  testWidgets('波エフェクト: 画面高の12%以下・半透明で、タップを通し、下の内容を隠さない', (tester) async {
+    tester.view.physicalSize = const Size(400, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    final c = (await tester.runAsync(() => _container(owned: {'dc_effect_waves'})))!;
+    await tester.runAsync(() => c.read(decorProvider.notifier).equip(decorItemById('dc_effect_waves')!));
+    var taps = 0;
+    await tester.pumpWidget(UncontrolledProviderScope(
+      container: c,
+      child: MaterialApp(
+        builder: (context, child) => DecorBackdrop(child: child!),
+        home: Scaffold(
+          body: Align(
+            alignment: Alignment.bottomCenter,
+            child: TextButton(onPressed: () => taps++, child: const Text('した')),
+          ),
+        ),
+      ),
+    ));
+    await tester.pump();
+    await tester.pump();
+    final fx = find.byKey(const ValueKey('decor_waves_opacity'));
+    expect(fx, findsOneWidget);
+    expect(tester.widget<Opacity>(fx).opacity, lessThanOrEqualTo(0.6));
+    expect(tester.getSize(find.ancestor(of: fx, matching: find.byType(SizedBox)).first).height, lessThanOrEqualTo(800 * 0.12 + 0.01));
+    await tester.tap(find.text('した'));
+    expect(taps, 1);
+  });
 }
