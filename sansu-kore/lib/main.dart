@@ -34,6 +34,7 @@ import 'screens/analysis_dashboard_screen.dart';
 import 'screens/avatar_selection_screen.dart';
 import 'services/sansu_purchase_service.dart';
 import 'theme/app_theme.dart';
+import 'features/shop/decor/decor_scope.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,6 +88,7 @@ class SansuKoreApp extends ConsumerWidget {
       title: '小学コレ！算数',
       theme: buildSansuTheme(),
       debugShowCheckedModeBanner: false,
+      builder: (context, child) => DecorBackdrop(child: child ?? const SizedBox.shrink()),
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),

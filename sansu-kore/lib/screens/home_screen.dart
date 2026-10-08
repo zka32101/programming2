@@ -20,6 +20,7 @@ import '../theme/app_theme.dart';
 import '../utils/grade_utils.dart';
 import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 import 'package:sansu_kore/widgets/badge_emblem.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 AppShopItem? _findShopItem(List<AppShopItem> items, String? id) {
   if (id == null) return null;
@@ -98,9 +99,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   MaterialPageRoute(
                       builder: (_) => const AvatarSelectionScreen()),
                 ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  backgroundImage: AssetImage(selectedAvatar.imageAsset),
+                child: DecorFrame(
+                  size: 40,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage(selectedAvatar.imageAsset),
+                  ),
                 ),
               ),
             ),

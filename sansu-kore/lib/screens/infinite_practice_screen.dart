@@ -8,6 +8,7 @@ import '../providers/profile_provider.dart';
 import '../theme/app_theme.dart';
 import '../utils/grade_utils.dart';
 import '../widgets/furigana_text.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 /// 無限とっくん画面
 /// ランダムに問題を無限生成し、連続正解ストリークを競う練習モード
@@ -144,7 +145,7 @@ class _InfinitePracticeScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FF),
+      backgroundColor: DecorScope.pageBg(context, const Color(0xFFF5F7FF)),
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
         title: const Text('∞ 無限とっくん'),
