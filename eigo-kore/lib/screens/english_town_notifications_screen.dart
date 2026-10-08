@@ -5,6 +5,7 @@ import '../services/english_town_notification_service.dart';
 import '../design_system/design_system.dart';
 import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_scope.dart';
 /// Notifications center and settings screen
 class EnglishTownNotificationsScreen extends ConsumerWidget {
   const EnglishTownNotificationsScreen({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class EnglishTownNotificationsScreen extends ConsumerWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: AppColors.bgLight,
+        backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
         appBar: AppBar(
           title: Text(
             '🔔 Notifications',

@@ -9,6 +9,7 @@ import '../services/speech_service.dart';
 import '../services/tts_service.dart';
 import '../design_system/design_system.dart';
 import '../widgets/speaking_score_ring.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class ParentChildChallengeScreen extends ConsumerStatefulWidget {
   const ParentChildChallengeScreen({super.key});
@@ -128,7 +129,7 @@ class _ParentChildChallengeScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF0F5),
+      backgroundColor: DecorScope.pageBg(context, const Color(0xFFFFF0F5)),
       appBar: AppBar(
         title: const Text('👨‍👩‍👧 親子チャレンジ'),
         backgroundColor: const Color(0xFFE91E63),

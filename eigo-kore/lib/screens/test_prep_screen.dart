@@ -10,6 +10,7 @@ import '../providers/weakness_provider.dart';
 import '../services/speech_service.dart';
 import '../services/tts_service.dart';
 import '../widgets/speaking_score_ring.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 /// テスト対策モード: 弱点問題を集めた特別レッスン
 class TestPrepScreen extends ConsumerStatefulWidget {
@@ -167,7 +168,7 @@ class _TestPrepScreenState extends ConsumerState<TestPrepScreen> {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         backgroundColor: AppColors.error,
         title: const Text('🎯 テスト対策モード'),

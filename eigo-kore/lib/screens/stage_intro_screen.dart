@@ -6,6 +6,7 @@ import '../models/stage.dart';
 import '../widgets/educational_illustrations.dart';
 import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_scope.dart';
 class StageIntroScreen extends StatefulWidget {
   final Stage stage;
   const StageIntroScreen({super.key, required this.stage});
@@ -39,7 +40,7 @@ class _StageIntroScreenState extends State<StageIntroScreen> {
     final intro = stageIntroData[widget.stage.id];
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         title: Text('${widget.stage.emoji} ${widget.stage.titleJa}'),

@@ -5,6 +5,7 @@ import '../services/english_town_activity_feed_service.dart';
 import '../design_system/design_system.dart';
 import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_scope.dart';
 /// Activity feed screen showing recent player activities
 class EnglishTownActivityFeedScreen extends ConsumerWidget {
   const EnglishTownActivityFeedScreen({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class EnglishTownActivityFeedScreen extends ConsumerWidget {
     final todaySummary = ref.watch(todayActivitySummaryProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         title: Text(
           '📊 Activity Feed',

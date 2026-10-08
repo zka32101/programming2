@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_core/shared_core.dart' hide progressProvider;
 import '../data/eigo_characters.dart';
 import '../providers/progress_provider.dart';
+import '../features/shop/decor/decor_scope.dart';
+import '../features/shop/decor/decor_shop_screen.dart';
 
 /// コインが足りない時のやさしい案内文（足りていれば null）。
 String? coinShortageMessage(int coins, int cost) {
@@ -47,8 +49,19 @@ class _CharacterCollectionScreenState
         .length;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('キャラクター図鑑')),
-      backgroundColor: const Color(0xFFF7F9FC),
+      appBar: AppBar(
+        title: const Text('キャラクター図鑑'),
+        actions: [
+          IconButton(
+            tooltip: 'きせかえショップ',
+            icon: const Icon(Icons.palette_outlined),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const DecorShopScreen()),
+            ),
+          ),
+        ],
+      ),
+      backgroundColor: DecorScope.pageBg(context, const Color(0xFFF7F9FC)),
       body: Column(
         children: [
           Padding(

@@ -19,6 +19,7 @@ import '../widgets/speaking_score_ring.dart';
 import '../widgets/lesson_screen_components.dart';
 import '../providers/user_profile_provider.dart';
 import '../models/pronunciation_result.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class LessonScreen extends ConsumerStatefulWidget {
   final Stage stage;
@@ -289,7 +290,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     final progress = (_qIndex + 1) / questions.length;
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         title: Text('${widget.stage.emoji} ${widget.stage.titleJa}'),
