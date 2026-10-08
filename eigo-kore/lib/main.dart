@@ -52,6 +52,7 @@ import 'screens/pet_breeding_screen.dart';
 import 'screens/teacher_mode_screen.dart';
 import 'screens/learning_pace_screen.dart';
 import 'screens/character_collection_screen.dart';
+import 'features/shop/decor/decor_shop_screen.dart';
 import 'screens/ad_settings_screen.dart';
 import 'screens/profile_management_screen.dart';
 import 'screens/leaderboard_screen.dart';
@@ -87,6 +88,7 @@ import 'services/firebase_service.dart';
 import 'providers/morning_notification_provider.dart';
 import 'providers/coin_provider.dart';
 import 'providers/user_profile_provider.dart';
+import 'features/shop/decor/decor_scope.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -137,9 +139,7 @@ class EigoKoreApp extends ConsumerWidget {
     ref.watch(purchaseProvider);
     ref.watch(morningNotificationStateProvider);
 
-    final profiles = ref.watch(userProfilesProvider);
-    final currentUserId = ref.watch(currentUserIdProvider);
-    final hasProfiles = profiles.isNotEmpty && currentUserId != null;
+    // 起動時は '/' の SplashScreen がプロフィール有無で '/home' か '/profile-select' へ遷移する
 
     return MaterialApp(
       title: '英語コレ！',
@@ -147,7 +147,8 @@ class EigoKoreApp extends ConsumerWidget {
       darkTheme: buildDarkAppTheme(),
       debugShowCheckedModeBanner: false,
       // Android 15+ のエッジ・ツー・エッジで、下のナビゲーションバーに隠れる
-      // （スコアバー等が見切れる）のを全画面でまとめて防ぐ
+      // （スコアバー等が見切れる）のを全画面でまとめて防ぐ。
+      // その内側で、きせかえの背景(DecorBackdrop)を重ねる。
       builder: (context, child) {
         final mq = MediaQuery.of(context);
         final bottom =
@@ -160,14 +161,14 @@ class EigoKoreApp extends ConsumerWidget {
                 ),
             child: Padding(
               padding: EdgeInsets.only(bottom: bottom),
-              child: child,
+              child: DecorBackdrop(child: child ?? const SizedBox.shrink()),
             ),
           ),
         );
       },
       initialRoute: '/',
       routes: {
-        '/': (context) => hasProfiles ? const RootShell() : const ProfileSelectScreen(),
+        '/': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnboardingScreen(),
         '/home': (context) => const RootShell(),
         '/stages': (context) => const StageSelectScreen(),
@@ -198,6 +199,7 @@ class EigoKoreApp extends ConsumerWidget {
         '/teacher-mode': (context) => const TeacherModeScreen(),
         '/learning-pace': (context) => const LearningPaceScreen(),
         '/character-collection': (context) => const CharacterCollectionScreen(),
+        '/decor-shop': (context) => const DecorShopScreen(),
         '/ad-settings': (context) => const AdSettingsScreen(),
         '/profile-management': (context) => const ProfileManagementScreen(),
         '/leaderboard': (context) => const LeaderboardScreen(),

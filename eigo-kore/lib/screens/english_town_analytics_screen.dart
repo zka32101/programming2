@@ -8,6 +8,7 @@ import '../providers/english_town_polish_provider.dart';
 import '../design_system/design_system.dart';
 import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_scope.dart';
 /// Engagement Analytics Screen
 ///
 /// Displays comprehensive analytics about player engagement including:
@@ -29,7 +30,7 @@ class EnglishTownAnalyticsScreen extends ConsumerWidget {
     final stats = ref.watch(extendedProgressStatsProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         title: Text(
           'Your Progress Analytics',

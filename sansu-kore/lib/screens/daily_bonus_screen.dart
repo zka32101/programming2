@@ -172,13 +172,17 @@ class _DayCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todayIdx = ((currentDay - 1) % 7).clamp(0, 6);
+    // 7列を幅に応じて縮小（固定36pxだと狭い画面で右にはみ出す）
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(7, (i) {
         final reward = kDailyRewards[i];
         final isPast = i < todayIdx;
         final isToday = i == todayIdx;
-        return Column(
+        return Expanded(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Column(
           children: [
             Text('${i + 1}日', style: TextStyle(fontSize: 10, color: isToday ? kPrimaryColor : kTextMuted)),
             const SizedBox(height: 4),
@@ -206,6 +210,8 @@ class _DayCalendar extends StatelessWidget {
             if (isPast)
               const Icon(Icons.check, color: kAccentGreen, size: 12),
           ],
+        ),
+          ),
         );
       }),
     );

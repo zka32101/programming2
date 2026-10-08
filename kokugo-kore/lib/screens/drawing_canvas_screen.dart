@@ -10,6 +10,7 @@ import '../services/handwriting_shape_judge.dart';
 import '../services/handwriting_raster_reference.dart';
 import '../theme/app_theme.dart';
 import '../widgets/stroke_order_view.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class DrawingCanvasScreen extends ConsumerStatefulWidget {
   final String character;   // answer character to write
@@ -130,7 +131,7 @@ class _DrawingCanvasScreenState extends ConsumerState<DrawingCanvasScreen> {
             : Colors.grey.shade300;
 
     return Scaffold(
-      backgroundColor: kBgLight,
+      backgroundColor: DecorScope.pageBg(context, kBgLight),
       appBar: AppBar(
         title: Text(
           'かく: ${widget.prompt}',

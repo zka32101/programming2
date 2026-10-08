@@ -7,6 +7,7 @@ import '../providers/progress_provider.dart';
 import '../design_system/design_system.dart';
 import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_scope.dart';
 class InviteScreen extends ConsumerStatefulWidget {
   const InviteScreen({super.key});
 
@@ -97,7 +98,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF0FFF4),
+      backgroundColor: DecorScope.pageBg(context, const Color(0xFFF0FFF4)),
       appBar: AppBar(
         title: const Text('👫 ともだち招待'),
         backgroundColor: AppColors.accentGreen,

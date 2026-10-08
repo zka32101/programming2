@@ -8,6 +8,7 @@ import '../providers/level_provider.dart';
 import '../providers/progress_provider.dart';
 import '../services/speech_service.dart';
 import '../services/tts_service.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class ConversationScreen extends ConsumerStatefulWidget {
   const ConversationScreen({super.key});
@@ -50,7 +51,7 @@ class _SelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         title: const Text('💬 会話シミュレーション'),
         backgroundColor: AppColors.primary,
@@ -140,7 +141,7 @@ class _IntroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         title: Text(script.titleJa),
         backgroundColor: AppColors.primary,
@@ -307,7 +308,7 @@ class _ConversationPlayScreenState extends ConsumerState<_ConversationPlayScreen
         _currentTurn.speaker == 'user';
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         title: Text('${widget.script.emoji} ${widget.script.titleJa}'),
         backgroundColor: AppColors.primary,

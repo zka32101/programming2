@@ -4,6 +4,7 @@ import '../providers/weekly_challenge_provider.dart';
 import '../providers/profile_provider.dart';
 import '../models/quest_model.dart';
 import '../theme/app_theme.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class WeeklyChallengeScreen extends ConsumerStatefulWidget {
   const WeeklyChallengeScreen({super.key});
@@ -64,7 +65,7 @@ class _WeeklyChallengeScreenState
     final isAnswered = wcState.answeredIds.contains(q.id);
 
     return Scaffold(
-      backgroundColor: kBgLight,
+      backgroundColor: DecorScope.pageBg(context, kBgLight),
       appBar: AppBar(
         title: const Text('ウィークリーチャレンジ'),
         backgroundColor: const Color(0xFF8E44AD), // 紫 for weekly
@@ -290,7 +291,7 @@ class _SummaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final isPerfect = correct == total;
     return Scaffold(
-      backgroundColor: kBgLight,
+      backgroundColor: DecorScope.pageBg(context, kBgLight),
       body: SafeArea(
         child: Center(
           child: Padding(

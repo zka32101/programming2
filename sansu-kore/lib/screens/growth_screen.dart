@@ -6,6 +6,7 @@ import '../providers/adaptive_provider.dart';
 import '../theme/app_theme.dart';
 import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_scope.dart';
 class GrowthScreen extends ConsumerStatefulWidget {
   const GrowthScreen({super.key});
 
@@ -37,7 +38,7 @@ class _GrowthScreenState extends ConsumerState<GrowthScreen> {
     final childName = profile.currentProfile?.name ?? 'きみ';
 
     return Scaffold(
-      backgroundColor: kBgLight,
+      backgroundColor: DecorScope.pageBg(context, kBgLight),
       appBar: AppBar(
         title: const Text('成長タイムカプセル'),
         backgroundColor: kPrimaryDeep,

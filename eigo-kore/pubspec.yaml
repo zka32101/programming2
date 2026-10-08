@@ -2,7 +2,7 @@ name: eigo_kore
 description: "英語コレ！- リスニング・スピーキング特化の小学生英語学習アプリ"
 publish_to: 'none'
 
-version: 3.1.1+9
+version: 3.1.1+10
 
 environment:
   sdk: ^3.11.5
@@ -52,7 +52,11 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/branding/
     - assets/icons_common/
+    - assets/shop/
+    - assets/shop/thumb/
+    - assets/logos/
     - assets/badges/
     - assets/icons/
     - assets/images/

@@ -126,7 +126,7 @@ class HomeScreen extends ConsumerWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                AvatarView(currentUser?.avatar ?? 'avatar_1', size: 28),
+                                AvatarView(currentUser?.avatar ?? 'avatar_1', size: 28, decorated: true),
                                 const SizedBox(width: 6),
                                 Text(currentUser?.name ?? 'プロフィール',
                                   style: AppTypography.labelLarge.copyWith(color:AppColors.textWhite, fontWeight: FontWeight.bold)),
@@ -155,6 +155,13 @@ class HomeScreen extends ConsumerWidget {
                                 ),
                               ],
                             ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.checkroom, color: AppColors.textWhite.withOpacity(0.9), size: 22),
+                            onPressed: () => Navigator.of(context).pushNamed('/decor-shop'),
+                            tooltip: 'きせかえショップ',
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
                           ),
                           Builder(
                             builder: (ctx) => IconButton(
@@ -238,6 +245,15 @@ class _QuickActions extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.xs),
       child: Column(
         children: [
+          // きせかえ・キャラ図鑑は目立つよう最上段に配置
+          Row(
+            children: [
+              _QuickBtn('👕 きせかえショップ', AppColors.accentPurple, '/decor-shop'),
+              AppSpacing.horizontalSpacerXs,
+              _QuickBtn('🎭 キャラ図鑑', AppColors.accentPink, '/character-collection'),
+            ],
+          ),
+          AppSpacing.verticalSpacerXs,
           Row(
             children: [
               _QuickBtn('⚡ デイリー\nチャレンジ', AppColors.accentOrange, '/daily-challenge'),
@@ -321,10 +337,6 @@ class _QuickActions extends StatelessWidget {
           Row(
             children: [
               _QuickBtn('🏆 ランキング', AppColors.accentOrange, '/leaderboard'),
-              AppSpacing.horizontalSpacerXs,
-              _QuickBtn('🎭 キャラ\n図鑑', AppColors.accentPink, '/character-collection'),
-              AppSpacing.horizontalSpacerXs,
-              const Expanded(child: SizedBox.shrink()),
             ],
           ),
         ],

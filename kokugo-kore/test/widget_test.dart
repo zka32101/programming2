@@ -35,8 +35,16 @@ void main() {
           ),
         );
         expect(find.byType(SplashScreen), findsOneWidget);
-        expect(find.text('小学コレ！国語'), findsOneWidget);
-        expect(find.text('ひらがなから読解・作文まで'), findsOneWidget);
+        await tester.pump(const Duration(milliseconds: 1300));
+        final paths = tester
+            .widgetList<Image>(find.byType(Image))
+            .map((i) => (i.image as AssetImage).assetName)
+            .toList();
+        expect(paths, contains('assets/branding/app_icon.png'));
+        expect(paths, contains('assets/branding/series_logo.png'));
+        expect(paths, contains('assets/branding/yourwish_logo.png'));
+        expect(tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
+            const Color(0xFFFFFFFF));
       });
 
       testWidgets('アニメーション実行確認', (WidgetTester tester) async {
@@ -45,9 +53,8 @@ void main() {
             child: MaterialApp(home: SplashScreen()),
           ),
         );
-        await tester.pumpAndSettle();
+        await tester.pump(const Duration(milliseconds: 1300));
         expect(find.byType(FadeTransition), findsWidgets);
-        expect(find.byType(ScaleTransition), findsWidgets);
       });
     });
 

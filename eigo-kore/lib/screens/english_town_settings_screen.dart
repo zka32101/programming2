@@ -4,6 +4,7 @@ import '../providers/english_town_polish_provider.dart';
 import '../design_system/design_system.dart';
 import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_scope.dart';
 /// English-Only Town Settings Screen
 ///
 /// Provides options for:
@@ -21,7 +22,7 @@ class EnglishTownSettingsScreen extends ConsumerWidget {
     final animationMultiplier = ref.watch(animationDurationMultiplierProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         title: Text(
           'Settings',

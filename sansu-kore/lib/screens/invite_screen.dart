@@ -6,6 +6,7 @@ import '../providers/profile_provider.dart';
 import '../theme/app_theme.dart';
 import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_scope.dart';
 class InviteScreen extends ConsumerStatefulWidget {
   const InviteScreen({super.key});
 
@@ -23,7 +24,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
     final childName = profile.currentProfile?.name ?? 'お友達';
 
     return Scaffold(
-      backgroundColor: kBgLight,
+      backgroundColor: DecorScope.pageBg(context, kBgLight),
       appBar: AppBar(
         title: const Text('ともコレ！友達招待'),
         backgroundColor: const Color(0xFF27AE60),

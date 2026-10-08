@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/branded_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/badge_data.dart';
 import '../providers/badge_provider.dart';
@@ -10,7 +11,6 @@ import '../providers/premium_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/progress_provider.dart';
 import '../services/firebase_service.dart';
-import '../theme/app_theme.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -23,7 +23,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _ctrl;
   late Animation<double> _fadeAnim;
-  late Animation<double> _scaleAnim;
 
   @override
   void initState() {
@@ -31,9 +30,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _ctrl = AnimationController(duration: const Duration(milliseconds: 1200), vsync: this);
     _fadeAnim = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _ctrl, curve: const Interval(0, 0.5, curve: Curves.easeIn)),
-    );
-    _scaleAnim = Tween<double>(begin: 0.7, end: 1.0).animate(
-      CurvedAnimation(parent: _ctrl, curve: const Interval(0, 0.6, curve: Curves.elasticOut)),
     );
     _ctrl.forward();
     _load();
@@ -78,88 +74,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [kPrimaryColor, kPrimaryDeep],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Center(
-          child: AnimatedBuilder(
-            animation: _ctrl,
-            builder: (_, __) => FadeTransition(
-              opacity: _fadeAnim,
-              child: ScaleTransition(
-                scale: _scaleAnim,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(28),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(40),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Text('🔴', style: TextStyle(fontSize: 52)),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      '小学コレ！算数',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'たし算からかんすうまで',
-                      style: TextStyle(color: Colors.white70, fontSize: 14),
-                    ),
-                    const SizedBox(height: 40),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.asset(
-                            'assets/logos/company_app_icon.jpg',
-                            width: 120,
-                            height: 120,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        const Text(
-                          'Your Wish',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+      backgroundColor: kSplashBackground,
+      body: FadeTransition(opacity: _fadeAnim, child: const BrandedSplashBody()),
     );
   }
 }

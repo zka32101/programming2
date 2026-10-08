@@ -4,6 +4,7 @@ import '../providers/english_town_firebase_provider.dart';
 import '../design_system/design_system.dart';
 import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_scope.dart';
 /// English-Only Town Global Leaderboard Screen
 ///
 /// Displays global rankings of all players by XP earned
@@ -17,7 +18,7 @@ class EnglishTownLeaderboardScreen extends ConsumerWidget {
     final cloudSyncAvailable = ref.watch(cloudSyncAvailableProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       appBar: AppBar(
         title: Text(
           '🏆 Global Leaderboard',

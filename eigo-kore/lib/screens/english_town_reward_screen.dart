@@ -10,6 +10,7 @@ import '../design_system/design_system.dart';
 import '../widgets/animated_reward_card.dart';
 import 'package:eigo_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_scope.dart';
 /// English-Only Town Reward Screen
 ///
 /// Displays rewards earned from a conversation:
@@ -58,7 +59,7 @@ class EnglishTownRewardScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: DecorScope.pageBg(context, AppColors.bgLight),
       body: Stack(
         children: [
           // Confetti background (if particles enabled)

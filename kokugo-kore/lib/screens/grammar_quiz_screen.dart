@@ -3,6 +3,7 @@ import '../data/grammar_data.dart';
 
 import '../theme/app_theme.dart';
 import '../widgets/generic_quiz_widget.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 enum _GrammarMode { joshi, setsuzoku, hinshi, okurigana, romaji }
 
@@ -72,7 +73,7 @@ class _GrammarQuizScreenState extends State<GrammarQuizScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: DecorScope.pageBg(context, const Color(0xFFF5F5F5)),
       appBar: AppBar(
         backgroundColor: const Color(0xFF2C3E50),
         foregroundColor: Colors.white,

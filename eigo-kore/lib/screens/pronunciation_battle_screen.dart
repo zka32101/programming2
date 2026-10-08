@@ -9,6 +9,7 @@ import '../models/question.dart';
 import '../services/speech_service.dart';
 import '../services/tts_service.dart';
 import '../widgets/speaking_score_ring.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class PronunciationBattleScreen extends ConsumerStatefulWidget {
   const PronunciationBattleScreen({super.key});
@@ -123,7 +124,7 @@ class _PronunciationBattleScreenState
         .toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F0FF),
+      backgroundColor: DecorScope.pageBg(context, const Color(0xFFF3F0FF)),
       appBar: AppBar(
         title: const Text('🎤 発音バトル'),
         backgroundColor: AppColors.speakingColor,

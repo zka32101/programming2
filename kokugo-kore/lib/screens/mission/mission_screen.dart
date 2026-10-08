@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../theme/app_theme.dart';
+import '../../features/shop/decor/decor_scope.dart';
 
 class MissionScreen extends ConsumerWidget {
   const MissionScreen({super.key});
@@ -8,7 +9,7 @@ class MissionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: kBgLight,
+      backgroundColor: DecorScope.pageBg(context, kBgLight),
       appBar: AppBar(
         title: const Text('🎯 ミッション'),
         backgroundColor: kPrimaryColor,
