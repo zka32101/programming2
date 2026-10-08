@@ -139,9 +139,7 @@ class EigoKoreApp extends ConsumerWidget {
     ref.watch(purchaseProvider);
     ref.watch(morningNotificationStateProvider);
 
-    final profiles = ref.watch(userProfilesProvider);
-    final currentUserId = ref.watch(currentUserIdProvider);
-    final hasProfiles = profiles.isNotEmpty && currentUserId != null;
+    // 起動時は '/' の SplashScreen がプロフィール有無で '/home' か '/profile-select' へ遷移する
 
     return MaterialApp(
       title: '英語コレ！',
@@ -151,7 +149,7 @@ class EigoKoreApp extends ConsumerWidget {
       builder: (context, child) => DecorBackdrop(child: child ?? const SizedBox.shrink()),
       initialRoute: '/',
       routes: {
-        '/': (context) => hasProfiles ? const RootShell() : const ProfileSelectScreen(),
+        '/': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnboardingScreen(),
         '/home': (context) => const RootShell(),
         '/stages': (context) => const StageSelectScreen(),

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
+import '../providers/user_profile_provider.dart';
 import '../widgets/branded_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../providers/coin_provider.dart';
-import '../services/firebase_service.dart';
-import '../services/notification_service.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -29,32 +26,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
   }
 
   Future<void> _initAndNavigate() async {
-    await Future.wait([
-      Future.delayed(const Duration(milliseconds: 1800)),
-      _initServices(),
-    ]);
-
+    // サービス初期化(Firebase/通知/コイン)は main() で完了済み。ここは表示時間のみ待つ。
+    await Future.delayed(const Duration(milliseconds: 1400));
     if (!mounted) return;
 
-    final prefs = await SharedPreferences.getInstance();
-    if (!mounted) return;
-
-    final onboardingDone = prefs.getBool('onboarding_done') ?? false;
-    final nav = Navigator.of(context);
-
-    if (onboardingDone) {
-      nav.pushReplacementNamed('/home');
-    } else {
-      nav.pushReplacementNamed('/onboarding');
-    }
-  }
-
-  Future<void> _initServices() async {
-    await Future.wait([
-      FirebaseService().init(),
-      NotificationService().init(),
-      ref.read(coinProvider.notifier).load(),
-    ]);
+    // プロフィールがあればホーム、無ければプロフィール選択(従来の '/' の分岐を維持)
+    final profiles = ref.read(userProfilesProvider);
+    final currentUserId = ref.read(currentUserIdProvider);
+    final hasProfiles = profiles.isNotEmpty && currentUserId != null;
+    Navigator.of(context)
+        .pushReplacementNamed(hasProfiles ? '/home' : '/profile-select');
   }
 
   @override
