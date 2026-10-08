@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../features/shop/decor/decor_scope.dart';
 import '../models/avatar_model.dart';
 
 /// プロフィールのアバター表示。
@@ -11,7 +12,10 @@ class AvatarView extends StatelessWidget {
   final double size;
   final bool circle;
 
-  const AvatarView(this.value, {super.key, this.size = 40, this.circle = true});
+  /// true なら、きせかえショップで装着中のフレームを重ねる（自分のアバター用。友だちの表示には使わない）。
+  final bool decorated;
+
+  const AvatarView(this.value, {super.key, this.size = 40, this.circle = true, this.decorated = false});
 
   static AvatarIcon? resolve(String value) {
     final id = legacyAvatarEmojiToId[value] ?? value;
@@ -40,12 +44,13 @@ class AvatarView extends StatelessWidget {
         child: Text(icon.emoji, style: TextStyle(fontSize: size * 0.8)),
       ),
     );
-    return SizedBox(
+    final avatar = SizedBox(
       width: size,
       height: size,
       child: circle
           ? ClipOval(child: image)
           : ClipRRect(borderRadius: BorderRadius.circular(size * 0.18), child: image),
     );
+    return decorated ? DecorFrame(size: size, child: avatar) : avatar;
   }
 }

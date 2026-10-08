@@ -193,7 +193,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             Center(
               child: Column(
                 children: [
-                  AvatarView(_avatar, size: 120),
+                  AvatarView(_avatar, size: 120, decorated: true),
                   AppSpacing.verticalSpacerMd,
                   Text(
                     '${widget.profile.grade}年生',

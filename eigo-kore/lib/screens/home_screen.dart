@@ -126,7 +126,7 @@ class HomeScreen extends ConsumerWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                AvatarView(currentUser?.avatar ?? 'avatar_1', size: 28),
+                                AvatarView(currentUser?.avatar ?? 'avatar_1', size: 28, decorated: true),
                                 const SizedBox(width: 6),
                                 Text(currentUser?.name ?? 'プロフィール',
                                   style: AppTypography.labelLarge.copyWith(color:AppColors.textWhite, fontWeight: FontWeight.bold)),
