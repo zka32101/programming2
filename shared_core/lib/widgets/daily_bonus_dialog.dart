@@ -74,7 +74,7 @@ class DailyBonusDialog extends StatelessWidget {
             ),
             const SizedBox(height: 22),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFFF9CA24), Color(0xFFF0932B)],
@@ -90,7 +90,9 @@ class DailyBonusDialog extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Row(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text('🪙', style: TextStyle(fontSize: 34)),
@@ -113,6 +115,7 @@ class DailyBonusDialog extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
               ),
             ),
             if (streak >= 6) ...[

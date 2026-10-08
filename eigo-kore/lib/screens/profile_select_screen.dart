@@ -239,7 +239,7 @@ class _ProfileSelectScreenState extends ConsumerState<ProfileSelectScreen> {
                       ),
                       AppSpacing.verticalSpacerXs,
                       SizedBox(
-                        height: 90,
+                        height: 156,
                         child: GridView.builder(
                           scrollDirection: Axis.horizontal,
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -276,7 +276,7 @@ class _ProfileSelectScreenState extends ConsumerState<ProfileSelectScreen> {
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        AvatarView(avatar.id, size: 40),
+                                        AvatarView(avatar.id, size: 44),
                                       ],
                                     ),
                                   ),
@@ -287,8 +287,10 @@ class _ProfileSelectScreenState extends ConsumerState<ProfileSelectScreen> {
                                         color: AppColors.textPrimary.withAlpha(120),
                                       ),
                                       child: Center(
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
                                           children: [
                                             const Icon(Icons.lock, color: AppColors.textWhite, size: 20),
                                             AppSpacing.verticalSpacerXs,
@@ -300,6 +302,7 @@ class _ProfileSelectScreenState extends ConsumerState<ProfileSelectScreen> {
                                               ),
                                             ),
                                           ],
+                                        ),
                                         ),
                                       ),
                                     ),
