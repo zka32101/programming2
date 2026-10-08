@@ -10,6 +10,7 @@ import '../theme/app_theme.dart';
 import 'character_unlock_dialog.dart';
 import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
+import '../features/shop/decor/decor_shop_tab.dart';
 bool _isEquippable(AppShopItem item) => item.kind != ShopItemKind.emoji;
 
 String _currentSeason() {
@@ -38,7 +39,7 @@ class KokugoShopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -57,6 +58,7 @@ class KokugoShopPage extends StatelessWidget {
               Tab(icon: Icon(Icons.auto_awesome, size: 18), text: 'キャラ育成'),
               Tab(icon: Icon(Icons.pets, size: 18), text: 'アバター'),
               Tab(icon: Icon(Icons.event, size: 18), text: '期間限定'),
+              Tab(icon: Icon(Icons.palette_outlined, size: 18), text: 'きせかえ'),
             ],
           ),
         ),
@@ -65,6 +67,7 @@ class KokugoShopPage extends StatelessWidget {
             _CharacterLevelUpTab(characters: characters),
             _AvatarTab(avatars: coinUnlockAvatars),
             _SeasonalTab(seasonalItems: seasonalItems),
+            const DecorShopTab(),
           ],
         ),
       ),

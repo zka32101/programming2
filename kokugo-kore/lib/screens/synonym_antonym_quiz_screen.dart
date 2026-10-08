@@ -3,6 +3,7 @@ import '../data/synonym_antonym_data.dart';
 
 import '../theme/app_theme.dart';
 import '../widgets/generic_quiz_widget.dart';
+import '../features/shop/decor/decor_scope.dart';
 
 class SynonymAntonymQuizScreen extends StatefulWidget {
   const SynonymAntonymQuizScreen({super.key});
@@ -17,7 +18,7 @@ class _SynonymAntonymQuizScreenState extends State<SynonymAntonymQuizScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: DecorScope.pageBg(context, const Color(0xFFF5F5F5)),
       appBar: AppBar(
         backgroundColor: kAccentTeal,
         foregroundColor: Colors.white,
