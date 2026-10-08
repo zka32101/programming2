@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_core/shared_core.dart';
 import '../data/customization_shop_items.dart';
 import '../data/sansu_characters.dart';
+import '../features/shop/decor/decor_items.dart';
+import '../features/shop/decor/decor_screen.dart';
 
 // ── 小学コレ！算数 交換所アイテム ──────────────────────────────────────────────
 // 2026-07: 交換所・期間限定タブはいったん非表示（ラインナップ見直し中）。
@@ -84,10 +86,27 @@ class ShopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CoinShopPage(
-      characters: kSansuCharacters,
-      exchangeItems: kCustomizationShopItems,
-      seasonalItems: const {},
+    return Stack(
+      children: [
+        CoinShopPage(
+          characters: kSansuCharacters,
+          exchangeItems: [...kCustomizationShopItems, ...decorExchangeItems()],
+          seasonalItems: decorSeasonalItems(),
+        ),
+        // 買った背景・フレーム・エフェクトをえらんでつける画面へ
+        Positioned(
+          right: 16,
+          bottom: 16,
+          child: FloatingActionButton.extended(
+            heroTag: 'decor_fab',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const DecorScreen()),
+            ),
+            icon: const Icon(Icons.palette_outlined),
+            label: const Text('きせかえ'),
+          ),
+        ),
+      ],
     );
   }
 }
