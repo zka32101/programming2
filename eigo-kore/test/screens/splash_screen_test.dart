@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:eigo_kore/screens/splash_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Widget _app() => const ProviderScope(
       child: MaterialApp(
@@ -16,6 +17,8 @@ Route<dynamic>? _route(RouteSettings s) => MaterialPageRoute(
     );
 
 void main() {
+  setUp(() => SharedPreferences.setMockInitialValues({}));
+
   testWidgets('スプラッシュにアプリ画像・シリーズロゴ・組織ロゴが出て背景は白', (tester) async {
     await tester.pumpWidget(_app());
     await tester.pump(const Duration(milliseconds: 1200));
