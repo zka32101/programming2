@@ -56,6 +56,7 @@ flutter:
     - assets/icons_common/
     - assets/shop/
     - assets/shop/thumb/
+    - assets/illustrations/
     - assets/logos/
     - assets/badges/
     - assets/icons/
