@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../data/explain_images.dart';
+import '../widgets/explanation_image.dart';
 import '../theme/app_theme.dart';
 import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 
@@ -239,6 +241,8 @@ class _GuideItemWidgetState extends State<_GuideItemWidget> {
             // 展開時の詳細
             if (_isExpanded) ...[
               const SizedBox(height: 12),
+              ExplanationImage(
+                  assetPath: explainImageForGuide(widget.item.title)),
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(

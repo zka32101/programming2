@@ -11,6 +11,8 @@ import '../providers/tts_provider.dart';
 import '../widgets/furigana_text.dart';
 import '../widgets/calculation_steps_widget.dart';
 import '../widgets/geometry_visual_widget.dart';
+import '../widgets/explanation_image.dart';
+import '../data/explain_images.dart';
 
 class QuestScreen extends ConsumerStatefulWidget {
   final Stage stage;
@@ -379,6 +381,13 @@ class _QuestScreenState extends ConsumerState<QuestScreen>
                   // ─── 図形ビジュアル（回答後に表示） ──────────────────
                   if (_answered && _current.shapeName != null)
                     GeometryVisualWidget(shapeName: _current.shapeName!),
+
+                  // ─── 解説の挿絵（既存ビジュアルが無い問題のみ） ──────
+                  if (_answered && _current.shapeName == null)
+                    ExplanationImage(
+                      assetPath: explainImageForStage(
+                          widget.stage.grade, widget.stage.stageNumber),
+                    ),
 
                   // ─── 計算過程（ヒント） ───────────────────────────
                   CalculationStepsWidget(
