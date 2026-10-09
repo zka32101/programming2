@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:speech_to_text/speech_to_text.dart';
 
 class SpeechService {
@@ -95,11 +96,46 @@ class SpeechService {
     return score.clamp(0, 99);
   }
 
-  String _normalize(String s) => s
+  String _normalize(String s) => numbersToWords(s)
       .toLowerCase()
       .replaceAll(RegExp(r"[',!?.]"), '')
       .replaceAll(RegExp(r'\s+'), ' ')
       .trim();
+
+  static const _numberWords = <String>[
+    'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
+    'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen',
+    'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',
+  ];
+  static const _tensWords = <int, String>{
+    30: 'thirty', 40: 'forty', 50: 'fifty', 60: 'sixty', 70: 'seventy',
+    80: 'eighty', 90: 'ninety', 100: 'one hundred',
+  };
+
+  /// 音声認識は「one two three」を「1 2 3」、「four five six」を「405-6」のように
+  /// 数字で返すことがある。採点では英単語に直して比べる。
+  /// 0〜20・30,40,…,100 はそのまま単語に、それ以外の数字列は1桁ずつ単語にする。
+  /// 数字どうしをつなぐ「-」は区切りとして扱う。
+  @visibleForTesting
+  static String numbersToWords(String s) {
+    final separated = s.replaceAllMapped(
+      RegExp(r'(?<=\d)-(?=\d)'),
+      (_) => ' ',
+    );
+    return separated.replaceAllMapped(RegExp(r'\d+'), (m) {
+      final digits = m.group(0)!;
+      final n = int.parse(digits);
+      if (digits.length <= 3 && !digits.startsWith('0') || digits == '0') {
+        if (n >= 0 && n < _numberWords.length) return ' ${_numberWords[n]} ';
+        final tens = _tensWords[n];
+        if (tens != null) return ' $tens ';
+      }
+      return digits
+          .split('')
+          .map((d) => ' ${_numberWords[int.parse(d)]} ')
+          .join();
+    });
+  }
 
   double _similarity(String s1, String s2) {
     if (s1 == s2) return 1.0;
