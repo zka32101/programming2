@@ -110,7 +110,7 @@ class _ChallengeHubScreenState extends ConsumerState<ChallengeHubScreen> {
               ),
             ),
           ),
-          AppSpacing.verticalSpacerMd,
+          const SliverToBoxAdapter(child: SizedBox(height: 12)),
           // Challenges list
           activeChallenges.when(
             loading: () => SliverToBoxAdapter(
