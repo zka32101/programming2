@@ -7,6 +7,7 @@ import '../models/badge_model.dart';
 import '../models/stage.dart';
 import '../providers/level_provider.dart';
 import '../widgets/xp_bar.dart';
+import '../widgets/new_badge_dialog.dart';
 import '../widgets/result_screen_components.dart';
 import '../features/shop/decor/decor_scope.dart';
 
@@ -44,6 +45,12 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     if (isPassed) {
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) _confetti.play();
+      });
+    }
+    // 新規バッジ獲得の達成演出(画面表示時に1回だけ。付与済みは newBadges に含まれない)
+    if (newBadges.isNotEmpty) {
+      Future.delayed(const Duration(milliseconds: 600), () {
+        if (mounted) NewBadgeDialog.showIfAny(context, newBadges);
       });
     }
     // レベルアップ通知を少し遅れて確認
