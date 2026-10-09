@@ -15,6 +15,18 @@ import '../theme/app_theme.dart';
 import '../utils/grade_utils.dart';
 import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 import 'package:sansu_kore/widgets/badge_emblem.dart';
+import '../widgets/badge_display_widget.dart' show NewBadgeDialog;
+
+/// 新バッジ獲得演出ダイアログを表示する（空リストなら何もしない）。
+Future<void> showNewBadgeDialogIfAny(
+    BuildContext context, List<BadgeModel> badges) async {
+  if (badges.isEmpty) return;
+  await showDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    builder: (_) => NewBadgeDialog(badges: badges, onClose: () {}),
+  );
+}
 
 class ResultScreen extends ConsumerStatefulWidget {
   final QuestResult result;
@@ -127,6 +139,9 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
         _saving = false;
       });
       if (r.isPassed) _confetti.play();
+      if (newBadges.isNotEmpty) {
+        showNewBadgeDialogIfAny(context, newBadges);
+      }
     }
   }
 
