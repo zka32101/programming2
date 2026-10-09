@@ -68,6 +68,7 @@ class _SpeakingPracticeScreenState extends ConsumerState<SpeakingPracticeScreen>
     if (_isListening) return;
     setState(() { _isListening = true; _recognizedText = ''; _answered = false; });
     await _speech.startListening(
+      expected: _questions[_qIndex].correctAnswer,
       onResult: (text, isFinal) {
         setState(() => _recognizedText = text);
         if (isFinal && text.isNotEmpty) {
