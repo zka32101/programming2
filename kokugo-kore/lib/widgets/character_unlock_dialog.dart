@@ -8,6 +8,7 @@ import 'package:shared_core/shared_core.dart' hide kTextMuted;
 
 import '../theme/app_theme.dart';
 import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
+import 'celebrate_art.dart';
 
 Future<void> showCharacterUnlockDialog(
   BuildContext context,
@@ -105,24 +106,22 @@ Future<void> showCharacterLevelUpDialog(
     barrierDismissible: false,
     builder: (ctx) => AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      content: Column(
+      content: SingleChildScrollView(
+       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(isMax ? '✨' : '⬆️', style: const TextStyle(fontSize: 44)),
-          const SizedBox(height: 8),
-          Text(
-            isMax ? 'レベルMAX達成！' : 'レベルアップ！',
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
+          CelebrateArt(
+            levelUp: true,
+            ribbonText: isMax ? 'レベルMAX！' : 'レベルアップ！',
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Text(
             character.name,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
           Text(
-            isMax ? 'MAX ✨' : 'Lv.$newLevel になったよ！',
+            isMax ? 'MAX ✨' : 'Lv.${newLevel - 1} → Lv.$newLevel',
             style: TextStyle(
               fontSize: 15,
               color: isMax ? Colors.amber.shade700 : kPrimaryDark,
@@ -138,6 +137,7 @@ Future<void> showCharacterLevelUpDialog(
             ),
           ],
         ],
+       ),
       ),
       actions: [
         SizedBox(
