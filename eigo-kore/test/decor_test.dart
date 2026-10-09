@@ -41,7 +41,7 @@ void main() {
       expect(File(i.asset).existsSync(), true, reason: i.asset);
       expect(File(i.thumb).existsSync(), true, reason: i.thumb);
     }
-    expect(kDecorItems.length, 23);
+    expect(kDecorItems.length, 29);
     expect(ids.contains('bg_eigo'), true);
   });
 
@@ -123,6 +123,7 @@ void main() {
     await tester.pumpWidget(UncontrolledProviderScope(container: empty, child: const MaterialApp(home: DecorScreen())));
     await tester.pump();
     expect(find.textContaining('まだきせかえをもっていないよ'), findsOneWidget);
+    expect(find.byKey(const ValueKey('decor_empty_illust')), findsOneWidget);
   });
 
   testWidgets('きせかえショップ: コインが足りなければ買えず、足りれば買ってコインが減る', (tester) async {

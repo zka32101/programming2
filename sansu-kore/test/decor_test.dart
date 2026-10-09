@@ -36,7 +36,7 @@ void main() {
       expect(File(i.asset).existsSync(), true, reason: i.asset);
       expect(File(i.thumb).existsSync(), true, reason: i.thumb);
     }
-    expect(kDecorItems.length, 23);
+    expect(kDecorItems.length, 29);
   });
 
   test('算数の既存の商品(テーマ色・背景・称号)とIDが重ならない', () {
@@ -124,6 +124,7 @@ void main() {
     await tester.pumpWidget(UncontrolledProviderScope(container: empty, child: const MaterialApp(home: DecorScreen())));
     await tester.pump();
     expect(find.textContaining('まだきせかえをもっていないよ'), findsOneWidget);
+    expect(find.byKey(const ValueKey('decor_empty_illust')), findsOneWidget);
   });
 
   testWidgets('DecorBackdrop: 背景つきなら絵と膜を敷き、なければ子だけ', (tester) async {
