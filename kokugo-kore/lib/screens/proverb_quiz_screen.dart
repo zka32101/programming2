@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/premium_provider.dart';
 
 import '../theme/app_theme.dart';
+import '../widgets/explanation_image.dart';
 import '../utils/shuffle_choices.dart';
 
 class ProverbQuestion {
@@ -694,6 +695,7 @@ class _ProverbQuizScreenState extends ConsumerState<ProverbQuizScreen>
             _current.explanation,
             style: const TextStyle(fontSize: 14, color: kTextDark, height: 1.5),
           ),
+          ExplanationImage(_current.proverb),
         ],
       ),
     );
