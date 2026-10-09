@@ -1,3 +1,4 @@
+import 'features/word_cards/word_cards_screen.dart';
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -181,6 +182,7 @@ class EigoKoreApp extends ConsumerWidget {
         '/learning-pace': (context) => const LearningPaceScreen(),
         '/character-collection': (context) => const CharacterCollectionScreen(),
         '/decor-shop': (context) => const DecorShopScreen(),
+        '/word-cards': (context) => const WordCardsScreen(),
         '/ad-settings': (context) => const AdSettingsScreen(),
         '/profile-management': (context) => const ProfileManagementScreen(),
         '/leaderboard': (context) => const LeaderboardScreen(),

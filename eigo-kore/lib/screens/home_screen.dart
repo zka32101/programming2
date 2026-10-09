@@ -268,6 +268,12 @@ class _QuickActions extends StatelessWidget {
           AppSpacing.verticalSpacerXs,
           Row(
             children: [
+              _QuickBtn('🃏 えいたんご カード', AppColors.accentOrange, '/word-cards'),
+            ],
+          ),
+          AppSpacing.verticalSpacerXs,
+          Row(
+            children: [
               _QuickBtn('⚡ デイリー\nチャレンジ', AppColors.accentOrange, '/daily-challenge'),
               AppSpacing.horizontalSpacerXs,
               _QuickBtn('🎤 発音\nバトル', AppColors.speakingColor, '/pronunciation-battle'),
