@@ -5,6 +5,9 @@ import '../../../providers/purchased_items_provider.dart';
 import '../../../theme/app_theme.dart';
 import 'decor_items.dart';
 import 'decor_screen.dart';
+import '../title/title_data.dart';
+import '../title/title_provider.dart';
+import '../../../widgets/title_plate.dart';
 
 String _season() {
   final m = DateTime.now().month;
@@ -77,7 +80,45 @@ class DecorShopTab extends ConsumerWidget {
             const SizedBox(height: 12),
           ],
         ],
+        const Text('称号', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: kPrimaryColor)),
+        const SizedBox(height: 8),
+        for (final def in kTitleDefs) _TitleRow(def: def, owned: owned, coins: coins, onBuy: _confirmTitle),
       ],
+    );
+  }
+
+  void _confirmTitle(BuildContext context, WidgetRef ref, TitleDef def) {
+    var busy = false;
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: Text('${def.name} を購入？'),
+          content: Text('${def.description}\n\n${def.coinCost}コインを使います。'),
+          actions: [
+            TextButton(onPressed: busy ? null : () => Navigator.pop(ctx), child: const Text('キャンセル')),
+            ElevatedButton(
+              onPressed: busy
+                  ? null
+                  : () async {
+                      setDialogState(() => busy = true);
+                      final ok = await ref.read(coinProvider.notifier).spendCoins(def.coinCost!);
+                      if (ok) {
+                        await ref.read(purchasedItemsProvider.notifier).purchase(def.id);
+                      }
+                      if (ctx.mounted) {
+                        Navigator.pop(ctx);
+                        ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+                          content: Text(ok ? '${def.name}を購入しました！' : 'コインが足りません'),
+                          duration: const Duration(seconds: 2),
+                        ));
+                      }
+                    },
+              child: const Text('購入する'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -114,6 +155,53 @@ class DecorShopTab extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// 称号1件の行。買う称号は値段、達成で解放される称号は鍵つきで条件を出す。
+class _TitleRow extends ConsumerWidget {
+  const _TitleRow({required this.def, required this.owned, required this.coins, required this.onBuy});
+
+  final TitleDef def;
+  final Set<String> owned;
+  final int coins;
+  final void Function(BuildContext, WidgetRef, TitleDef) onBuy;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stats = ref.watch(titleStatsProvider);
+    final available = isTitleAvailable(def, stats, owned);
+    final Widget trailing;
+    if (available) {
+      trailing = Chip(
+        label: Text(def.isPurchasable ? '所持済み' : '解放済み', style: const TextStyle(fontSize: 11)),
+        backgroundColor: const Color(0xFFE8F5E9),
+      );
+    } else if (def.isPurchasable) {
+      trailing = SizedBox(
+        width: 90,
+        child: ElevatedButton(
+          onPressed: coins >= def.coinCost! ? () => onBuy(context, ref, def) : null,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kPrimaryColor,
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+          child: Text('🪙${def.coinCost}', style: const TextStyle(fontSize: 11, color: Colors.white)),
+        ),
+      );
+    } else {
+      trailing = const Icon(Icons.lock, color: Colors.grey, key: ValueKey('title_lock'));
+    }
+    return ListTile(
+      key: ValueKey('title_row_${def.id}'),
+      contentPadding: EdgeInsets.zero,
+      leading: Opacity(opacity: available || def.isPurchasable ? 1 : 0.5, child: TitlePlate(name: def.name, width: 64)),
+      title: Text(def.name),
+      subtitle: Text(available || def.isPurchasable ? def.description : '🔒 ${def.conditionText}',
+          maxLines: 1, overflow: TextOverflow.ellipsis),
+      trailing: trailing,
     );
   }
 }
