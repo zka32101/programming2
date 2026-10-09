@@ -124,6 +124,8 @@ void main() {
     await tester.pump();
     expect(find.textContaining('まだきせかえをもっていないよ'), findsOneWidget);
     expect(find.byKey(const ValueKey('decor_empty_illust')), findsOneWidget);
+    // 称号欄が進捗プロバイダ(レベル等)を読むので、その読み込みタイマーを消化する。
+    await tester.pump(const Duration(milliseconds: 50));
   });
 
   testWidgets('きせかえショップ: コインが足りなければ買えず、足りれば買ってコインが減る', (tester) async {

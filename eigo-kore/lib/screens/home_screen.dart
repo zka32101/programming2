@@ -16,6 +16,8 @@ import '../widgets/streak_card.dart';
 import '../widgets/study_time_card.dart';
 import '../widgets/weekly_ranking_card.dart';
 import '../widgets/xp_bar.dart';
+import '../widgets/title_plate.dart';
+import '../features/shop/decor/title_provider.dart';
 import '../widgets/home_screen_cards.dart';
 import '../providers/user_profile_provider.dart';
 import 'profile_edit_screen.dart';
@@ -33,12 +35,13 @@ class HomeScreen extends ConsumerWidget {
     final studyTime = ref.watch(studyTimeProvider);
     final currentUser = ref.watch(currentUserProvider);
     final profiles = ref.watch(userProfilesProvider);
+    final title = ref.watch(activeTitleProvider);
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 120,
+            expandedHeight: title == null ? 120 : 164,
             pinned: true,
             backgroundColor: AppColors.primary,
             flexibleSpace: FlexibleSpaceBar(
@@ -123,13 +126,22 @@ class HomeScreen extends ConsumerWidget {
                                 ),
                               );
                             },
-                            child: Row(
+                            child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                AvatarView(currentUser?.avatar ?? 'avatar_1', size: 28, decorated: true),
-                                const SizedBox(width: 6),
-                                Text(currentUser?.name ?? 'プロフィール',
-                                  style: AppTypography.labelLarge.copyWith(color:AppColors.textWhite, fontWeight: FontWeight.bold)),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    AvatarView(currentUser?.avatar ?? 'avatar_1', size: 28, decorated: true),
+                                    const SizedBox(width: 6),
+                                    Text(currentUser?.name ?? 'プロフィール',
+                                      style: AppTypography.labelLarge.copyWith(color:AppColors.textWhite, fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                                if (title != null) ...[
+                                  const SizedBox(height: 2),
+                                  TitlePlate(name: title.name),
+                                ],
                               ],
                             ),
                           ),

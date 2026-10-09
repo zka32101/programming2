@@ -5,6 +5,8 @@ import '../../../design_system/app_colors.dart';
 import 'decor_items.dart';
 import 'decor_provider.dart';
 import 'decor_scope.dart';
+import 'title_items.dart';
+import 'title_provider.dart';
 
 /// 買ったきせかえ（背景・フレーム・エフェクト）をえらんでつける画面。
 class DecorScreen extends ConsumerWidget {
@@ -23,21 +25,23 @@ class DecorScreen extends ConsumerWidget {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
       ),
-      body: mine.isEmpty
-          ? const _Empty()
-          : ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                for (final kind in DecorKind.values) ...[
-                  _Section(
-                    kind: kind,
-                    items: [for (final i in mine) if (i.kind == kind) i],
-                    activeId: active.of(kind),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              ],
-            ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          if (mine.isEmpty)
+            const _Empty()
+          else
+            for (final kind in DecorKind.values) ...[
+              _Section(
+                kind: kind,
+                items: [for (final i in mine) if (i.kind == kind) i],
+                activeId: active.of(kind),
+              ),
+              const SizedBox(height: 16),
+            ],
+          const _TitleSection(),
+        ],
+      ),
     );
   }
 }
@@ -63,6 +67,60 @@ class _Empty extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// しょうごう(称号)をえらぶ。買った・たっせいしたものだけえらべて、ほかは鍵つきで条件を出す。
+class _TitleSection extends ConsumerWidget {
+  const _TitleSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final owned = ref.watch(inventoryProvider);
+    final stats = ref.watch(titleStatsProvider);
+    final active = ref.watch(activeTitleProvider);
+    final notifier = ref.read(titleProvider.notifier);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('しょうごう', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: [
+            _Tile(
+              label: 'なし',
+              selected: active == null,
+              onTap: notifier.unequip,
+              child: const Icon(Icons.block, color: Colors.grey),
+            ),
+            for (final t in kTitleDefs)
+              if (isTitleAvailable(t, stats, owned))
+                _Tile(
+                  label: t.name,
+                  selected: active?.id == t.id,
+                  onTap: () => notifier.equip(t.id),
+                  child: const Center(child: Text('🏅', style: TextStyle(fontSize: 30))),
+                ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        for (final t in kTitleDefs)
+          if (!isTitleAvailable(t, stats, owned))
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Row(children: [
+                const Icon(Icons.lock_outline, size: 16, color: Colors.grey),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text('${t.name}　${t.conditionText}',
+                      style: const TextStyle(fontSize: 12, color: Colors.black54)),
+                ),
+              ]),
+            ),
+      ],
     );
   }
 }

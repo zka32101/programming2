@@ -4,6 +4,7 @@ import 'package:shared_core/shared_core.dart' show CoinBalanceWidget, ShopItemTi
 import 'decor_items.dart';
 import 'decor_scope.dart';
 import 'decor_screen.dart';
+import 'title_items.dart';
 
 String _season() {
   final m = DateTime.now().month;
@@ -65,21 +66,34 @@ class _DecorShopScreenState extends ConsumerState<DecorShopScreen> {
                   item: item.toShopItem(),
                   isOwned: owned.contains(item.id),
                   currentCoins: coins,
-                  onPurchase: () => _purchase(item),
+                  onPurchase: () => _purchase(item.id, item.name, item.description, item.coinCost),
                 ),
               const SizedBox(height: 12),
             ],
+          const Text('しょうごう', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 4),
+          const Text('ホームの名前の下にひょうじできるよ。たっせいでもらえるしょうごうは「きせかえ」でえらべるよ。',
+              style: TextStyle(fontSize: 11, color: Colors.black54)),
+          const SizedBox(height: 8),
+          for (final t in kTitleDefs.where((t) => t.isPurchasable))
+            ShopItemTile(
+              item: t.toShopItem(),
+              isOwned: owned.contains(t.id),
+              currentCoins: coins,
+              onPurchase: () => _purchase(t.id, t.name, t.description, t.coinCost),
+            ),
+          const SizedBox(height: 12),
         ],
       ),
     );
   }
 
-  Future<void> _purchase(DecorItem item) async {
+  Future<void> _purchase(String id, String name, String description, int cost) async {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('${item.name} を買う？'),
-        content: Text('${item.description}\n\n${item.coinCost}コインを使うよ。'),
+        title: Text('$name を買う？'),
+        content: Text('$description\n\n$costコインを使うよ。'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('やめる')),
           ElevatedButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('買う')),
@@ -87,8 +101,8 @@ class _DecorShopScreenState extends ConsumerState<DecorShopScreen> {
       ),
     );
     if (ok != true || !mounted) return;
-    final err = await ref.read(inventoryProvider.notifier).purchase(item.id, item.coinCost);
+    final err = await ref.read(inventoryProvider.notifier).purchase(id, cost);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err ?? '${item.name} をゲット！')));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err ?? '$name をゲット！')));
   }
 }
