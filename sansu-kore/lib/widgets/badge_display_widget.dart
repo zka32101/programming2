@@ -47,47 +47,84 @@ class _NewBadgeDialogState extends State<NewBadgeDialog>
       backgroundColor: Colors.white,
       child: ScaleTransition(
         scale: _scaleAnimation,
-        child: Padding(
+        child: SingleChildScrollView(
           padding: EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // タイトル
-              ShaderMask(
-                shaderCallback: (bounds) => LinearGradient(
-                  colors: [Colors.orange, Colors.yellow],
-                ).createShader(bounds),
-                child: Text(
-                  'おめでとう！',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+              // 達成演出: 星バースト + メダル + リボン + おめでとう
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: SizedBox(
+                  width: 260,
+                  height: 250,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                        top: 0,
+                        child: Image.asset('assets/celebrate/celebrate_starburst.webp', width: 250),
+                      ),
+                      Positioned(
+                        top: 55,
+                        child: Image.asset('assets/celebrate/celebrate_medal.webp', width: 130),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        child: SizedBox(
+                          width: 260,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset('assets/celebrate/celebrate_ribbon_banner.webp', width: 260),
+                              const Text(
+                                'おめでとう！',
+                                style: TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF461905),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
               SizedBox(height: 8),
-              Text(
-                '新しいバッジを獲得しました',
-                style: TextStyle(color: Colors.grey[700], fontSize: 14),
-              ),
-              SizedBox(height: 20),
-
-              // バッジグリッド
-              GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 0.9,
+              if (widget.badges.length == 1)
+                Text(
+                  '${widget.badges.first.emoji} ${widget.badges.first.title} を獲得',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey[800],
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              else ...[
+                Text(
+                  '新しいバッジを ${widget.badges.length} 個獲得しました',
+                  style: TextStyle(color: Colors.grey[700], fontSize: 14),
                 ),
-                itemCount: widget.badges.length,
-                itemBuilder: (context, index) {
-                  return _BadgeCard(badge: widget.badges[index]);
-                },
-              ),
+                SizedBox(height: 12),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    childAspectRatio: 0.9,
+                  ),
+                  itemCount: widget.badges.length,
+                  itemBuilder: (context, index) {
+                    return _BadgeCard(badge: widget.badges[index]);
+                  },
+                ),
+              ],
 
               SizedBox(height: 24),
 
