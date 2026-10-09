@@ -26,16 +26,31 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
   }
 
   Future<void> _initAndNavigate() async {
-    // サービス初期化(Firebase/通知/コイン)は main() で完了済み。ここは表示時間のみ待つ。
-    await Future.delayed(const Duration(milliseconds: 1400));
+    // サービス初期化(Firebase/通知/コイン)は main() で完了済み。
+    // 表示時間と、プロフィール/現在ユーザーIDの読み込み完了の両方を待つ。
+    final profilesNotifier = ref.read(userProfilesProvider.notifier);
+    final currentIdNotifier = ref.read(currentUserIdProvider.notifier);
+    await Future.wait([
+      Future.delayed(const Duration(milliseconds: 1400)),
+      profilesNotifier.loaded,
+      currentIdNotifier.loaded,
+    ]);
     if (!mounted) return;
 
-    // プロフィールがあればホーム、無ければプロフィール選択(従来の '/' の分岐を維持)
     final profiles = ref.read(userProfilesProvider);
     final currentUserId = ref.read(currentUserIdProvider);
-    final hasProfiles = profiles.isNotEmpty && currentUserId != null;
+    var goHome = false;
+    if (profiles.isNotEmpty) {
+      if (currentUserId != null && profiles.any((p) => p.id == currentUserId)) {
+        goHome = true;
+      } else if (profiles.length == 1) {
+        await currentIdNotifier.setCurrentUserId(profiles.first.id);
+        goHome = true;
+      }
+    }
+    if (!mounted) return;
     Navigator.of(context)
-        .pushReplacementNamed(hasProfiles ? '/home' : '/profile-select');
+        .pushReplacementNamed(goHome ? '/home' : '/profile-select');
   }
 
   @override

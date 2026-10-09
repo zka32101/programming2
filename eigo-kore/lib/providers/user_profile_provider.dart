@@ -25,8 +25,11 @@ final currentUserProvider = Provider<UserProfile?>((ref) {
 class UserProfileNotifier extends StateNotifier<List<UserProfile>> {
   static const String _storageKey = 'eigo_kore_profiles';
 
+  /// 起動時の読み込み完了を待つための Future。
+  late final Future<void> loaded;
+
   UserProfileNotifier() : super([]) {
-    _loadProfiles();
+    loaded = _loadProfiles();
   }
 
   Future<void> _loadProfiles() async {
@@ -79,8 +82,11 @@ class UserProfileNotifier extends StateNotifier<List<UserProfile>> {
 class CurrentUserIdNotifier extends StateNotifier<String?> {
   static const String _currentUserKey = 'eigo_kore_current_user_id';
 
+  /// 起動時の読み込み完了を待つための Future。
+  late final Future<void> loaded;
+
   CurrentUserIdNotifier() : super(null) {
-    _loadCurrentUserId();
+    loaded = _loadCurrentUserId();
   }
 
   Future<void> _loadCurrentUserId() async {
