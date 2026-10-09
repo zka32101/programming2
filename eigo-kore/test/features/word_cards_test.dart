@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:eigo_kore/features/word_cards/word_card_data.dart';
@@ -13,21 +15,31 @@ void main() {
     }
   });
 
+  test('all cards: 25 unique, categories, assets exist', () {
+    expect(allWordCards.length, 25);
+    expect(allWordCards.map((c) => c.english).toSet().length, 25);
+    expect(fruitWordCards.every((c) => c.category == 'くだもの'), isTrue);
+    expect(vehicleWordCards.every((c) => c.category == 'のりもの'), isTrue);
+    for (final c in allWordCards) {
+      expect(File(c.image).existsSync(), isTrue, reason: c.image);
+    }
+  });
+
   testWidgets('flip, navigate, finish on small screen', (t) async {
     t.view.physicalSize = const Size(320, 480);
     t.view.devicePixelRatio = 1.0;
     addTearDown(t.view.reset);
     await t.pumpWidget(const MaterialApp(home: WordCardsScreen(enableTts: false)));
-    expect(find.text('1/12'), findsOneWidget);
+    expect(find.text('1/25'), findsOneWidget);
     expect(find.text('ねこ'), findsOneWidget);
     await t.tap(find.byKey(const Key('flipCard')));
     await t.pump();
     expect(find.text('cat'), findsOneWidget);
     await t.tap(find.byKey(const Key('nextBtn')));
     await t.pump();
-    expect(find.text('2/12'), findsOneWidget);
+    expect(find.text('2/25'), findsOneWidget);
     expect(find.text('いぬ'), findsOneWidget);
-    for (var i = 0; i < 11; i++) {
+    for (var i = 0; i < 24; i++) {
       await t.tap(find.byKey(const Key('nextBtn')));
       await t.pump();
     }

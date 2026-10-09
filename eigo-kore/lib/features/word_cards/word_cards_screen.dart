@@ -19,7 +19,7 @@ class _WordCardsScreenState extends State<WordCardsScreen> {
   bool _flipped = false;
   bool _done = false;
 
-  List<WordCard> get _cards => widget.cards ?? animalWordCards;
+  List<WordCard> get _cards => widget.cards ?? allWordCards;
 
   @override
   void initState() {
@@ -108,6 +108,9 @@ class _WordCardsScreenState extends State<WordCardsScreen> {
           Text('${_index + 1}/${_cards.length}',
               key: const Key('progress'),
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(c.category,
+              key: const Key('categoryLabel'),
+              style: const TextStyle(fontSize: 14, color: Colors.grey)),
           const SizedBox(height: 8),
           Expanded(
             child: GestureDetector(
