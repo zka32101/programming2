@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/premium_provider.dart';
 
 import '../theme/app_theme.dart';
+import '../widgets/explanation_image.dart';
 import '../utils/shuffle_choices.dart';
 import 'proverb_quiz_screen.dart' show QuizChoiceButton;
 
@@ -695,6 +696,7 @@ class _IdiomQuizScreenState extends ConsumerState<IdiomQuizScreen>
             _current.explanation,
             style: const TextStyle(fontSize: 14, color: kTextDark, height: 1.5),
           ),
+          ExplanationImage(_current.idiom),
         ],
       ),
     );

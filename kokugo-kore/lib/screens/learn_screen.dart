@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/explanation_image.dart';
 import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
 
 class LearnScreen extends StatelessWidget {
@@ -831,6 +832,7 @@ class _ProverbSection extends StatelessWidget {
                               p.$2,
                               style: const TextStyle(fontSize: 12, color: kTextMuted),
                             ),
+                            ExplanationImage(p.$1),
                           ],
                         ),
                       ),
@@ -912,6 +914,7 @@ class _YojijukugoSection extends StatelessWidget {
                               Text(e.$3,
                                   style: const TextStyle(
                                       fontSize: 12, color: kTextMuted)),
+                              ExplanationImage(e.$1),
                             ],
                           ),
                         ),
@@ -1270,6 +1273,7 @@ class _IdiomSection extends StatelessWidget {
                               item.$2,
                               style: const TextStyle(fontSize: 12, color: kTextMuted),
                             ),
+                            ExplanationImage(item.$1),
                           ],
                         ),
                       ),
