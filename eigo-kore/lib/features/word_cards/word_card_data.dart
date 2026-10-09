@@ -9,8 +9,8 @@ class WordCard {
 
 const String wordCardRewardSticker = 'assets/word_cards/sticker_star.webp';
 
-WordCard _a(String en, String ja, [String cat = 'どうぶつ']) =>
-    WordCard(en, ja, 'assets/word_cards/$en.webp', cat);
+WordCard _a(String en, String ja, [String cat = 'どうぶつ', String? file]) =>
+    WordCard(en, ja, 'assets/word_cards/${file ?? en}.webp', cat);
 
 final List<WordCard> animalWordCards = List.unmodifiable([
   _a('cat', 'ねこ'),
@@ -46,5 +46,30 @@ final List<WordCard> vehicleWordCards = List.unmodifiable([
   _a('ship', 'ふね', 'のりもの'),
 ]);
 
-final List<WordCard> allWordCards =
-    List.unmodifiable([...animalWordCards, ...fruitWordCards, ...vehicleWordCards]);
+final List<WordCard> foodWordCards = List.unmodifiable([
+  _a('apple', 'りんご', 'たべもの'),
+  _a('banana', 'バナナ', 'たべもの'),
+  _a('bread', 'パン', 'たべもの'),
+  _a('rice ball', 'おにぎり', 'たべもの', 'onigiri'),
+  _a('milk', 'ぎゅうにゅう', 'たべもの'),
+  _a('egg', 'たまご', 'たべもの'),
+  _a('cake', 'ケーキ', 'たべもの'),
+  _a('ice cream', 'アイスクリーム', 'たべもの', 'icecream'),
+]);
+
+final List<WordCard> schoolWordCards = List.unmodifiable([
+  _a('pencil', 'えんぴつ', 'がっきゅうのどうぐ'),
+  _a('book', 'ほん', 'がっきゅうのどうぐ'),
+  _a('bag', 'かばん', 'がっきゅうのどうぐ'),
+  _a('eraser', 'けしゴム', 'がっきゅうのどうぐ'),
+  _a('scissors', 'はさみ', 'がっきゅうのどうぐ'),
+  _a('clock', 'とけい', 'がっきゅうのどうぐ'),
+]);
+
+final List<WordCard> allWordCards = List.unmodifiable([
+  ...animalWordCards,
+  ...fruitWordCards,
+  ...vehicleWordCards,
+  ...foodWordCards,
+  ...schoolWordCards,
+]);
