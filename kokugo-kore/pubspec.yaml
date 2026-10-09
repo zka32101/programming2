@@ -75,6 +75,7 @@ flutter:
     - assets/logos/
     - assets/images/
     - assets/backgrounds/
+    - assets/celebrate/
 
 # url_launcher(クロスプロモーション用)が引き込む最新の url_launcher_android は
 # androidx.core 1.17.0 / androidx.browser 1.9.0 を要求し AGP 8.9.1+ が必要になるが、
