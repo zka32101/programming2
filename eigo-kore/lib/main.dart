@@ -85,6 +85,7 @@ import 'screens/leaderboard_screen.dart';
 import 'screens/conversation_list_screen.dart';
 import 'screens/chat_screen.dart';
 import 'services/notification_service.dart';
+import 'package:cross_promo_kit/cross_promo_kit.dart' show CrossPromoService;
 import 'services/firebase_service.dart';
 import 'providers/morning_notification_provider.dart';
 import 'providers/coin_provider.dart';
@@ -106,6 +107,11 @@ Future<void> main() async {
 
   // Firebase初期化（未設定時はgraceful fallbackでローカルのみ動作）
   await FirebaseService().init();
+
+  // クロスプロモ（他アプリ紹介）。失敗しても起動を止めない
+  try {
+    await CrossPromoService.init();
+  } catch (_) {}
 
   // 保存済みコイン残高を読み込んでから起動（未読み込みのままだと0のみで
   // 上書きされ、既存残高が消失するため必須）
