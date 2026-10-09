@@ -1,4 +1,5 @@
 import 'package:confetti/confetti.dart';
+import '../reward_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
@@ -213,6 +214,13 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                 // 親のほめ導線メッセージ（UI表示）
                 if (!_saving && r.isPassed) ...[
                   const SizedBox(height: 16),
+                  Image.asset(
+                    rewardStickerAsset(r.correctCount, r.totalCount),
+                    key: const Key('reward_sticker'),
+                    width: 72,
+                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  ),
+                  const SizedBox(height: 12),
                   _ParentPraiseHint(isPerfect: r.isPerfect),
                   const SizedBox(height: 12),
                   _ShareAchievementButton(result: r, stage: widget.stage),
