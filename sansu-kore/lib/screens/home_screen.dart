@@ -1,3 +1,4 @@
+import '../widgets/title_plate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_core/shared_core.dart' show AppShopItem;
@@ -126,34 +127,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                  const Text(
-                    '🔴 小学コレ！算数',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
-                  ),
                   if (currentProfile != null)
                     Text(
-                      '${currentProfile.name} (${gradeLabel(currentProfile.grade)})',
+                      currentProfile.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white70, fontSize: 12),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
                     ),
                   if (selectedTitleItem != null)
-                    Container(
-                      margin: const EdgeInsets.only(top: 2),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.25),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        '${selectedTitleItem.emoji} ${selectedTitleItem.name}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
-                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: TitlePlate(name: selectedTitleItem.name, width: 110),
                     ),
                 ],
                 ),
