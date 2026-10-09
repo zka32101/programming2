@@ -36,6 +36,8 @@ import 'package:shared_core/shared_core.dart'
         NotificationBadge,
         NotificationListPage;
 import '../widgets/daily_bonus_dialog.dart';
+import '../widgets/title_plate.dart';
+import '../features/shop/title/title_provider.dart';
 import '../widgets/daily_mission_card.dart';
 import '../widgets/timer_chip_widget.dart';
 import '../widgets/badge_progress_tracker.dart';
@@ -202,6 +204,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         : null;
     final equipped = ref.watch(equippedItemsProvider).equippedByCategory;
     final weeklyBonus = ref.watch(weeklyBonusProvider);
+    final activeTitle = ref.watch(activeTitleProvider);
 
     // ショップで装着中の背景テーマ（shared_core の共通テーマ）があれば優先。
     final equippedThemeId = equipped['背景'];
@@ -263,6 +266,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     end: Alignment.bottomRight,
                   ),
                 ),
+                // 選んだ称号は名前(ツールバー)の真下に出す。
+                child: activeTitle == null
+                    ? null
+                    : Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12, bottom: 2),
+                          child: TitlePlate(name: activeTitle.name, width: 110),
+                        ),
+                      ),
               ),
             ),
             titleSpacing: 12,

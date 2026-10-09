@@ -5,6 +5,9 @@ import '../../../theme/app_theme.dart';
 import 'decor_items.dart';
 import 'decor_provider.dart';
 import 'decor_scope.dart';
+import '../title/title_data.dart';
+import '../title/title_provider.dart';
+import '../../../widgets/title_plate.dart';
 
 /// 買ったきせかえ（背景・フレーム・エフェクト）をえらんでつける画面。
 class DecorScreen extends ConsumerWidget {
@@ -15,6 +18,8 @@ class DecorScreen extends ConsumerWidget {
     final owned = ref.watch(purchasedItemsProvider).ownedItemIds;
     final active = ref.watch(activeDecorProvider);
     final mine = [for (final i in kDecorItems) if (owned.contains(i.id)) i];
+    final stats = ref.watch(titleStatsProvider);
+    final myTitles = [for (final t in kTitleDefs) if (isTitleAvailable(t, stats, owned)) t];
 
     return Scaffold(
       backgroundColor: DecorScope.pageBg(context, kBgLight),
@@ -23,7 +28,7 @@ class DecorScreen extends ConsumerWidget {
         backgroundColor: kPrimaryColor,
         foregroundColor: Colors.white,
       ),
-      body: mine.isEmpty
+      body: mine.isEmpty && myTitles.isEmpty
           ? const _Empty()
           : ListView(
               padding: const EdgeInsets.all(16),
@@ -36,6 +41,7 @@ class DecorScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                 ],
+                _TitleSection(titles: myTitles),
               ],
             ),
     );
@@ -156,6 +162,46 @@ class _Tile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// 称号をえらぶ区分。持っている(買った・解放した)称号だけ並べる。
+class _TitleSection extends ConsumerWidget {
+  const _TitleSection({required this.titles});
+
+  final List<TitleDef> titles;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (titles.isEmpty) return const SizedBox.shrink();
+    final notifier = ref.read(titleSelectionProvider.notifier);
+    final activeId = ref.watch(activeTitleProvider)?.id;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('称号', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: [
+            _Tile(
+              label: 'なし',
+              selected: activeId == null,
+              onTap: notifier.clear,
+              child: const Icon(Icons.block, color: Colors.grey),
+            ),
+            for (final t in titles)
+              _Tile(
+                label: t.name,
+                selected: activeId == t.id,
+                onTap: () => notifier.select(t),
+                child: Center(child: TitlePlate(name: t.name, width: 80)),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
