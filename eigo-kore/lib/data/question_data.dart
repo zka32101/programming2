@@ -244,12 +244,12 @@ final stage2Questions = <Question>[
   // ライティング (2問)
   const Question(
     id: 's2_w1', type: QuestionType.writing, difficulty: DifficultyLevel.beginner,
-    text: '7（Seven）', textJa: '7を英語で書こう',
+    text: '7', textJa: '「7」を英語で選ぼう',
     choices: ['Six', 'Seven', 'Eight'], correctAnswer: 'Seven',
   ),
   const Question(
     id: 's2_w2', type: QuestionType.writing, difficulty: DifficultyLevel.intermediate,
-    text: '12（Twelve）', textJa: '12を英語で書こう',
+    text: '12', textJa: '「12」を英語で選ぼう',
     choices: ['Eleven', 'Twelve', 'Thirteen'], correctAnswer: 'Twelve',
   ),
 ];
@@ -351,12 +351,12 @@ final stage3Questions = <Question>[
   ),
   const Question(
     id: 's3_w1', type: QuestionType.writing, difficulty: DifficultyLevel.beginner,
-    text: '青（Blue）', textJa: '青を英語で選ぼう',
+    text: '青', textJa: '「青」を英語で選ぼう',
     choices: ['Green', 'Blue', 'Red'], correctAnswer: 'Blue',
   ),
   const Question(
     id: 's3_w2', type: QuestionType.writing, difficulty: DifficultyLevel.intermediate,
-    text: '紫（Purple）', textJa: '紫を英語で選ぼう',
+    text: '紫', textJa: '「紫」を英語で選ぼう',
     choices: ['Pink', 'Orange', 'Purple'], correctAnswer: 'Purple',
   ),
 ];
@@ -461,12 +461,12 @@ final stage4Questions = <Question>[
   ),
   const Question(
     id: 's4_w1', type: QuestionType.writing, difficulty: DifficultyLevel.beginner,
-    text: '鳥（Bird）', textJa: '鳥を英語で選ぼう',
+    text: '鳥', textJa: '「鳥」を英語で選ぼう',
     choices: ['Dog', 'Cat', 'Bird'], correctAnswer: 'Bird',
   ),
   const Question(
     id: 's4_w2', type: QuestionType.writing, difficulty: DifficultyLevel.intermediate,
-    text: 'うさぎ（Rabbit）', textJa: 'うさぎを英語で選ぼう',
+    text: 'うさぎ', textJa: '「うさぎ」を英語で選ぼう',
     choices: ['Rabbit', 'Hamster', 'Guinea pig'], correctAnswer: 'Rabbit',
   ),
 ];
@@ -572,12 +572,12 @@ final stage5Questions = <Question>[
   ),
   const Question(
     id: 's5_w1', type: QuestionType.writing, difficulty: DifficultyLevel.beginner,
-    text: 'バナナ（Banana）', textJa: 'バナナを英語で選ぼう',
+    text: 'バナナ', textJa: '「バナナ」を英語で選ぼう',
     choices: ['Apple', 'Banana', 'Orange'], correctAnswer: 'Banana',
   ),
   const Question(
     id: 's5_w2', type: QuestionType.writing, difficulty: DifficultyLevel.intermediate,
-    text: '寿司（Sushi）', textJa: '寿司を英語で選ぼう',
+    text: '寿司', textJa: '「寿司」を英語で選ぼう',
     choices: ['Ramen', 'Tempura', 'Sushi'], correctAnswer: 'Sushi',
   ),
 ];

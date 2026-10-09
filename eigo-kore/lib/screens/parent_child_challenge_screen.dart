@@ -72,6 +72,7 @@ class _ParentChildChallengeScreenState
   Future<void> _startListening() async {
     setState(() { _isListening = true; _recognizedText = ''; });
     await _speech.startListening(
+      expected: _currentQuestion.correctAnswer,
       onResult: (text, isFinal) {
         setState(() { _recognizedText = text; });
         if (isFinal) _stopAndScore();

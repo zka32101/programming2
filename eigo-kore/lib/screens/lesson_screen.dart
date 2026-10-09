@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/question.dart';
 import '../models/stage.dart';
 import '../utils/shuffle_choices.dart';
+import '../utils/listening_accuracy.dart';
 import '../providers/badge_provider.dart';
 import '../providers/coin_provider.dart';
 import '../providers/level_provider.dart';
@@ -122,8 +123,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     );
 
     final maxScore = _questions.fold(0, (sum, q) => sum + q.points);
-    final listeningQs = _questions.where((q) => q.type == QuestionType.listening).toList();
-    final listeningCorrect = listeningQs.isEmpty ? 0.0 : _correct / listeningQs.length;
+    final listeningCorrect = listeningAccuracyOf(_questions, _answerLog);
 
     final badges = ref.read(badgeProvider.notifier);
     final newBadges = await badges.checkAndAward(
@@ -219,6 +219,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     };
     _speech.onError = (_) => onEnded();
     final started = await _speech.startListening(
+      expected: _current.correctAnswer,
       onResult: (text, isFinal) {
         setState(() { _recognizedText = text; });
         if (isFinal) _finishSpeaking(text);

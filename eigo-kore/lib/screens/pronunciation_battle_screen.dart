@@ -87,6 +87,7 @@ class _PronunciationBattleScreenState
   Future<void> _startListening() async {
     setState(() { _isListening = true; _recognizedText = ''; _hasResult = false; _currentScore = 0; });
     await _speech.startListening(
+      expected: _selectedQuestion?.correctAnswer,
       onResult: (text, isFinal) {
         setState(() { _recognizedText = text; });
         if (isFinal) _stopAndScore();

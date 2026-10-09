@@ -106,7 +106,8 @@ class ImprovedQuestionCard extends ConsumerWidget {
 
             AppSpacing.verticalSpacerMd,
 
-            // 音声ボタン
+            // 音声ボタン(ライティングは問題文が日本語で、読み上げると答えになるので出さない)
+            if (question.type != QuestionType.writing)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
