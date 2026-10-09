@@ -117,7 +117,7 @@ class _LessonCard extends ConsumerWidget {
           ),
           child: Center(child: Text(lesson.emoji, style: const TextStyle(fontSize: 22))),
         ),
-        title: Text(lesson.title,
+        title: Text(FuriganaText.plainText(lesson.title),
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
         subtitle: Text('${lesson.grade}年生 ・ 読了目安${lesson.estimatedReadMinutes}分',
             style: const TextStyle(fontSize: 11, color: kTextMuted)),
@@ -167,7 +167,7 @@ class _LessonDetailPageState extends ConsumerState<LessonDetailPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(lesson.title, overflow: TextOverflow.ellipsis),
+        title: Text(FuriganaText.plainText(lesson.title), overflow: TextOverflow.ellipsis),
         actions: [
           IconButton(
             icon: Icon(isFavorite ? Icons.star : Icons.star_border, color: Colors.white),
@@ -191,9 +191,9 @@ class _LessonDetailPageState extends ConsumerState<LessonDetailPage> {
           const SizedBox(height: 20),
           for (final section in lesson.sections) ...[
             if (section.heading != null) ...[
-              Text(section.heading!,
+              FuriganaText(section.heading!,
                   style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold, color: kTextDark)),
+                      fontSize: 16, fontWeight: FontWeight.bold, color: kTextDark, height: 2.0)),
               const SizedBox(height: 8),
             ],
             FuriganaText(

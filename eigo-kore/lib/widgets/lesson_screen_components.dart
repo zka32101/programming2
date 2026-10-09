@@ -359,7 +359,8 @@ class ImprovedAnswerExplanation extends StatelessWidget {
             AppSpacing.verticalSpacerSm,
 
             // 説明
-            if (question.explanation != null && question.explanation!.isNotEmpty) ...[
+            if (question.type != QuestionType.writing &&
+                question.explanation.isNotEmpty) ...[
               Text(
                 '説明',
                 style: AppTypography.labelMedium.copyWith(
@@ -368,7 +369,7 @@ class ImprovedAnswerExplanation extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                question.explanation!,
+                question.explanation,
                 style: AppTypography.bodyMedium.copyWith(
                   color: AppColors.textMuted,
                   height: 1.5,
