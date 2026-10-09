@@ -467,6 +467,26 @@ class _CharacterDetailSheet extends StatelessWidget {
   }
 }
 
+/// キャラID → assets/character_levels のファイル名接頭辞
+@visibleForTesting
+const Map<String, String> kLevelImageBase = {
+  'honhon': '01_honhon',
+  'penpen': '02_penpen',
+  'jisyon': '03_jishin',
+  'kiku': '05_kikukun',
+  'yomu': '06_yomukun',
+  'kaku': '07_kakuchan',
+  'hanasu': '08_hanasun',
+  'kangaeru': '09_kangaeru',
+  'warau': '10_waraun',
+  'naku': '11_nakuchan',
+  'odoroku': '12_odorokukunn',
+  'maru': '13_maruchan',
+  'koma': '14_mojiin',
+  'kagi': '15_kagikun',
+  'kuesu': '16_kuesu_chan',
+};
+
 /// レベル画像ギャラリー（Lv.2-1～Lv.3-3, Lvmax）
 class _LevelImageGallery extends StatelessWidget {
   final String characterId;
@@ -477,31 +497,28 @@ class _LevelImageGallery extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Lv.2, Lv.3, Lvmax の画像を表示
-    // characterId は "01_honhon" 形式
-    final charCode = characterId.split('_')[0];
-    final charName = characterId.split('_').length > 1
-        ? characterId.split('_')[1]
-        : characterId;
+    // character.id (例: honhon) を、画像ファイル名の接頭辞 (例: 01_honhon) に変換する
+    final base = kLevelImageBase[characterId] ?? characterId;
 
     final images = <String>[];
 
     // Lv.2 の表情 3 種
     if (level >= 2) {
       for (int i = 1; i <= 3; i++) {
-        images.add('assets/character_levels/${charCode}_${charName}_lv2_$i.jpg');
+        images.add('assets/character_levels/${base}_lv2_$i.jpg');
       }
     }
 
     // Lv.3 のポーズ 3 種
     if (level >= 3) {
       for (int i = 1; i <= 3; i++) {
-        images.add('assets/character_levels/${charCode}_${charName}_lv3_$i.jpg');
+        images.add('assets/character_levels/${base}_lv3_$i.jpg');
       }
     }
 
     // Lvmax 画像
     if (level >= 5) {
-      images.add('assets/character_levels/${charCode}_${charName}_lvmax.jpg');
+      images.add('assets/character_levels/${base}_lvmax.jpg');
     }
 
     if (images.isEmpty) {
