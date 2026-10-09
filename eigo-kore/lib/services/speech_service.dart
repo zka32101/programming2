@@ -31,6 +31,7 @@ class SpeechService {
   /// 開始できたら true。マイク権限なし・認識サービスなしなら false。
   Future<bool> startListening({
     required void Function(String text, bool isFinal) onResult,
+    String? expected,
   }) async {
     // Initialize lazily so the mic permission prompt appears only when the
     // learner actually starts speaking.
@@ -41,12 +42,35 @@ class SpeechService {
       },
       listenOptions: SpeechListenOptions(
         localeId: 'en_US',
-        listenFor: const Duration(seconds: 8),
-        pauseFor: const Duration(seconds: 2),
+        listenFor: listenForFor(expected),
+        pauseFor: pauseForFor(expected),
       ),
     );
     return true;
   }
+
+  /// 期待文の語数に応じた「無音で打ち切るまでの時間」。
+  /// 「Seven, eight, nine, ten」のように間をあけて言う文が途中で確定しないよう、
+  /// 語数が多いほど長く待つ(1語=2秒、2語=3秒、3語以上=4秒、不明=3秒)。
+  @visibleForTesting
+  static Duration pauseForFor(String? expected) {
+    final n = _wordCount(expected);
+    if (n == 0) return const Duration(seconds: 3);
+    if (n == 1) return const Duration(seconds: 2);
+    if (n == 2) return const Duration(seconds: 3);
+    return const Duration(seconds: 4);
+  }
+
+  /// 認識全体の最大時間。語数が多いほど長くする(8〜14秒)。
+  @visibleForTesting
+  static Duration listenForFor(String? expected) {
+    final n = _wordCount(expected);
+    return Duration(seconds: (8 + (n > 3 ? n - 3 : 0)).clamp(8, 14));
+  }
+
+  static int _wordCount(String? s) => s == null
+      ? 0
+      : s.split(RegExp(r'[\s,]+')).where((w) => w.isNotEmpty).length;
 
   Future<void> stopListening() async {
     await _speech.stop();

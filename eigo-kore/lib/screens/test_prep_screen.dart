@@ -80,6 +80,7 @@ class _TestPrepScreenState extends ConsumerState<TestPrepScreen> {
     if (_isListening) return;
     setState(() { _isListening = true; _recognizedText = ''; });
     await _speech.startListening(
+      expected: _current.correctAnswer,
       onResult: (text, isFinal) {
         setState(() { _recognizedText = text; });
         if (isFinal && text.isNotEmpty) {

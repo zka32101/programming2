@@ -106,12 +106,12 @@ final stage6Questions = <Question>[
   // ライティング (2問)
   const Question(
     id: 's6_w1', type: QuestionType.writing, difficulty: DifficultyLevel.beginner,
-    text: '先生（Teacher）', textJa: '先生を英語で選ぼう',
+    text: '先生', textJa: '「先生」を英語で選ぼう',
     choices: ['Student', 'Teacher', 'Principal'], correctAnswer: 'Teacher',
   ),
   const Question(
     id: 's6_w2', type: QuestionType.writing, difficulty: DifficultyLevel.intermediate,
-    text: '教室（Classroom）', textJa: '教室を英語で選ぼう',
+    text: '教室', textJa: '「教室」を英語で選ぼう',
     choices: ['Gym', 'Library', 'Classroom'], correctAnswer: 'Classroom',
   ),
 ];
@@ -220,12 +220,12 @@ final stage7Questions = <Question>[
   // ライティング (2問)
   const Question(
     id: 's7_w1', type: QuestionType.writing, difficulty: DifficultyLevel.beginner,
-    text: '父（Father）', textJa: '父を英語で選ぼう',
+    text: '父', textJa: '「父」を英語で選ぼう',
     choices: ['Brother', 'Father', 'Grandfather'], correctAnswer: 'Father',
   ),
   const Question(
     id: 's7_w2', type: QuestionType.writing, difficulty: DifficultyLevel.intermediate,
-    text: '姉妹（Sister）', textJa: '姉妹を英語で選ぼう',
+    text: '姉妹', textJa: '「姉妹」を英語で選ぼう',
     choices: ['Brother', 'Sister', 'Cousin'], correctAnswer: 'Sister',
   ),
 ];
@@ -333,12 +333,12 @@ final stage8Questions = <Question>[
   // ライティング (2問)
   const Question(
     id: 's8_w1', type: QuestionType.writing, difficulty: DifficultyLevel.beginner,
-    text: '手（Hand）', textJa: '手を英語で選ぼう',
+    text: '手', textJa: '「手」を英語で選ぼう',
     choices: ['Foot', 'Hand', 'Arm'], correctAnswer: 'Hand',
   ),
   const Question(
     id: 's8_w2', type: QuestionType.writing, difficulty: DifficultyLevel.intermediate,
-    text: '鼻（Nose）', textJa: '鼻を英語で選ぼう',
+    text: '鼻', textJa: '「鼻」を英語で選ぼう',
     choices: ['Mouth', 'Nose', 'Ear'], correctAnswer: 'Nose',
   ),
 ];
@@ -447,12 +447,12 @@ final stage9Questions = <Question>[
   // ライティング (2問)
   const Question(
     id: 's9_w1', type: QuestionType.writing, difficulty: DifficultyLevel.beginner,
-    text: '雨（Rainy）', textJa: '雨を英語で選ぼう',
+    text: '雨', textJa: '「雨」を英語で選ぼう',
     choices: ['Sunny', 'Rainy', 'Cloudy'], correctAnswer: 'Rainy',
   ),
   const Question(
     id: 's9_w2', type: QuestionType.writing, difficulty: DifficultyLevel.intermediate,
-    text: '雪（Snowy）', textJa: '雪を英語で選ぼう',
+    text: '雪', textJa: '「雪」を英語で選ぼう',
     choices: ['Windy', 'Stormy', 'Snowy'], correctAnswer: 'Snowy',
   ),
 ];
@@ -561,12 +561,12 @@ final stage10Questions = <Question>[
   // ライティング (2問)
   const Question(
     id: 's10_w1', type: QuestionType.writing, difficulty: DifficultyLevel.beginner,
-    text: '読書（Reading）', textJa: '読書を英語で選ぼう',
+    text: '読書', textJa: '「読書」を英語で選ぼう',
     choices: ['Drawing', 'Reading', 'Cooking'], correctAnswer: 'Reading',
   ),
   const Question(
     id: 's10_w2', type: QuestionType.writing, difficulty: DifficultyLevel.advanced,
-    text: '趣味（Hobby）', textJa: '趣味を英語で選ぼう',
+    text: '趣味', textJa: '「趣味」を英語で選ぼう',
     choices: ['Interest', 'Hobby', 'Activity'], correctAnswer: 'Hobby',
   ),
 ];
