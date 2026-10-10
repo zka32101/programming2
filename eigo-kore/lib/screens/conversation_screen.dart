@@ -2,6 +2,8 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/conversation_data.dart';
+import '../data/explain_images.dart';
+import '../widgets/explain_image.dart';
 import '../design_system/design_system.dart';
 import '../providers/coin_provider.dart';
 import '../providers/level_provider.dart';
@@ -154,6 +156,7 @@ class _IntroScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              ExplainImage(assetPath: explainImageForConversation(script.id)),
               Text(script.emoji, style: AppTypography.headlineLarge),
               AppSpacing.verticalSpacerSm,
               Text(script.titleJa,

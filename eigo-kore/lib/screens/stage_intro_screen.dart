@@ -1,7 +1,9 @@
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import '../data/explain_images.dart';
 import '../data/stage_intro_data.dart';
+import '../widgets/explain_image.dart';
 import '../models/stage.dart';
 import '../widgets/educational_illustrations.dart';
 import 'package:eigo_kore/widgets/ukalab_emoji.dart';
@@ -75,6 +77,7 @@ class _StageIntroScreenState extends State<StageIntroScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            ExplainImage(assetPath: explainImageForStage(widget.stage.id)),
             // ヘッダーカード
             _HeaderCard(stage: widget.stage, intro: intro),
             AppSpacing.verticalSpacerMd,
