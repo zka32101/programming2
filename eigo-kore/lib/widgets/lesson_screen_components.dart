@@ -1,4 +1,5 @@
 import '../design_system/design_system.dart';
+import '../data/explain_images.dart';
 import '../theme/component_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -306,12 +307,14 @@ class ImprovedAnswerExplanation extends StatelessWidget {
   final Question question;
   final bool isCorrect;
   final VoidCallback onPlayCorrect;
+  final String? stageId;
 
   const ImprovedAnswerExplanation({
     Key? key,
     required this.question,
     required this.isCorrect,
     required this.onPlayCorrect,
+    this.stageId,
   }) : super(key: key);
 
   @override
@@ -361,6 +364,23 @@ class ImprovedAnswerExplanation extends StatelessWidget {
             // 説明
             if (question.type != QuestionType.writing &&
                 question.explanation.isNotEmpty) ...[
+              if (stageId != null && explainImageForStage(stageId!) != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxHeight: 150),
+                      child: Image.asset(
+                        explainImageForStage(stageId!)!,
+                        key: const Key('explainQuizImage'),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                      ),
+                    ),
+                  ),
+                ),
               Text(
                 '説明',
                 style: AppTypography.labelMedium.copyWith(

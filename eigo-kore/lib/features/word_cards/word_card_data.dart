@@ -44,6 +44,7 @@ final List<WordCard> vehicleWordCards = List.unmodifiable([
   _a('train', 'でんしゃ', 'のりもの'),
   _a('airplane', 'ひこうき', 'のりもの'),
   _a('ship', 'ふね', 'のりもの'),
+  _a('bicycle', 'じてんしゃ', 'のりもの'),
 ]);
 
 final List<WordCard> foodWordCards = List.unmodifiable([

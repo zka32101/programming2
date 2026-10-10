@@ -15,9 +15,9 @@ void main() {
     }
   });
 
-  test('all cards: 39 unique, categories, assets exist', () {
-    expect(allWordCards.length, 39);
-    expect(allWordCards.map((c) => c.english).toSet().length, 39);
+  test('all cards: 40 unique, categories, assets exist', () {
+    expect(allWordCards.length, 40);
+    expect(allWordCards.map((c) => c.english).toSet().length, 40);
     expect(fruitWordCards.every((c) => c.category == 'くだもの'), isTrue);
     expect(vehicleWordCards.every((c) => c.category == 'のりもの'), isTrue);
     expect(foodWordCards.every((c) => c.category == 'たべもの'), isTrue);
@@ -32,16 +32,16 @@ void main() {
     t.view.devicePixelRatio = 1.0;
     addTearDown(t.view.reset);
     await t.pumpWidget(const MaterialApp(home: WordCardsScreen(enableTts: false)));
-    expect(find.text('1/39'), findsOneWidget);
+    expect(find.text('1/40'), findsOneWidget);
     expect(find.text('ねこ'), findsOneWidget);
     await t.tap(find.byKey(const Key('flipCard')));
     await t.pump();
     expect(find.text('cat'), findsOneWidget);
     await t.tap(find.byKey(const Key('nextBtn')));
     await t.pump();
-    expect(find.text('2/39'), findsOneWidget);
+    expect(find.text('2/40'), findsOneWidget);
     expect(find.text('いぬ'), findsOneWidget);
-    for (var i = 0; i < 38; i++) {
+    for (var i = 0; i < 39; i++) {
       await t.tap(find.byKey(const Key('nextBtn')));
       await t.pump();
     }
