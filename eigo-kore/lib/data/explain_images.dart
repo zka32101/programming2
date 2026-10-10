@@ -28,6 +28,7 @@ const Map<String, String> _explainImages = {
   'stage_65': 'assets/explain/stage_65_directions.webp',
   'stage_7': 'assets/explain/stage_7_family.webp',
   'stage_8': 'assets/explain/stage_8_body.webp',
+  'stage_9': 'assets/explain/stage_9_weather.webp',
   'conv_12': 'assets/explain/conv_12_birthday.webp',
   'conv_1': 'assets/explain/conv_1_hajimemashite.webp',
   'conv_2': 'assets/explain/conv_2_restaurant.webp',
