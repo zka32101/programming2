@@ -1,5 +1,6 @@
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import '../reward_assets.dart';
 
 class StreakBadge extends StatelessWidget {
   final int days;
@@ -29,7 +30,11 @@ class StreakBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('🔥', style: TextStyle(fontSize: 14)),
+          Image.asset(
+            streakFlameAsset(days)!,
+            height: 18,
+            errorBuilder: (_, __, ___) => const Text('🔥', style: TextStyle(fontSize: 14)),
+          ),
           const SizedBox(width: 4),
           Text(
             '$days日連続',

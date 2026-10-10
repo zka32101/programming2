@@ -1,5 +1,6 @@
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import '../reward_assets.dart';
 
 class StreakCard extends StatelessWidget {
   final int days;
@@ -51,10 +52,14 @@ class StreakCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  days == 0 ? '❄️' : '🔥',
-                  style: const TextStyle(fontSize: 32),
-                ),
+                if (days == 0)
+                  const Text('❄️', style: TextStyle(fontSize: 32))
+                else
+                  Image.asset(
+                    streakFlameAsset(days)!,
+                    height: 40,
+                    errorBuilder: (_, __, ___) => const Text('🔥', style: TextStyle(fontSize: 32)),
+                  ),
                 const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
