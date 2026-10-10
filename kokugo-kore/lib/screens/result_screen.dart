@@ -9,6 +9,7 @@ import '../providers/coin_provider.dart';
 
 import '../data/kokugo_characters.dart';
 import '../theme/app_theme.dart';
+import '../reward_assets.dart';
 import '../providers/badge_metrics_provider.dart';
 import '../providers/study_habit_provider.dart';
 import '../providers/badge_time_definitions.dart';
@@ -346,6 +347,12 @@ class _ScoreDisplay extends StatelessWidget {
           UkalabEmoji(emoji, size: 64),
           const SizedBox(height: 12),
           Text(message, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: kTextDark)),
+          if (r.isPassed) ...[
+            const SizedBox(height: 12),
+            Image.asset(rewardStickerAsset(r.correctCount, r.totalCount),
+                width: 72, height: 72,
+                errorBuilder: (_, __, ___) => const SizedBox.shrink()),
+          ],
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
