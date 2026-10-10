@@ -21,5 +21,16 @@ void main() {
         endsWith('explain_idiom_ashi_hipparu.webp'));
     expect(explainImageFor('一石二鳥'), endsWith('explain_yoji_isseki_nicho.webp'));
     expect(explainImageFor('七転び八起き'), isNull);
+    expect(explainImageFor('鬼に金棒（おににかなぼう）'),
+        endsWith('explain_proverb_oni_kanabou.webp'));
+    expect(explainImageFor('泣きっ面に蜂（なきっつらにはち）'),
+        endsWith('explain_proverb_nakitsura_hachi.webp'));
+    expect(explainImageFor('棚からぼた餅（たなからぼたもち）'),
+        endsWith('explain_proverb_tana_botamochi.webp'));
+    expect(explainImageFor('頭隠して尻隠さず（あたまかくしてしりかくさず）'),
+        endsWith('explain_proverb_atama_kakushite.webp'));
+    expect(explainImageFor('頭（あたま）を抱（かか）える'),
+        endsWith('explain_idiom_atama_kakaeru.webp'));
+    expect(explainImageFor('弱肉強食'), endsWith('explain_yoji_jakuniku.webp'));
   });
 }
