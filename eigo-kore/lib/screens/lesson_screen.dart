@@ -356,6 +356,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
                       if (_answered || _speakingDone)
                         ImprovedAnswerExplanation(
                           question: _current,
+                          stageId: widget.stage.id,
                           isCorrect: _current.type == QuestionType.speaking
                               ? _speakingScore >= 60
                               : _selectedAnswer == _current.correctAnswer,
