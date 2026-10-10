@@ -35,6 +35,14 @@ class StreakBadge extends StatelessWidget {
             height: 18,
             errorBuilder: (_, __, ___) => const Text('🔥', style: TextStyle(fontSize: 14)),
           ),
+          if (streakCrownAsset(days) != null) ...[
+            const SizedBox(width: 2),
+            Image.asset(
+              streakCrownAsset(days)!,
+              height: 18,
+              errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+            ),
+          ],
           const SizedBox(width: 4),
           Text(
             '$days日連続',

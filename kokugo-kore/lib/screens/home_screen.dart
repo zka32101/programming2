@@ -625,7 +625,8 @@ class _StatsRow extends StatelessWidget {
         children: [
           _StatCard(label: 'れんぞく', value: '${progress.streakDays}日',
               emoji: '🔥', color: const Color(0xFFE74C3C),
-              imageAsset: streakFlameAsset(progress.streakDays)),
+              imageAsset: streakFlameAsset(progress.streakDays),
+              crownAsset: streakCrownAsset(progress.streakDays)),
           const SizedBox(width: 10),
           _StatCard(label: 'コイン', value: '$coinCount枚',
               emoji: '🪙', color: const Color(0xFFFFB81C)),
@@ -645,7 +646,8 @@ class _StatCard extends StatelessWidget {
   final Color color;
   final VoidCallback? onTap;
   final String? imageAsset;
-  const _StatCard({required this.label, required this.value, required this.emoji, required this.color, this.onTap, this.imageAsset});
+  final String? crownAsset;
+  const _StatCard({required this.label, required this.value, required this.emoji, required this.color, this.onTap, this.imageAsset, this.crownAsset});
 
   @override
   Widget build(BuildContext context) {
@@ -661,11 +663,23 @@ class _StatCard extends StatelessWidget {
           ),
           child: Column(
             children: [
-              if (imageAsset != null)
-                Image.asset(imageAsset!, height: 28, width: 28,
-                    errorBuilder: (_, __, ___) => UkalabEmoji(emoji, size: 24))
-              else
-                UkalabEmoji(emoji, size: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (imageAsset != null)
+                    Image.asset(imageAsset!, height: 28, width: 28,
+                        errorBuilder: (_, __, ___) => UkalabEmoji(emoji, size: 24))
+                  else
+                    UkalabEmoji(emoji, size: 24),
+                  if (crownAsset != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 2),
+                      child: Image.asset(crownAsset!, height: 24, width: 24,
+                          errorBuilder: (_, __, ___) => const SizedBox.shrink()),
+                    ),
+                ],
+              ),
               const SizedBox(height: 4),
               Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color)),
               Text(label, style: Theme.of(context).textTheme.bodySmall),
