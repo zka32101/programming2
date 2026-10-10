@@ -60,6 +60,14 @@ class StreakCard extends StatelessWidget {
                     height: 40,
                     errorBuilder: (_, __, ___) => const Text('🔥', style: TextStyle(fontSize: 32)),
                   ),
+                if (streakCrownAsset(days) != null) ...[
+                  const SizedBox(width: 6),
+                  Image.asset(
+                    streakCrownAsset(days)!,
+                    height: 40,
+                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  ),
+                ],
                 const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

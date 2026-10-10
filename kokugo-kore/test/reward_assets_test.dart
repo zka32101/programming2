@@ -43,4 +43,18 @@ void main() {
     ));
     expect(tester.takeException(), isNull);
   });
+
+  test('streakCrownAsset milestones', () {
+    expect(streakCrownAsset(6), isNull);
+    expect(streakCrownAsset(7), contains('trophy_crown'));
+    expect(streakCrownAsset(14), contains('medal_crown'));
+    expect(streakCrownAsset(30), contains('shield_crown'));
+    expect(streakCrownAsset(31), isNull);
+  });
+
+  testWidgets('crown assets load', (tester) async {
+    for (final d in [7, 14, 30]) {
+      await rootBundle.load(streakCrownAsset(d)!);
+    }
+  });
 }
