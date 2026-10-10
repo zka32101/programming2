@@ -20,6 +20,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../providers/profile_provider.dart';
 import '../providers/purchased_items_provider.dart';
 import '../theme/app_theme.dart';
+import '../reward_assets.dart';
 import '../utils/constants.dart';
 import 'package:shared_core/shared_core.dart'
     show
@@ -623,7 +624,8 @@ class _StatsRow extends StatelessWidget {
       child: Row(
         children: [
           _StatCard(label: 'れんぞく', value: '${progress.streakDays}日',
-              emoji: '🔥', color: const Color(0xFFE74C3C)),
+              emoji: '🔥', color: const Color(0xFFE74C3C),
+              imageAsset: streakFlameAsset(progress.streakDays)),
           const SizedBox(width: 10),
           _StatCard(label: 'コイン', value: '$coinCount枚',
               emoji: '🪙', color: const Color(0xFFFFB81C)),
@@ -642,7 +644,8 @@ class _StatCard extends StatelessWidget {
   final String emoji;
   final Color color;
   final VoidCallback? onTap;
-  const _StatCard({required this.label, required this.value, required this.emoji, required this.color, this.onTap});
+  final String? imageAsset;
+  const _StatCard({required this.label, required this.value, required this.emoji, required this.color, this.onTap, this.imageAsset});
 
   @override
   Widget build(BuildContext context) {
@@ -658,7 +661,11 @@ class _StatCard extends StatelessWidget {
           ),
           child: Column(
             children: [
-              UkalabEmoji(emoji, size: 24),
+              if (imageAsset != null)
+                Image.asset(imageAsset!, height: 28, width: 28,
+                    errorBuilder: (_, __, ___) => UkalabEmoji(emoji, size: 24))
+              else
+                UkalabEmoji(emoji, size: 24),
               const SizedBox(height: 4),
               Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color)),
               Text(label, style: Theme.of(context).textTheme.bodySmall),

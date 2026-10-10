@@ -76,6 +76,7 @@ flutter:
     - assets/images/
     - assets/backgrounds/
     - assets/celebrate/
+    - assets/reward/
     - assets/title_plate/
 
 # url_launcher(クロスプロモーション用)が引き込む最新の url_launcher_android は
