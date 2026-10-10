@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('registered explain image assets exist', () {
-    expect(allExplainImagePaths.length, 29);
+    expect(allExplainImagePaths.length, 30);
     for (final p in allExplainImagePaths) {
       expect(File(p).existsSync(), isTrue, reason: p);
     }
