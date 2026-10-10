@@ -1,6 +1,7 @@
 import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import '../reward_assets.dart';
+import 'streak_calendar.dart';
 
 class StreakBadge extends StatelessWidget {
   final int days;
@@ -16,7 +17,9 @@ class StreakBadge extends StatelessWidget {
             ? AppColors.accentOrange
             : AppColors.primary;
 
-    return Container(
+    return GestureDetector(
+      onTap: () => showStreakCalendar(context, days),
+      child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -54,6 +57,7 @@ class StreakBadge extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }

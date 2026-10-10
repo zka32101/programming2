@@ -43,6 +43,7 @@ import '../widgets/daily_mission_card.dart';
 import '../widgets/timer_chip_widget.dart';
 import '../widgets/badge_progress_tracker.dart';
 import 'package:kokugo_kore/widgets/ukalab_emoji.dart';
+import '../widgets/streak_calendar.dart';
 
 AppShopItem? _findCommonShopItem(String? id) {
   if (id == null) return null;
@@ -626,7 +627,8 @@ class _StatsRow extends StatelessWidget {
           _StatCard(label: 'れんぞく', value: '${progress.streakDays}日',
               emoji: '🔥', color: const Color(0xFFE74C3C),
               imageAsset: streakFlameAsset(progress.streakDays),
-              crownAsset: streakCrownAsset(progress.streakDays)),
+              crownAsset: streakCrownAsset(progress.streakDays),
+              onTap: () => showStreakCalendar(context, progress.streakDays)),
           const SizedBox(width: 10),
           _StatCard(label: 'コイン', value: '$coinCount枚',
               emoji: '🪙', color: const Color(0xFFFFB81C)),

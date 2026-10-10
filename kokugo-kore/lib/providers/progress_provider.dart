@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/study_dates.dart';
 
 const _clearedPrefix = 'stage_cleared_';
 const _streakKey = 'streak_count';
@@ -147,6 +148,7 @@ class ProgressNotifier extends Notifier<LearningProgress> {
     await prefs.setBool('$_clearedPrefix$stageId', true);
     await prefs.setInt(_streakKey, streak);
     await prefs.setString(_lastStudyKey, today.toIso8601String());
+    await recordStudyDay(prefs, today, streak: streak);
     await prefs.setInt(_totalCorrectKey, newTotal);
     await prefs.setInt(_totalKanjiKey, newKanji);
     await prefs.setInt(_totalReadingKey, newReading);

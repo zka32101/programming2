@@ -35,6 +35,31 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
   List<BadgeModel> get newBadges => (widget.args['newBadges'] as List<dynamic>? ?? []).cast<BadgeModel>();
   int get xpGained => widget.args['xpGained'] as int? ?? 0;
 
+  List<Widget> _bonusStickers() {
+    final assets = bonusStickerAssets(
+      firstAttempt: widget.args['bonusFirstAttempt'] as bool? ?? false,
+      personalBest: widget.args['bonusPersonalBest'] as bool? ?? false,
+      firstPerfect: widget.args['bonusFirstPerfect'] as bool? ?? false,
+    );
+    if (assets.isEmpty) return const [];
+    return [
+      AppSpacing.verticalSpacerSm,
+      Row(
+        key: const Key('bonus_stickers'),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (final a in assets)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Image.asset(a,
+                  height: 48,
+                  errorBuilder: (_, __, ___) => const SizedBox.shrink()),
+            ),
+        ],
+      ),
+    ];
+  }
+
   double get accuracy => correct / total;
   bool get isPassed => accuracy >= 0.6;
   bool get isExcellent => accuracy >= 0.9;
@@ -111,6 +136,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                     width: 72,
                     errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                   ),
+                  ..._bonusStickers(),
                 ],
                 AppSpacing.verticalSpacerMd,
                 // XPバー（レベル進捗）

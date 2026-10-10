@@ -23,6 +23,7 @@ import '../utils/grade_utils.dart';
 import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 import 'package:sansu_kore/widgets/badge_emblem.dart';
 import '../features/shop/decor/decor_scope.dart';
+import '../widgets/streak_calendar.dart';
 
 AppShopItem? _findShopItem(List<AppShopItem> items, String? id) {
   if (id == null) return null;
@@ -269,7 +270,7 @@ class _StatsRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [
-          _StatCard(label: 'れんぞく', value: '${progress.streakDays}日', emoji: '🔥', imageAsset: streakFlameAsset(progress.streakDays), color: const Color(0xFFE74C3C)),
+          _StatCard(label: 'れんぞく', value: '${progress.streakDays}日', emoji: '🔥', imageAsset: streakFlameAsset(progress.streakDays), color: const Color(0xFFE74C3C), onTap: () => showStreakCalendar(context, progress.streakDays)),
           const SizedBox(width: 10),
           _StatCard(label: 'コイン', value: '$coinCount枚', emoji: '🪙', color: const Color(0xFFFFB81C)),
           const SizedBox(width: 10),
@@ -286,13 +287,16 @@ class _StatCard extends StatelessWidget {
   final String emoji;
   final String? imageAsset;
   final Color color;
+  final VoidCallback? onTap;
 
-  const _StatCard({required this.label, required this.value, required this.emoji, this.imageAsset, required this.color});
+  const _StatCard({required this.label, required this.value, required this.emoji, this.imageAsset, required this.color, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Container(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -309,6 +313,7 @@ class _StatCard extends StatelessWidget {
             Text(label, style: const TextStyle(fontSize: 10, color: kTextMuted)),
           ],
         ),
+      ),
       ),
     );
   }
