@@ -1,5 +1,7 @@
 import 'package:confetti/confetti.dart';
 import '../reward_assets.dart';
+import '../utils/study_dates.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
@@ -43,6 +45,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
   late ConfettiController _confetti;
   List<BadgeModel> _newBadges = [];
   bool _saving = true;
+  List<String> _bonusAssets = const [];
 
   @override
   void initState() {
@@ -67,6 +70,12 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     final r = widget.result;
     final s = widget.stage;
 
+    // おまけシール判定（記録前の進捗で「そのステージの初挑戦か」を見る）
+    final firstAttempt = !ref.read(progressProvider).clearedStageIds.contains('g${s.grade}_s${s.stageNumber}');
+    _bonusAssets = bonusStickerAssets(
+        firstAttempt: firstAttempt && r.isPassed,
+        firstPerfect: firstAttempt && r.isPerfect);
+
     // 学習進捗を保存
     await ref.read(progressProvider.notifier).recordResult(
       grade: s.grade,
@@ -85,6 +94,12 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     );
 
     final progress = ref.read(progressProvider);
+
+    // 学習日の履歴（連続学習カレンダー用）
+    try {
+      await recordStudyDay(await SharedPreferences.getInstance(), DateTime.now(),
+          streak: progress.streakDays);
+    } catch (_) {}
 
     // バッジチェック
     final newBadges = await ref.read(badgeProvider.notifier).checkAndAward(
@@ -220,6 +235,22 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                     width: 72,
                     errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                   ),
+                  if (_bonusAssets.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Row(
+                      key: const Key('bonus_stickers'),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (final a in _bonusAssets)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Image.asset(a,
+                                height: 48,
+                                errorBuilder: (_, __, ___) => const SizedBox.shrink()),
+                          ),
+                      ],
+                    ),
+                  ],
                   const SizedBox(height: 12),
                   _ParentPraiseHint(isPerfect: r.isPerfect),
                   const SizedBox(height: 12),

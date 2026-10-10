@@ -28,3 +28,18 @@ String? streakCrownAsset(int days) {
   if (days == 30) return '${base}streak_shield_crown.webp';
   return null;
 }
+
+/// おまけシール（メインのシールの隣に小さく出す）。最大2個。
+/// 初挑戦=rocket / 自己ベスト更新=trophy_blue / 初回で満点=rainbow_star。
+List<String> bonusStickerAssets({
+  bool firstAttempt = false,
+  bool personalBest = false,
+  bool firstPerfect = false,
+}) {
+  const base = 'assets/reward/';
+  return [
+    if (firstPerfect) '${base}sticker_rainbow_star.webp',
+    if (personalBest) '${base}sticker_trophy_blue.webp',
+    if (firstAttempt) '${base}sticker_rocket.webp',
+  ].take(2).toList();
+}

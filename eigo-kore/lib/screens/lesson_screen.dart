@@ -96,6 +96,13 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
         : _speakingScores.reduce((a, b) => a + b) / _speakingScores.length;
 
     final progress = ref.read(progressProvider.notifier);
+    // おまけシール判定（完了を記録する前の進捗で判定）
+    final prevState = ref.read(progressProvider);
+    final bonusFirstAttempt = !prevState.clearedStages.contains(widget.stage.id);
+    final prevBest = prevState.stageBestScores[widget.stage.id];
+    final bonusPersonalBest = prevBest != null && _score > prevBest;
+    final bonusFirstPerfect =
+        bonusFirstAttempt && _questions.isNotEmpty && _correct == _questions.length;
     final coinsEarned = await progress.completeStage(widget.stage.id, _score, speakAvg);
     await ref.read(coinProvider.notifier).addCoins(coinsEarned);
 
@@ -156,6 +163,9 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
         'duration': DateTime.now().difference(_startTime),
         'newBadges': newBadges,
         'xpGained': totalXp,
+        'bonusFirstAttempt': bonusFirstAttempt,
+        'bonusPersonalBest': bonusPersonalBest,
+        'bonusFirstPerfect': bonusFirstPerfect,
       });
     }
   }

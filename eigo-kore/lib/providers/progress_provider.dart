@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/firebase_service.dart';
+import '../utils/study_dates.dart';
 
 class ProgressState {
   final Set<String> clearedStages;
@@ -132,6 +133,7 @@ class ProgressNotifier extends StateNotifier<ProgressState> {
 
     await prefs.setStringList('cleared_stages', cleared.toList());
     await prefs.setInt('streak_days', newStreak);
+    await recordStudyDay(prefs, today, streak: newStreak);
     await prefs.setInt('total_lessons', newLessons);
 
     final coinsEarned = (score ~/ 10) + 5;
