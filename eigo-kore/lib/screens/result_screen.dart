@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/badge_model.dart';
 import '../models/stage.dart';
+import '../reward_assets.dart';
 import '../providers/level_provider.dart';
 import '../widgets/xp_bar.dart';
 import '../widgets/new_badge_dialog.dart';
@@ -102,6 +103,15 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                   score: score,
                   xpGained: xpGained,
                 ),
+                if (isPassed) ...[
+                  AppSpacing.verticalSpacerMd,
+                  Image.asset(
+                    rewardStickerAsset(correct, total),
+                    key: const Key('reward_sticker'),
+                    width: 72,
+                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  ),
+                ],
                 AppSpacing.verticalSpacerMd,
                 // XPバー（レベル進捗）
                 if (xpGained > 0) XpBar(level: level),
