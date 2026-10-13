@@ -209,7 +209,10 @@ class _LevelUpCard extends ConsumerWidget {
                   SizedBox(
                     width: 48,
                     height: 48,
-                    child: Image.asset(character.imageAsset!,
+                    // レベルに応じた画像（命名規則 _lvN_ に合わない場合は基本画像）
+                    child: Image.asset(
+                        character.imageAssetForLevel(state.level) ??
+                            character.imageAsset!,
                         fit: BoxFit.contain),
                   )
                 else
