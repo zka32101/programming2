@@ -67,10 +67,36 @@ final List<WordCard> schoolWordCards = List.unmodifiable([
   _a('clock', 'とけい', 'がっきゅうのどうぐ'),
 ]);
 
+final List<WordCard> weatherWordCards = List.unmodifiable([
+  _a('sunny', 'はれ', 'てんき'),
+  _a('cloudy', 'くもり', 'てんき'),
+  _a('rainy', 'あめ', 'てんき'),
+  _a('snowy', 'ゆき', 'てんき'),
+  _a('windy', 'かぜ', 'てんき'),
+  _a('thunder', 'かみなり', 'てんき'),
+  _a('rainbow', 'にじ', 'てんき'),
+  _a('typhoon', 'たいふう', 'てんき'),
+]);
+
+final List<WordCard> colorWordCards = List.unmodifiable([
+  _a('red', 'あか', 'いろ', 'color_red'),
+  _a('blue', 'あお', 'いろ', 'color_blue'),
+  _a('yellow', 'きいろ', 'いろ', 'color_yellow'),
+  _a('green', 'みどり', 'いろ', 'color_green'),
+  _a('pink', 'ピンク', 'いろ', 'color_pink'),
+  _a('purple', 'むらさき', 'いろ', 'color_purple'),
+  _a('orange', 'オレンジ', 'いろ', 'color_orange'),
+  _a('black', 'くろ', 'いろ', 'color_black'),
+  _a('white', 'しろ', 'いろ', 'color_white'),
+  _a('brown', 'ちゃいろ', 'いろ', 'color_brown'),
+]);
+
 final List<WordCard> allWordCards = List.unmodifiable([
   ...animalWordCards,
   ...fruitWordCards,
   ...vehicleWordCards,
   ...foodWordCards,
   ...schoolWordCards,
+  ...weatherWordCards,
+  ...colorWordCards,
 ]);
