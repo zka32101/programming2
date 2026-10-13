@@ -108,22 +108,22 @@ Future<void> main() async {
     statusBarIconBrightness: Brightness.light,
   ));
 
+  // 起動をネットワーク待ちで止めない: 各初期化にタイムアウトを付け、
+  // Remote Config の取得はバックグラウンドで行う(審査端末の低速/オフライン対策)
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
-    );
-    await CrossPromoService.init();
+    ).timeout(const Duration(seconds: 5));
+    await CrossPromoService.init().timeout(const Duration(seconds: 3));
 
     // Phase 4.12-4.14: RemoteConfig 初期化（Dynamic Pricing・Retention・Multiplayer 用）
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.setConfigSettings(
       RemoteConfigSettings(
-        fetchTimeout: const Duration(minutes: 1),
+        fetchTimeout: const Duration(seconds: 10),
         minimumFetchInterval: const Duration(hours: 1),
       ),
     );
-    await remoteConfig.fetchAndActivate();
-
     // デフォルト値を設定（Pricing・Retention・Multiplayer 設定）
     await remoteConfig.setDefaults({
       'pricing_new_user_discount': 0.2,  // 20% 割引
@@ -133,12 +133,16 @@ Future<void> main() async {
       'multiplayer_rating_initial': 1500,  // 初期レート
       'multiplayer_rating_change_base': 30,  // レート変動基本値
     });
+    // 取得は待たない(取得できた値は次回以降/取得完了後に反映)
+    unawaited(remoteConfig.fetchAndActivate().then((_) {}).catchError((_) {}));
   } catch (_) {}
 
   // RevenueCat 初期化（本番キー未設定=--dart-define 未指定の場合はスキップ）
   if (SubscriptionConfig.isConfigured) {
     try {
-      await KokugoPurchaseService().initialize();
+      await KokugoPurchaseService()
+          .initialize()
+          .timeout(const Duration(seconds: 5));
     } catch (_) {}
   }
 
