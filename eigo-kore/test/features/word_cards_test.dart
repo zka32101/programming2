@@ -15,13 +15,17 @@ void main() {
     }
   });
 
-  test('all cards: 40 unique, categories, assets exist', () {
-    expect(allWordCards.length, 40);
-    expect(allWordCards.map((c) => c.english).toSet().length, 40);
+  test('all cards: 58 unique, categories, assets exist', () {
+    expect(allWordCards.length, 58);
+    expect(allWordCards.map((c) => c.image).toSet().length, 58);
     expect(fruitWordCards.every((c) => c.category == 'くだもの'), isTrue);
     expect(vehicleWordCards.every((c) => c.category == 'のりもの'), isTrue);
     expect(foodWordCards.every((c) => c.category == 'たべもの'), isTrue);
     expect(schoolWordCards.every((c) => c.category == 'がっきゅうのどうぐ'), isTrue);
+    expect(weatherWordCards.length, 8);
+    expect(colorWordCards.length, 10);
+    expect(weatherWordCards.every((c) => c.category == 'てんき'), isTrue);
+    expect(colorWordCards.every((c) => c.category == 'いろ'), isTrue);
     for (final c in allWordCards) {
       expect(File(c.image).existsSync(), isTrue, reason: c.image);
     }
@@ -32,16 +36,16 @@ void main() {
     t.view.devicePixelRatio = 1.0;
     addTearDown(t.view.reset);
     await t.pumpWidget(const MaterialApp(home: WordCardsScreen(enableTts: false)));
-    expect(find.text('1/40'), findsOneWidget);
+    expect(find.text('1/58'), findsOneWidget);
     expect(find.text('ねこ'), findsOneWidget);
     await t.tap(find.byKey(const Key('flipCard')));
     await t.pump();
     expect(find.text('cat'), findsOneWidget);
     await t.tap(find.byKey(const Key('nextBtn')));
     await t.pump();
-    expect(find.text('2/40'), findsOneWidget);
+    expect(find.text('2/58'), findsOneWidget);
     expect(find.text('いぬ'), findsOneWidget);
-    for (var i = 0; i < 39; i++) {
+    for (var i = 0; i < 57; i++) {
       await t.tap(find.byKey(const Key('nextBtn')));
       await t.pump();
     }
