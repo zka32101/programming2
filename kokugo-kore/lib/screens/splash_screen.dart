@@ -58,7 +58,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       ref.read(dailyBonusProvider.notifier).load(),
       ref.read(adaptiveProvider.notifier).load(),
       ref.read(learningTimerProvider.notifier).load(),
-      FirebaseService.signInAnonymously(),
+      // オフライン/低速でもホームへ進めるよう、タイムアウト+失敗無視にする
+      Future<void>.sync(() => FirebaseService.signInAnonymously())
+          .timeout(const Duration(seconds: 4))
+          .catchError((_) {}),
     ]);
     await Future.delayed(const Duration(milliseconds: 1600));
     if (!mounted) return;
