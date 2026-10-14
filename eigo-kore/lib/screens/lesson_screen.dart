@@ -47,6 +47,8 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   String _recognizedText = '';
   int _speakingScore = 0;
   bool _speakingDone = false;
+  int _skippedSpeaking = 0;
+  bool _micUnavailable = false;
   final _startTime = DateTime.now();
 
   // 元データは正解が選択肢の前方に偏っているため、レッスン開始時に選択肢をシャッフルする
@@ -86,6 +88,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
       _recognizedText = '';
       _speakingScore = 0;
       _speakingDone = false;
+      _micUnavailable = false;
     });
     if (_current.type == QuestionType.listening) _autoPlay();
   }
@@ -111,9 +114,11 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     final phraseCount = speakingQs.where((q) => q.difficulty == DifficultyLevel.intermediate).length;
     final convCount = speakingQs.where((q) => q.difficulty == DifficultyLevel.advanced).length;
 
+    // スキップした発音問題は練習回数に数えない
+    final practicedSpeaking = (widget.stage.speakingCount - _skippedSpeaking).clamp(0, widget.stage.speakingCount);
     await progress.addSpeakingPractice(
-      widget.stage.speakingCount,
-      isConversation: convCount > 0,
+      practicedSpeaking,
+      isConversation: convCount > 0 && practicedSpeaking > 0,
     );
 
     // 弱点データを一括記録
@@ -206,6 +211,15 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     _feedPetFromScore(s, text);
   }
 
+  /// 発音問題をスキップ: 採点せず、点数・正解数・発音スコア・弱点記録のいずれにも加えない
+  Future<void> _skipSpeaking() async {
+    if (_speakingDone) return;
+    if (_isListening) await _speech.stopListening();
+    if (!mounted) return;
+    _skippedSpeaking++;
+    _nextQ();
+  }
+
   Future<void> _startListening() async {
     if (_isListening) return;
     setState(() { _isListening = true; _recognizedText = ''; });
@@ -236,7 +250,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
       },
     );
     if (!started && mounted) {
-      setState(() { _isListening = false; });
+      setState(() { _isListening = false; _micUnavailable = true; });
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('マイクが使えないみたい。マイクの許可と音声認識を確かめてね'),
       ));
@@ -353,6 +367,8 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
                           onStart: _startListening,
                           onStop: _stopListening,
                           onPlay: () => _tts.speak(_current.text),
+                          onSkip: _skipSpeaking,
+                          micUnavailable: _micUnavailable,
                         )
                       else
                         ImprovedChoiceArea(
@@ -433,6 +449,8 @@ class _SpeakingArea extends StatelessWidget {
   final VoidCallback onStart;
   final VoidCallback onStop;
   final VoidCallback onPlay;
+  final VoidCallback onSkip;
+  final bool micUnavailable;
 
   const _SpeakingArea({
     required this.question,
@@ -443,6 +461,8 @@ class _SpeakingArea extends StatelessWidget {
     required this.onStart,
     required this.onStop,
     required this.onPlay,
+    required this.onSkip,
+    required this.micUnavailable,
   });
 
   @override
@@ -453,6 +473,21 @@ class _SpeakingArea extends StatelessWidget {
         child: Column(
           children: [
             if (!speakingDone) ...[
+              if (micUnavailable) ...[
+                Container(
+                  padding: EdgeInsets.all(AppSpacing.sm),
+                  decoration: BoxDecoration(
+                    color: AppColors.accentOrange.withAlpha(38),
+                    borderRadius: BorderRadius.circular(AppSizes.borderRadius),
+                  ),
+                  child: Text(
+                    'マイクが使えないよ。許可を確かめるか、「スキップ」で次に進もう',
+                    style: AppTypography.labelLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                AppSpacing.verticalSpacerMd,
+              ],
               Text(
                 'マイクに向かって発音してみよう！',
                 style: AppTypography.labelLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
@@ -486,6 +521,15 @@ class _SpeakingArea extends StatelessWidget {
                   color: isListening ? AppColors.speakingColor : AppColors.textMuted,
                   fontWeight: isListening ? FontWeight.bold : FontWeight.normal,
                 ),
+              ),
+              AppSpacing.verticalSpacerSm,
+              OutlinedButton.icon(
+                onPressed: onSkip,
+                icon: const Icon(Icons.skip_next),
+                label: const Text('スキップ'),
+                style: micUnavailable
+                    ? OutlinedButton.styleFrom(foregroundColor: AppColors.accentOrange)
+                    : null,
               ),
               if (recognizedText.isNotEmpty) ...[
                 AppSpacing.verticalSpacerXs,
