@@ -143,7 +143,7 @@ class EigoKoreApp extends ConsumerWidget {
     // 起動時は '/' の SplashScreen がプロフィール有無で '/home' か '/profile-select' へ遷移する
 
     return MaterialApp(
-      title: '英語コレ！',
+      title: '小学コレ！英語',
       theme: buildAppTheme(),
       darkTheme: buildDarkAppTheme(),
       debugShowCheckedModeBanner: false,
