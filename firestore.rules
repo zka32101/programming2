@@ -11,11 +11,12 @@ service cloud.firestore {
         allow read, write: if request.auth.uid == userId;
 
         // ScreenTime Config - 親のみ読取/書き込み
+        // 注意: 同じパスの allow は OR 評価。検証は create/update の条件に統合する。
         match /screen_time_config/{configDoc} {
-          allow read, write: if request.auth.uid == userId;
+          allow read, delete: if request.auth != null && request.auth.uid == userId;
 
           // Validation rules
-          allow write: if
+          allow create, update: if request.auth != null && request.auth.uid == userId &&
             request.resource.data.dailyLimitMinutes > 0 &&
             request.resource.data.dailyLimitMinutes <= 480 &&
             request.resource.data.usedTodayMinutes >= 0 &&
@@ -25,10 +26,10 @@ service cloud.firestore {
 
         // ScreenTime History
         match /screen_time_history/{historyDoc} {
-          allow read, write: if request.auth.uid == userId;
+          allow read, delete: if request.auth != null && request.auth.uid == userId;
 
           // History entries validation
-          allow write: if
+          allow create, update: if request.auth != null && request.auth.uid == userId &&
             request.resource.data.date is string &&
             request.resource.data.entries is list;
         }
@@ -46,10 +47,10 @@ service cloud.firestore {
         && progressId.matches(request.auth.uid + '_.*');
     }
 
-    // Public data (if needed for future features)
+    // Public data: 読み取りのみ公開。書き込みはクライアントから不可(管理者は Admin SDK 経由)。
     match /public/{document=**} {
       allow read: if true;
-      allow write: if request.auth != null && request.auth.uid != null;
+      allow write: if false;
     }
 
     // Deny all other access by default

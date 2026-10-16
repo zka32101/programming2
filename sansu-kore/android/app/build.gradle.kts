@@ -67,6 +67,15 @@ android {
             signingConfig = if (hasReleaseSigning) {
                 signingConfigs.getByName("release")
             } else {
+                // Play 提出用の AAB を、release 署名なし(debug 署名)で作ってしまう事故を防ぐ。
+                // CI(CI=true)で bundle 系タスクを実行し、key.properties が無ければビルドを失敗させる。
+                // APK の動作確認や、手元の `flutter run --release` は、従来どおり debug 署名で通る。
+                val wantsBundle = gradle.startParameter.taskNames.any { it.contains("bundle", ignoreCase = true) }
+                if (System.getenv("CI") == "true" && wantsBundle) {
+                    throw GradleException(
+                        "release 署名(android/key.properties)がありません。debug 署名の AAB を作らないよう、ビルドを中止します。"
+                    )
+                }
                 signingConfigs.getByName("debug")
             }
         }
