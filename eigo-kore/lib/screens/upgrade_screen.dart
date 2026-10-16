@@ -60,7 +60,7 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
                   const Text('🎤', style: TextStyle(fontSize: 48)),
                   AppSpacing.verticalSpacerXs,
                   Text(
-                    '英語コレ！を\nずっと使おう',
+                    '小学コレ！英語を\nずっと使おう',
                     style: AppTypography.headlineLarge
                         .copyWith(color: AppColors.textWhite, height: 1.4),
                     textAlign: TextAlign.center,

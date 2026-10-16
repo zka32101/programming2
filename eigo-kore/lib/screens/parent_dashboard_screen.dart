@@ -406,7 +406,7 @@ class _AIAdviceCard extends StatelessWidget {
     if (lessons == 0) {
       growth = 'まだ学習が始まっていません。最初のレッスンに挑戦してみましょう！';
       challenge = '最初のレッスンを完了することが目標です。';
-      parentAction = '「英語コレ！」を一緒に開いて、子どもに操作を教えてあげてください。';
+      parentAction = '「小学コレ！英語」を一緒に開いて、子どもに操作を教えてあげてください。';
     } else if (speaking < 10) {
       growth = 'はじめの一歩を踏み出しました！リスニングで英語の音に慣れてきています。';
       challenge = 'スピーキング練習がまだ少ないです。マイクを使った発音練習を増やしましょう。';

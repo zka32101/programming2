@@ -152,7 +152,7 @@ class HomeScreen extends ConsumerWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  '英語コレ！',
+                                  '小学コレ！英語',
                                   style: AppTypography.labelLarge.copyWith(color:AppColors.textWhite, fontWeight: FontWeight.bold),
                                 ),
                                 Row(
