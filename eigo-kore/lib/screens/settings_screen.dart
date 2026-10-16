@@ -111,7 +111,7 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: 'バージョン 1.1.0',
             onTap: () => showAboutDialog(
               context: context,
-              applicationName: '英語コレ！',
+              applicationName: '小学コレ！英語',
               applicationVersion: '1.1.0',
               applicationLegalese: '© 2026 ',
             ),

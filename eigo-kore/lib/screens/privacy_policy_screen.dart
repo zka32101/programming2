@@ -18,7 +18,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
       body: SingleChildScrollView(
         padding: AppSpacing.allPaddingMd,
         child: SelectableText(
-          '''英語コレ！プライバシーポリシー
+          '''小学コレ！英語 プライバシーポリシー
 
 最終更新日: 2026年1月1日
 

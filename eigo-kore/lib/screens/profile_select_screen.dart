@@ -84,7 +84,7 @@ class _ProfileSelectScreenState extends ConsumerState<ProfileSelectScreen> {
               child: Column(
                 children: [
                   Text(
-                    '英語コレ！',
+                    '小学コレ！英語',
                     style: AppTypography.headlineLarge.copyWith(color: AppColors.textWhite),
                   ),
                   AppSpacing.verticalSpacerXs,
