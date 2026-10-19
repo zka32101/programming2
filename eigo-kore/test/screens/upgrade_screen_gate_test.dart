@@ -1,0 +1,99 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:eigo_kore/providers/premium_provider.dart';
+import 'package:eigo_kore/screens/upgrade_screen.dart';
+import 'package:eigo_kore/widgets/parental_gate.dart';
+
+class _FakePremium extends PremiumNotifier {
+  int yearly = 0;
+  int monthly = 0;
+
+  @override
+  Future<bool> purchaseYearly() async {
+    yearly++;
+    return false; // 画面を閉じない(maybePop を避ける)
+  }
+
+  @override
+  Future<bool> purchaseMonthly() async {
+    monthly++;
+    return false;
+  }
+}
+
+int _answer(WidgetTester tester) {
+  final q = tester
+      .widgetList<Text>(find.byType(Text))
+      .map((t) => t.data ?? '')
+      .firstWhere((d) => d.contains(' × '));
+  final m = RegExp(r'(\d+) × (\d+)').firstMatch(q)!;
+  return int.parse(m.group(1)!) * int.parse(m.group(2)!);
+}
+
+void main() {
+  late _FakePremium fake;
+
+  setUp(() {
+    ParentalGateLockout.reset();
+    fake = _FakePremium();
+  });
+
+  Future<void> pump(WidgetTester tester) async {
+    await tester.pumpWidget(ProviderScope(
+      overrides: [premiumProvider.overrideWith((ref) => fake)],
+      child: const MaterialApp(home: UpgradeScreen()),
+    ));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('購入ボタンを押すと保護者ゲートが出て、「やめる」では購入されない', (tester) async {
+    await pump(tester);
+
+    await tester.tap(find.text('年額プラン'));
+    await tester.pumpAndSettle();
+    expect(find.text('🔒 保護者の方へ確認'), findsOneWidget);
+    expect(fake.yearly, 0);
+
+    await tester.tap(find.text('やめる'));
+    await tester.pumpAndSettle();
+    expect(fake.yearly, 0);
+
+    await tester.tap(find.text('月額プラン'));
+    await tester.pumpAndSettle();
+    expect(find.text('🔒 保護者の方へ確認'), findsOneWidget);
+    await tester.tap(find.text('やめる'));
+    await tester.pumpAndSettle();
+    expect(fake.monthly, 0);
+  });
+
+  testWidgets('ゲートに正解すると、年額・月額の購入が実行される', (tester) async {
+    await pump(tester);
+
+    await tester.tap(find.text('年額プラン'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '${_answer(tester)}');
+    await tester.tap(find.text('つぎへ'));
+    await tester.pumpAndSettle();
+    expect(fake.yearly, 1);
+
+    await tester.tap(find.text('月額プラン'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '${_answer(tester)}');
+    await tester.tap(find.text('つぎへ'));
+    await tester.pumpAndSettle();
+    expect(fake.monthly, 1);
+  });
+
+  testWidgets('間違えると購入されない', (tester) async {
+    await pump(tester);
+
+    await tester.tap(find.text('年額プラン'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '${_answer(tester) + 1}');
+    await tester.tap(find.text('つぎへ'));
+    await tester.pumpAndSettle();
+    expect(fake.yearly, 0);
+    expect(find.textContaining('答えが違います'), findsOneWidget);
+  });
+}

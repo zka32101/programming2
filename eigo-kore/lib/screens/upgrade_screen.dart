@@ -2,6 +2,7 @@ import '../design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/premium_provider.dart';
+import '../widgets/parental_gate.dart';
 
 /// プレミアム購読画面（月額¥300 / 年額¥2,400、小学コレシリーズ共通価格）。
 class UpgradeScreen extends ConsumerStatefulWidget {
@@ -15,8 +16,14 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
   bool _busy = false;
 
   Future<void> _run(Future<bool> Function() action, String successMessage,
-      String failureMessage) async {
+      String failureMessage,
+      {bool requireGate = false}) async {
     if (_busy) return;
+    // 課金の前に、保護者(大人)であることを確認する。
+    if (requireGate) {
+      final passed = await requireParentalGate(context);
+      if (!passed || !mounted) return;
+    }
     setState(() => _busy = true);
     final ok = await action();
     if (!mounted) return;
@@ -82,7 +89,8 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
                 onTap: _busy
                     ? null
                     : () => _run(notifier.purchaseYearly, 'ご購入ありがとうございます！',
-                        '購入できませんでした'),
+                        '購入できませんでした',
+                        requireGate: true),
               ),
               AppSpacing.verticalSpacerXs,
               _PlanTile(
@@ -92,7 +100,8 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
                 onTap: _busy
                     ? null
                     : () => _run(notifier.purchaseMonthly, 'ご購入ありがとうございます！',
-                        '購入できませんでした'),
+                        '購入できませんでした',
+                        requireGate: true),
               ),
               AppSpacing.verticalSpacerMd,
             ],
