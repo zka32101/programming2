@@ -1,0 +1,31 @@
+name: color_sort_app CI
+
+on:
+  push:
+    paths:
+      - 'games/color_sort_app/**'
+      - 'games/color_sort/**'
+      - 'puzzle_core/**'
+      - '.github/workflows/color-sort-app-ci.yml'
+  pull_request:
+    paths:
+      - 'games/color_sort_app/**'
+      - 'games/color_sort/**'
+      - 'puzzle_core/**'
+      - '.github/workflows/color-sort-app-ci.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: games/color_sort_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test
