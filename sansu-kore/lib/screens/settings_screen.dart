@@ -1,7 +1,8 @@
 import 'package:sansu_kore/features/shop/decor/decor_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_core/shared_core.dart' show AnalyticsDashboard, ParentalGateService;
+import 'package:shared_core/shared_core.dart' show AnalyticsDashboard;
+import '../widgets/parental_gate.dart';
 import 'package:cross_promo_kit/cross_promo_kit.dart' show CrossPromoSection;
 import '../providers/profile_provider.dart';
 import '../providers/progress_provider.dart';
@@ -204,7 +205,7 @@ class _SettingsTabContent extends ConsumerWidget {
           CrossPromoSection(
             currentAppId: 'com.yourwish.shougakukore.sansu',
             currentCategory: '小学コレ',
-            beforeOpenStore: (context) => ParentalGateService.requireParentalGate(context),
+            beforeOpenStore: (context) => requireParentalGate(context),
           ),
           const SizedBox(height: 16),
         ],
