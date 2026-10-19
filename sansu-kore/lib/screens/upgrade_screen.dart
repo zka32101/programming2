@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/premium_provider.dart';
 import '../theme/app_theme.dart';
+import '../widgets/parental_gate.dart';
 
 class UpgradeScreen extends ConsumerStatefulWidget {
   const UpgradeScreen({super.key});
@@ -114,6 +115,9 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
   }
 
   Future<void> _purchase(BuildContext context, WidgetRef ref, {required bool monthly}) async {
+    // 課金の前に、保護者(大人)であることを確認する。
+    final passedGate = await requireParentalGate(context);
+    if (!passedGate || !context.mounted) return;
     setState(() => _purchasing = true);
     try {
       final success = monthly
