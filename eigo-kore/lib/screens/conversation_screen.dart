@@ -219,7 +219,6 @@ class _ConversationPlayScreenState extends ConsumerState<_ConversationPlayScreen
   void initState() {
     super.initState();
     _confetti = ConfettiController(duration: const Duration(seconds: 2));
-    _speech.init();
     _processNextTurn();
   }
 
@@ -270,12 +269,18 @@ class _ConversationPlayScreenState extends ConsumerState<_ConversationPlayScreen
 
   Future<void> _startListening() async {
     setState(() { _isListening = true; _recognizedText = ''; });
-    await _speech.startListening(
+    final started = await _speech.startListening(
       onResult: (text, isFinal) {
         setState(() { _recognizedText = text; });
         if (isFinal) _stopAndSubmit();
       },
     );
+    if (!started && mounted) {
+      setState(() { _isListening = false; });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(SpeechService.micUnavailableMessage),
+      ));
+    }
   }
 
   Future<void> _stopAndSubmit() async {

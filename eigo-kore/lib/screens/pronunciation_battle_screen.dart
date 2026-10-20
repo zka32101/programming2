@@ -39,7 +39,6 @@ class _PronunciationBattleScreenState
   void initState() {
     super.initState();
     _confetti = ConfettiController(duration: const Duration(seconds: 2));
-    _speech.init();
     final speakers = allStages.expand((s) => s.questions)
         .where((q) => q.type == QuestionType.speaking)
         .toList();
@@ -86,13 +85,19 @@ class _PronunciationBattleScreenState
 
   Future<void> _startListening() async {
     setState(() { _isListening = true; _recognizedText = ''; _hasResult = false; _currentScore = 0; });
-    await _speech.startListening(
+    final started = await _speech.startListening(
       expected: _selectedQuestion?.correctAnswer,
       onResult: (text, isFinal) {
         setState(() { _recognizedText = text; });
         if (isFinal) _stopAndScore();
       },
     );
+    if (!started && mounted) {
+      setState(() { _isListening = false; });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(SpeechService.micUnavailableMessage),
+      ));
+    }
   }
 
   Future<void> _stopAndScore() async {

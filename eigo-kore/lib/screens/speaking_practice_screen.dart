@@ -41,7 +41,6 @@ class _SpeakingPracticeScreenState extends ConsumerState<SpeakingPracticeScreen>
   @override
   void initState() {
     super.initState();
-    _speech.init();
   }
 
   void _startPractice(Stage stage) {
@@ -67,7 +66,7 @@ class _SpeakingPracticeScreenState extends ConsumerState<SpeakingPracticeScreen>
   Future<void> _startListening() async {
     if (_isListening) return;
     setState(() { _isListening = true; _recognizedText = ''; _answered = false; });
-    await _speech.startListening(
+    final started = await _speech.startListening(
       expected: _questions[_qIndex].correctAnswer,
       onResult: (text, isFinal) {
         setState(() => _recognizedText = text);
@@ -79,6 +78,12 @@ class _SpeakingPracticeScreenState extends ConsumerState<SpeakingPracticeScreen>
         }
       },
     );
+    if (!started && mounted) {
+      setState(() { _isListening = false; });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(SpeechService.micUnavailableMessage),
+      ));
+    }
   }
 
   Future<void> _stopListening() async {
