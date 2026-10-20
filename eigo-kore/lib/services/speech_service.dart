@@ -16,7 +16,8 @@ class SpeechService {
   void Function(String error)? onError;
 
   Future<bool> init() async {
-    if (_initialized) return _available;
+    // 権限なしで失敗した場合は、あとで許可されたときのために毎回やり直す。
+    if (_initialized && _available) return true;
     _available = await _speech.initialize(
       onError: (error) => onError?.call(error.errorMsg),
       onStatus: (status) => onStatus?.call(status),
@@ -24,6 +25,9 @@ class SpeechService {
     _initialized = true;
     return _available;
   }
+
+  static const micUnavailableMessage =
+      'マイクが使えないみたい。端末の設定でマイクの許可と音声認識を確かめてね';
 
   bool get isAvailable => _available;
   bool get isListening => _speech.isListening;

@@ -228,7 +228,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     if (!started && mounted) {
       setState(() { _isListening = false; });
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('マイクが使えないみたい。マイクの許可と音声認識を確かめてね'),
+        content: Text(SpeechService.micUnavailableMessage),
       ));
     }
   }

@@ -45,7 +45,6 @@ class _ParentChildChallengeScreenState
   void initState() {
     super.initState();
     _confetti = ConfettiController(duration: const Duration(seconds: 3));
-    _speech.init();
     _setupQuestions();
   }
 
@@ -71,13 +70,19 @@ class _ParentChildChallengeScreenState
 
   Future<void> _startListening() async {
     setState(() { _isListening = true; _recognizedText = ''; });
-    await _speech.startListening(
+    final started = await _speech.startListening(
       expected: _currentQuestion.correctAnswer,
       onResult: (text, isFinal) {
         setState(() { _recognizedText = text; });
         if (isFinal) _stopAndScore();
       },
     );
+    if (!started && mounted) {
+      setState(() { _isListening = false; });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(SpeechService.micUnavailableMessage),
+      ));
+    }
   }
 
   Future<void> _stopAndScore() async {

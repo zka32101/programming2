@@ -40,7 +40,6 @@ class _TestPrepScreenState extends ConsumerState<TestPrepScreen> {
   @override
   void initState() {
     super.initState();
-    _speech.init();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadQuestions());
   }
 
@@ -79,7 +78,7 @@ class _TestPrepScreenState extends ConsumerState<TestPrepScreen> {
   Future<void> _startListening() async {
     if (_isListening) return;
     setState(() { _isListening = true; _recognizedText = ''; });
-    await _speech.startListening(
+    final started = await _speech.startListening(
       expected: _current.correctAnswer,
       onResult: (text, isFinal) {
         setState(() { _recognizedText = text; });
@@ -91,6 +90,12 @@ class _TestPrepScreenState extends ConsumerState<TestPrepScreen> {
         }
       },
     );
+    if (!started && mounted) {
+      setState(() { _isListening = false; });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(SpeechService.micUnavailableMessage),
+      ));
+    }
   }
 
   Future<void> _stopListening() async {
