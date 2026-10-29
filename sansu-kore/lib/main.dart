@@ -1,3 +1,4 @@
+import 'services/app_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -89,6 +90,7 @@ class SansuKoreApp extends ConsumerWidget {
       theme: buildSansuTheme(),
       debugShowCheckedModeBanner: false,
       builder: (context, child) => DecorBackdrop(child: child ?? const SizedBox.shrink()),
+      navigatorObservers: [AppAnalytics.observer],
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
