@@ -1,4 +1,4 @@
-﻿# Flutter
+# Flutter
 -keep class io.flutter.app.** { *; }
 -keep class io.flutter.plugin.** { *; }
 -keep class io.flutter.util.** { *; }
@@ -7,17 +7,11 @@
 -keep class io.flutter.plugins.** { *; }
 -keep class io.flutter.embedding.** { *; }
 
-# App MainActivity (keep all classes in the app package)
--keep class com.petitworksapps.shougakukore.sansu.** { *; }
-
 # Firebase
--keep class com.google.firebase.** { *; }
--keep class com.google.android.gms.** { *; }
 -dontwarn com.google.firebase.**
 -dontwarn com.google.android.gms.**
 
 # Kotlin
--keep class kotlin.** { *; }
 -keepclassmembers class kotlin.Metadata { *; }
 -dontwarn kotlin.**
 
