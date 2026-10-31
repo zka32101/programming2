@@ -19,6 +19,7 @@ import '../screens/avatar_selection_screen.dart';
 import '../screens/daily_bonus_screen.dart';
 import '../screens/math_guide_screen.dart';
 import '../theme/app_theme.dart';
+import '../widgets/retention/retention_section.dart';
 import '../utils/grade_utils.dart';
 import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 import 'package:sansu_kore/widgets/badge_emblem.dart';
@@ -193,6 +194,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               coinCount: coins.totalCoins,
             ),
           ),
+
+          // 定着率施策（初回7日間のごほうび・今週の目標）
+          const SliverToBoxAdapter(child: RetentionSection()),
 
           // ウィークリーチャレンジカード
           SliverToBoxAdapter(

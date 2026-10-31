@@ -13,6 +13,8 @@ import '../providers/selected_avatar_provider.dart';
 import '../screens/avatar_selection_screen.dart';
 import '../screens/customization_screen.dart';
 import '../theme/app_theme.dart';
+import '../widgets/retention/reminder_switch.dart';
+import '../widgets/retention/study_window_tile.dart';
 import '../utils/grade_utils.dart';
 import 'package:sansu_kore/widgets/ukalab_emoji.dart';
 
@@ -179,6 +181,11 @@ class _SettingsTabContent extends ConsumerWidget {
               ),
             ),
           ),
+          const SizedBox(height: 16),
+          _SectionHeader('学習のおしらせ'),
+          const ReminderSwitchTile(),
+          const SizedBox(height: 8),
+          const StudyWindowTile(),
           const SizedBox(height: 16),
           _SectionHeader('プラン'),
           _SettingCard(
