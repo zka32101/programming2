@@ -12,6 +12,7 @@ import '../providers/progress_provider.dart';
 import '../providers/settings_provider.dart';
 import '../providers/speaking_history_provider.dart';
 import '../providers/weakness_provider.dart';
+import '../services/retention_hooks.dart';
 import '../services/speech_service.dart';
 import '../services/tts_service.dart';
 import '../services/pronunciation_pet_integration_service.dart';
@@ -170,6 +171,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     }
     // 弱点記録
     _answerLog.add((id: _current.id, type: _current.type, correct: isCorrect, speakingScore: 0));
+    onQuizAnswered(ref, quizId: _current.id, correct: isCorrect, context: context);
     setState(() {
       _answered = true;
       _selectedAnswer = choice;
@@ -191,6 +193,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     if (s >= 90) _confetti.play();
     // 弱点記録
     _answerLog.add((id: _current.id, type: _current.type, correct: s >= 70, speakingScore: s));
+    onQuizAnswered(ref, quizId: _current.id, correct: s >= 70, context: context);
 
     // ペット育成統合：発音スコア → ペットフィード
     _feedPetFromScore(s, text);

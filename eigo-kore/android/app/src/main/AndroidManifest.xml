@@ -4,6 +4,7 @@
     <!-- インターネット（TTS/音声認識） -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!-- Google Play 定期購入 -->
     <uses-permission android:name="com.android.vending.BILLING"/>
     <application

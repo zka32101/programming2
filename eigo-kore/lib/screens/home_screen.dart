@@ -1,4 +1,5 @@
 import '../widgets/avatar_view.dart';
+import '../widgets/retention_section.dart';
 import 'package:eigo_kore/widgets/badge_emblem.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -186,6 +187,7 @@ class HomeScreen extends ConsumerWidget {
             child: _ImprovedDailyMissionCardWrapper(progress: progress),
           ),
           SliverToBoxAdapter(child: StreakCard(days: progress.streakDays)),
+          const SliverToBoxAdapter(child: RetentionSection()),
           SliverToBoxAdapter(child: StudyTimeCard(studyTime: studyTime)),
           SliverToBoxAdapter(
             child: ImprovedStatsRow(

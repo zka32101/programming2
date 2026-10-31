@@ -7,6 +7,7 @@ import '../utils/shuffle_choices.dart';
 import '../providers/level_provider.dart';
 import '../providers/settings_provider.dart';
 import '../providers/weakness_provider.dart';
+import '../services/retention_hooks.dart';
 import '../services/speech_service.dart';
 import '../services/tts_service.dart';
 import '../widgets/speaking_score_ring.dart';
@@ -72,6 +73,7 @@ class _TestPrepScreenState extends ConsumerState<TestPrepScreen> {
     if (_answered) return;
     final isCorrect = choice == _current.correctAnswer;
     if (isCorrect) { _score += _current.points; _correct++; _confetti.play(); }
+    onQuizAnswered(ref, quizId: _current.id, correct: isCorrect, context: context);
     setState(() { _answered = true; _selectedAnswer = choice; });
   }
 
@@ -87,6 +89,7 @@ class _TestPrepScreenState extends ConsumerState<TestPrepScreen> {
           setState(() { _speakingScore = s; _speakingDone = true; _isListening = false; });
           if (s >= 60) { _score += _current.points; _correct++; }
           if (s >= 85) _confetti.play();
+          onQuizAnswered(ref, quizId: _current.id, correct: s >= 60, context: context);
         }
       },
     );
