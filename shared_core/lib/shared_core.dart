@@ -47,3 +47,21 @@ export 'theme/app_theme.dart';
 
 // クロスプロモーション（他アプリ紹介）— 実装待ち
 // export 'package:cross_promo_kit/cross_promo_kit.dart';
+
+// --- 定着率施策(最新の shared_core から取り込み。既存の機能には手を入れない) ---
+export 'utils/date_key.dart';                       // dateKeyOf, parseDateKey, calendarDaysBetween
+export 'retention/smart_notification_planner.dart'; // SmartNotificationPlanner, StudyWindow, NotificationContext, PlannedNotification, NotificationTone
+export 'retention/notification_plan_provider.dart'; // notificationPlanProvider
+export 'retention/smart_reminder_scheduler.dart';   // SmartReminderScheduler
+export 'retention/onboarding_rewards.dart';         // onboardingProvider, kOnboardingRewards（初回7日間）
+export 'retention/spaced_review.dart';              // reviewQueueProvider, reviewDueCountProvider（間違い復習）
+export 'retention/collection.dart';                 // CollectionSet, collectionProvider
+export 'retention/parent_report.dart';              // ParentReportBuilder, ParentReportScheduler
+export 'retention/retention_kpi.dart';              // RetentionKpi, retentionTrackerProvider
+export 'retention/retention_experiments.dart';      // RetentionExperiments
+export 'retention/answer_streak_bonus.dart';        // AnswerStreakBonus, answerStreakProvider
+export 'retention/learning_support.dart';           // ExplanationDepthSelector, AutoHintPolicy, AchievementProximityHint
+export 'retention/weekly_challenge.dart';           // weeklyChallengeProvider
+export 'retention/family_challenge.dart';           // FamilyChallengeSession
+export 'services/weekly_report_notification_scheduler.dart'; // WeeklyReportNotificationScheduler
+export 'models/screen_time_model.dart';

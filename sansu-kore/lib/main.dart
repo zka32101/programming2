@@ -34,6 +34,7 @@ import 'screens/analysis_dashboard_screen.dart';
 import 'screens/avatar_selection_screen.dart';
 import 'services/sansu_purchase_service.dart';
 import 'theme/app_theme.dart';
+import 'services/retention_hooks.dart';
 import 'features/shop/decor/decor_scope.dart';
 
 Future<void> main() async {
@@ -70,11 +71,18 @@ Future<void> main() async {
     await SansuPurchaseService.instance.initialize();
   } catch (_) {}
 
-  runApp(ProviderScope(
+  final container = ProviderContainer(
     overrides: [
       // 小学コレ！算数のキャラクターノティファイアを注入
       characterStateProvider.overrideWith(CharacterNotifier.new),
     ],
+  );
+
+  // 定着率施策（shared_core の retention）の保存データを読み込む
+  await initRetention(container);
+
+  runApp(UncontrolledProviderScope(
+    container: container,
     child: const SansuKoreApp(),
   ));
 }
