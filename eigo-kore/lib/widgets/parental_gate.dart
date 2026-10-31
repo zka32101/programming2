@@ -50,7 +50,11 @@ class ParentalGateLockout {
 
 /// 購入・外部リンクなどの前に、保護者(大人)であることを確認する計算ゲート。
 /// 通れたら true を返す。3回続けて間違えると、60秒間は開かない。
-Future<bool> requireParentalGate(BuildContext context) async {
+Future<bool> requireParentalGate(
+  BuildContext context, {
+  String? title,
+  String? description,
+}) async {
   if (ParentalGateLockout.isLocked) {
     await showDialog<void>(
       context: context,
@@ -68,13 +72,16 @@ Future<bool> requireParentalGate(BuildContext context) async {
   final passed = await showDialog<bool>(
     context: context,
     barrierDismissible: false,
-    builder: (_) => const _ParentalGateDialog(),
+    builder: (_) => _ParentalGateDialog(title: title, description: description),
   );
   return passed ?? false;
 }
 
 class _ParentalGateDialog extends StatefulWidget {
-  const _ParentalGateDialog();
+  const _ParentalGateDialog({this.title, this.description});
+
+  final String? title;
+  final String? description;
 
   @override
   State<_ParentalGateDialog> createState() => _ParentalGateDialogState();
@@ -124,7 +131,7 @@ class _ParentalGateDialogState extends State<_ParentalGateDialog> {
       // 画面が小さい端末でも、中身がはみ出さずにスクロールできるようにする。
       scrollable: true,
       insetPadding: EdgeInsets.symmetric(horizontal: 28, vertical: compact ? 12 : 24),
-      title: const Text('🔒 保護者の方へ確認'),
+      title: Text('🔒 ${widget.title ?? '保護者の方へ確認'}'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

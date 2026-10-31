@@ -8,6 +8,8 @@ import '../providers/settings_provider.dart';
 import '../providers/ai_api_key_provider.dart';
 import '../providers/morning_notification_provider.dart';
 import '../services/notification_service.dart';
+import '../widgets/reminder_switch.dart';
+import '../widgets/study_window_tile.dart';
 import '../design_system/design_system.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -43,6 +45,8 @@ class SettingsScreen extends ConsumerWidget {
           _SectionHeader('通知設定'),
           _NotificationCard(settings: settings, ref: ref),
           _MorningEnglishCard(morningNotification: morningNotification, ref: ref),
+          const ReminderSwitchTile(),
+          const StudyWindowTile(),
 
           // API キー入力は開発者向け。製品版では出さない
           if (!kReleaseMode) ...[

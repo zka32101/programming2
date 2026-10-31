@@ -84,6 +84,7 @@ import 'screens/leaderboard_screen.dart';
 import 'screens/conversation_list_screen.dart';
 import 'screens/chat_screen.dart';
 import 'services/notification_service.dart';
+import 'services/retention_hooks.dart';
 import 'services/firebase_service.dart';
 import 'providers/morning_notification_provider.dart';
 import 'providers/coin_provider.dart';
@@ -114,6 +115,9 @@ Future<void> main() async {
     ],
   );
   await container.read(coinProvider.notifier).load();
+
+  // 定着率施策（初回7日間・復習キュー・週次チャレンジ・通知計画）の保存データを読み込む
+  await initRetention(container);
 
   // 課金(RevenueCat)初期化と、無料期間(14日)・購読状態の読み込み
   await EigoPurchaseService.instance.initialize();
