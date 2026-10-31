@@ -198,11 +198,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           // 定着率施策（初回7日間のごほうび・今週の目標）
           const SliverToBoxAdapter(child: RetentionSection()),
 
-          // ウィークリーチャレンジカード
-          SliverToBoxAdapter(
-            child: _WeeklyChallengeCard(),
-          ),
-
           // 算数ガイドセクション
           SliverToBoxAdapter(
             child: _MathGuideSection(
@@ -318,76 +313,6 @@ class _StatCard extends StatelessWidget {
           ],
         ),
       ),
-      ),
-    );
-  }
-}
-
-class _WeeklyChallengeCard extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final wc = ref.watch(weeklyChallengeProvider);
-    final color = const Color(0xFF8E44AD);
-
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed('/weekly-challenge'),
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [color, const Color(0xFF6C3483)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-                color: color.withValues(alpha: 0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 3))
-          ],
-        ),
-        child: Row(
-          children: [
-            const Text('🏆', style: TextStyle(fontSize: 32)),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('ウィークリーチャレンジ',
-                      style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.white70,
-                          fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 4),
-                  Text(
-                    wc.isAllDone
-                        ? '今週のチャレンジ完了！🎉'
-                        : '今週の問題 ${wc.completed}/${wc.total} 正解',
-                    style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  const SizedBox(height: 6),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: wc.progress,
-                      backgroundColor: Colors.white24,
-                      valueColor:
-                          const AlwaysStoppedAnimation<Color>(Colors.white),
-                      minHeight: 6,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Icon(Icons.chevron_right, color: Colors.white70),
-          ],
-        ),
       ),
     );
   }
